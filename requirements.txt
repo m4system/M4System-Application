@@ -13,7 +13,7 @@ django-reversion>2.0.6
 docutils>=0.15.2
 humanize>=0.5.1
 kafka-python>1.4.6
-numpy==1.11.0
+numpy>1.11.0
 pymodbus>2.1.0
 pysnmp>=4.4.12
 python-dateutil>2.5.2
