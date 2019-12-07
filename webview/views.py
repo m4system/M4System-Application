@@ -1,25 +1,24 @@
-from django.http import HttpResponse, JsonResponse
-from django.views.decorators.cache import never_cache, cache_page
-from tools import dbg, msg, getMetadata, setMetadata
-from django.shortcuts import render, get_object_or_404
-from django.core.exceptions import PermissionDenied
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.vary import vary_on_cookie
-from django.views.decorators.cache import cache_control
-from django.contrib import messages
 import datetime
-import time
-from webview.models import UserProfile, Widgets, UserView, UIMsg
-from webview.forms import SettingsForm
 import json
-from django.core.cache import cache
-from scheduler.models import Hosts, HostChecks, Historical, EventLog, Sla, SlaLog, Trap
-from django.shortcuts import render_to_response
-from django.db.models import Q
-from django.utils import timezone
-from djcelery.models import TaskState
 from statistics import mean
-from django.views.decorators.csrf import csrf_exempt
+
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
+from django.db.models import Q
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render_to_response
+from django.utils import timezone
+from django.views.decorators.cache import cache_control
+from django.views.decorators.cache import never_cache, cache_page
+from django.views.decorators.vary import vary_on_cookie
+from djcelery.models import TaskState
+
+from scheduler.models import Hosts, HostChecks, Historical, EventLog, Sla, SlaLog, Trap
+from tools import dbg, msg, getMetadata, setMetadata
+from webview.forms import SettingsForm
+from webview.models import UserProfile, Widgets, UserView, UIMsg
 
 
 @login_required

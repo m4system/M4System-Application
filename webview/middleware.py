@@ -1,5 +1,3 @@
-from django.http import HttpResponse
-
 class SetRemoteAddrFromForwardedFor(object):
     # Add support for reverse proxying django
     def __init__(self, get_response):

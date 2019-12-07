@@ -1,10 +1,11 @@
 from django.conf.urls import include, url
 from django.contrib import admin
 # We load them here to override their template.
-from django.contrib.auth.views import login, logout, password_reset, password_reset_done, password_reset_confirm, password_reset_complete
-from webview.views import settings
+from django.contrib.auth.views import login, logout, password_reset, password_reset_done, password_reset_confirm, \
+    password_reset_complete
 from django.views.generic import RedirectView
 
+from webview.views import settings
 
 urlpatterns = [
     url(r'^favicon\.ico$', RedirectView.as_view(url='/public/img/favicon.ico')),  # serve the favicon and avoid 404s

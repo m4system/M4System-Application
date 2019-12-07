@@ -1,10 +1,9 @@
-from django.db import models
 from django.contrib.auth.models import User, Group
+from django.db import models
 # from django.template import loader, Context
-import json
 from django.template.loader import render_to_string
-from django.core.cache import cache
-from tools import dbg, getMetadata
+
+from tools import getMetadata
 
 
 #User profile for the webui used to store info

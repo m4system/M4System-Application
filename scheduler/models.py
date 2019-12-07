@@ -1,19 +1,17 @@
-from django.db import models
-from djcelery.models import IntervalSchedule, PeriodicTask
-from tools import dbg, setmd, getmd, loadmd, savemd, msg, add_msg, getMetadata, setMetadata
 import datetime
+
 from django.contrib.auth.models import Group, User
-from django.core.mail import send_mail
-from django.template.loader import render_to_string
-from django.template import engines
+from django.core.mail import send_mass_mail
+from django.db import models
 from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
-# from delorean import Delorean
-import json
-from scheduler.utils import strtobool, booltostr
-import time
-from django.core.mail import send_mass_mail
+from django.template import engines
 from django.utils import timezone
+from djcelery.models import IntervalSchedule, PeriodicTask
+
+# from delorean import Delorean
+from scheduler.utils import strtobool, booltostr
+from tools import dbg, setmd, add_msg, getMetadata, setMetadata
 
 
 def get_choicename(obj, fieldname):

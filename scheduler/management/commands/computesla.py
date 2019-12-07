@@ -1,5 +1,7 @@
+from django.core.management.base import BaseCommand
+
 from scheduler.models import Sla
-from django.core.management.base import BaseCommand, CommandError
+
 
 class Command(BaseCommand):
     help = 'Recompute all SLAs'

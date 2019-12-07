@@ -1,8 +1,10 @@
 from django.contrib import admin
-from django.contrib.auth.models import User, Group
-from .models import UserProfile, Widgets, UserView, UIMsg
-from reversion.admin import VersionAdmin
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
+from django.contrib.auth.models import User, Group
+from reversion.admin import VersionAdmin
+
+from .models import UserProfile, Widgets, UserView, UIMsg
+
 
 # add all admin with reversion
 class UserProfileAdmin(VersionAdmin):

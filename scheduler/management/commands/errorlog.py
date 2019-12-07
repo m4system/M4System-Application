@@ -1,13 +1,9 @@
-from django.core.management.base import BaseCommand, CommandError
-from webview.models import UserProfile
-from scheduler.models import ErrorLog
-from django.contrib.auth.models import Group, User
-from tools import dbg
 import datetime
-from django.template.loader import render_to_string
-from django.core.mail import send_mass_mail
+
+from django.core.management.base import BaseCommand
 from django.utils import timezone
-from django.conf import settings
+
+from scheduler.models import ErrorLog
 
 
 class Command(BaseCommand):

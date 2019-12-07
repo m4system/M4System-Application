@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import Hosts, HostChecks, Thresholds, Historical, Sla, EventLog, SlaLog, ErrorLog, Metadata, Trap, Template
 from reversion.admin import VersionAdmin
+
+from .models import Hosts, HostChecks, Thresholds, Historical, Sla, EventLog, SlaLog, ErrorLog, Metadata, Trap, Template
 
 
 class HostsAdmin(VersionAdmin):

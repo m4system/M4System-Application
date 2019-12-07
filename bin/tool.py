@@ -7,23 +7,9 @@
 
 def branch():
     # Shell Plus Model Imports
-    from django.contrib.admin.models import LogEntry
-    from django.contrib.auth.models import Group, Permission, User
-    from django.contrib.contenttypes.models import ContentType
-    from django.contrib.sessions.models import Session
-    from djcelery.models import CrontabSchedule, IntervalSchedule, PeriodicTask, PeriodicTasks, TaskMeta, TaskSetMeta, TaskState, WorkerState
-    from jet.dashboard.models import UserDashboardModule
-    from jet.models import Bookmark, PinnedApplication
-    from reversion.models import Revision, Version
-    from scheduler.models import ErrorLog, EventLog, Historical, HostChecks, Hosts, Metadata, Sla, SlaLog, Template, Thresholds, Trap
-    from webview.models import UIMsg, UserProfile, UserView, Widgets
+    from scheduler.models import HostChecks, Hosts, Thresholds
+    from webview.models import UserView, Widgets
     # Shell Plus Django Imports
-    from django.db import transaction
-    from django.core.cache import cache
-    from django.core.urlresolvers import reverse
-    from django.conf import settings
-    from django.db.models import Avg, Count, F, Max, Min, Sum, Q, Prefetch, Case, When
-    from django.utils import timezone
 
     fpcName = "fpc"
     hostname = "fpc"

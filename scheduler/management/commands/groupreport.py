@@ -1,12 +1,11 @@
-from django.core.management.base import BaseCommand, CommandError
-from webview.models import UserProfile, Widgets, UserView
-from scheduler.models import Hosts, HostChecks, Historical, EventLog, Sla, SlaLog
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import Group
+from django.core.management.base import BaseCommand
+
+
 # from tools import dbg, setmd, getmd, loadmd, savemd, getMetadata, setMetadata
 # import datetime
 # from django.template.loader import render_to_string
 # from django.core.mail import send_mass_mail
-from django.utils import timezone
 
 
 class Command(BaseCommand):

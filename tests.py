@@ -1,6 +1,8 @@
 from django.test import TestCase
-from scheduler.models import HostChecks
 from djcelery.models import PeriodicTask
+
+from scheduler.models import HostChecks
+
 
 class WebviewLoginPageTest(TestCase):
     fixtures = ['djcelery.json', 'user.json','auth.json', 'scheduler.json','webview.json']

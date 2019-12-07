@@ -1,8 +1,10 @@
-from scheduler.models import Hosts, HostChecks, Thresholds, Historical, Sla, EventLog, SlaLog, ErrorLog, Metadata
+from django.core.cache import cache
+from django.core.management.base import BaseCommand
+
+from scheduler.models import HostChecks, Historical, Sla, EventLog, SlaLog, ErrorLog, Metadata
 from webview.models import UIMsg
 
-from django.core.management.base import BaseCommand, CommandError
-from django.core.cache import cache
+
 # totally reset all data
 
 class Command(BaseCommand):

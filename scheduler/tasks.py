@@ -1,23 +1,23 @@
 from __future__ import absolute_import
+
+import traceback
+from time import time
+
 from celery import shared_task
+from django.utils import timezone
+from pyasn1.codec.ber import encoder, decoder
+from pysnmp.carrier.asyncore.dgram import udp
+from pysnmp.carrier.asyncore.dispatch import AsyncoreDispatcher
+from pysnmp.proto import api
+
+# import sh
+from tools import setMetadata, getMetadata
+from .models import Hosts, HostChecks, ErrorLog
+from .utils import computeint, computebool, computestr
+
 # Easysnmp is not supported on windows unfortunally
 # from easysnmp import snmp_get
 # from pysnmp.hlapi import getCmd as snmp_get
-
-from pysnmp.carrier.asyncore.dispatch import AsyncoreDispatcher
-from pysnmp.carrier.asyncore.dgram import udp, udp6, unix
-from pyasn1.codec.ber import encoder, decoder
-from pysnmp.proto import api
-from time import time
-
-from .models import Hosts, HostChecks, ErrorLog
-from .utils import computeint, computebool, computestr
-from tools import dbg
-# import sh
-from tools import setMetadata, getMetadata
-from django.utils import timezone
-
-import traceback
 
 # Defines the celery task available.  Links to the checktypes
 
@@ -268,12 +268,10 @@ def execstr(self, host, check):
 @shared_task(bind=True, name='exportInfluxDB')
 def exportInfluxDB(self, count = 100):
     print("Starting with exportInfluxDB")
-    from django.db import IntegrityError, transaction
+    from django.db import transaction
     from influxdb import InfluxDBClient
     from django.conf import settings
     from .models import Historical
-    from kafka import KafkaProducer
-    import json
 
     user = ''
     password = ''
@@ -348,12 +346,10 @@ def exportInfluxDB(self, count = 100):
 @shared_task(bind=True, name='exportInfluxDBnew')
 def exportInfluxDBnew(self, count = 1000):
     print("Starting with exportInfluxDBnew")
-    from django.db import IntegrityError, transaction
+    from django.db import transaction
     from influxdb import InfluxDBClient
     from django.conf import settings
     from .models import Historical
-    from kafka import KafkaProducer
-    import json
 
     user = ''
     password = ''
@@ -428,7 +424,7 @@ def exportInfluxDBnew(self, count = 1000):
 @shared_task(bind=True, name='pruneFromDB')
 def pruneFromDB(self):
     print("Starting with pruneFromDB")
-    from django.db import IntegrityError, transaction
+    from django.db import transaction
     from .models import Historical
     import datetime
     try:
@@ -455,8 +451,6 @@ def Heartbeat(self):
 @shared_task(bind=True, name='ExportKafka')
 def exportKafka(self, count = 100):
     print("Starting with exportKafka")
-    from django.db import IntegrityError, transaction
-    from django.conf import settings
     from .models import Historical
     from kafka import KafkaProducer
     import json

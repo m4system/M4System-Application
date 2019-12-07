@@ -1,11 +1,9 @@
 import json
-# from django.db.models import Avg
-from django.core.cache import cache
-import datetime
-from statistics import mean
-import time
-from tools import setmd, getmd, dbg, setMetadata, getMetadata
+
 from django.utils import timezone
+
+# from django.db.models import Avg
+from tools import setMetadata, getMetadata
 
 
 def computeint(check, host, value):

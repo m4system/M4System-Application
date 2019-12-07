@@ -1,7 +1,10 @@
+import sys
+
+from django.core.management.base import BaseCommand
+
 from scheduler.models import Trap, Hosts
 from tools import dbg
-from django.core.management.base import BaseCommand, CommandError
-import sys
+
 
 class Command(BaseCommand):
     help = 'Import a Trap'
