@@ -14,6 +14,7 @@ from scheduler.utils import strtobool, booltostr
 from tools import dbg, setmd, add_msg, getMetadata, setMetadata
 
 
+# noinspection PyProtectedMember
 def get_choicename(obj, fieldname):
     """
     given an object and a field which has a choices argument,
@@ -36,7 +37,8 @@ class Hosts(models.Model):
     address = models.GenericIPAddressField('IP', protocol='IPv4', unique=False, help_text='IP address of the host.')
     community = models.CharField('Community', max_length=128, default='public', help_text='Community for snmp checks.')
     enabled = models.BooleanField('Active', default=True, help_text='Are checks for this host active ?')
-    note = models.CharField('Note', max_length=4096, null=True, blank=True, default=None, help_text='Additional information that could be usefull.')
+    note = models.CharField('Note', max_length=4096, null=True, blank=True, default=None,
+                            help_text='Additional information that could be usefull.')
 
     def __str__(self):
         return str(self.name)
@@ -51,31 +53,43 @@ class HostChecks(models.Model):
     """
     This model stores the checks performed on hosts, related to :model:`scheduler.Hosts`.
     """
-    CHECK_CHOICES = (('snmpgetint', 'SNMP Check Int'), ('snmpgetbool', 'SNMP Check Bool'), ('execint', 'Shell Exec Int'), ('execbool', 'Shell Exec Bool'), ('snmpgetstr', 'SNMP Check String'), ('execstr', 'Shell Exec String'))
-    INTERVAL_CHOICES = (('10', 'every 10 seconds'), ('30', 'every 30 seconds'), ('60', 'every 60 seconds'), ('600', 'every 600 seconds'))
+    CHECK_CHOICES = (
+        ('snmpgetint', 'SNMP Check Int'), ('snmpgetbool', 'SNMP Check Bool'), ('execint', 'Shell Exec Int'),
+        ('execbool', 'Shell Exec Bool'), ('snmpgetstr', 'SNMP Check String'), ('execstr', 'Shell Exec String'))
+    INTERVAL_CHOICES = (
+        ('10', 'every 10 seconds'), ('30', 'every 30 seconds'), ('60', 'every 60 seconds'),
+        ('600', 'every 600 seconds'))
     name = models.SlugField('Name', max_length=128, unique=True, help_text='Name of the check.')
     hosts = models.ManyToManyField('Hosts', help_text='Hosts the check applies to.')
-    checktype = models.CharField('Type', max_length=16, choices=CHECK_CHOICES, default='snmpgetint', help_text='The type of check to be performed.')
-    interval = models.CharField('Interval', max_length=32, choices=INTERVAL_CHOICES, default='30', help_text='Interval for the periodic task.')
-    arg = models.CharField('Argument', max_length=1024, help_text='The argument for the check.  oid for snmp and cmd for exec.')
-    unit = models.CharField('Unit', max_length=4, default=None, blank=True, help_text='Unit used for the check in the widget, i.e. A')
-    quotient = models.CharField('Quotient', max_length=4, default='1', help_text='Divide or multiply the result. .01 = divided by 100')
+    checktype = models.CharField('Type', max_length=16, choices=CHECK_CHOICES, default='snmpgetint',
+                                 help_text='The type of check to be performed.')
+    interval = models.CharField('Interval', max_length=32, choices=INTERVAL_CHOICES, default='30',
+                                help_text='Interval for the periodic task.')
+    arg = models.CharField('Argument', max_length=1024,
+                           help_text='The argument for the check.  oid for snmp and cmd for exec.')
+    unit = models.CharField('Unit', max_length=4, default=None, blank=True,
+                            help_text='Unit used for the check in the widget, i.e. A')
+    quotient = models.CharField('Quotient', max_length=4, default='1',
+                                help_text='Divide or multiply the result. .01 = divided by 100')
     verbosename = models.CharField('Full Name', max_length=128, help_text='Name of the widget as rendered on the page.')
     threshold = models.ManyToManyField('Thresholds', blank=True, help_text='Threshold the check adheres to.')
     sla = models.ManyToManyField('Sla', blank=True, help_text='SLAs this check affects.')
-    allhosts = models.BooleanField('Check all hosts to fail a threshold', default=False, help_text='When more than one host is assigned to a check, require them all to fail before failing the check.')
-    colorizesla = models.BooleanField('Colorize on SLA status instead of threshold', default=False, help_text='So that pumps do not always show a red widget')
+    allhosts = models.BooleanField('Check all hosts to fail a threshold', default=False,
+                                   help_text='When more than one host is assigned to a check, require them all to fail before failing the check.')
+    colorizesla = models.BooleanField('Colorize on SLA status instead of threshold', default=False,
+                                      help_text='So that pumps do not always show a red widget')
     # status = models.CharField('Check global status', max_length=4096, default='{}', help_text='Ok, partial, failed, none')
     # statsinterval = models.IntegerField('Stats Interval', default='300', help_text='How often, in seconds, we recalculate the stats.')
     enabled = models.BooleanField('Active', default=True, help_text='Are checks for this host active ?')
-    note = models.CharField('Note', max_length=4096, null=True, blank=True, default=None, help_text='Additional information that could be usefull.')
+    note = models.CharField('Note', max_length=4096, null=True, blank=True, default=None,
+                            help_text='Additional information that could be usefull.')
 
     def save(self, *args, **kwargs):
         super(HostChecks, self).save(*args, **kwargs)
         # Set the master status of the check, depending on wether or not we account for all hosts
         if self.allhosts is True:
-            nbhosts = 0 # number of hosts we have total
-            nbfailed = 0 # number of faled hosts
+            nbhosts = 0  # number of hosts we have total
+            nbfailed = 0  # number of faled hosts
             for host in self.hosts.filter(enabled=True):
                 nbhosts = nbhosts + 1
                 if getMetadata(host.name + ':' + self.name + '::checkstatus', 'OK') == "failed":
@@ -118,6 +132,7 @@ class HostChecks(models.Model):
         ordering = ['-name']
 
 
+# noinspection PyUnusedLocal
 class Thresholds(models.Model):
     """
     This model stores the Thresholds applied to checks, related to :model:`scheduler.HostChecks`.
@@ -130,29 +145,59 @@ class Thresholds(models.Model):
     THOLD_CHOICES = (('int', 'Integer'), ('bool', 'Boolean'), ('str', 'String'))
     name = models.SlugField('Name', max_length=128, unique=True, help_text='Name of the thresholds.')
     verbosename = models.CharField('Full Name', max_length=256, blank=True, help_text='Verbose name as displayed.')
-    type = models.CharField('Type', max_length=4, choices=THOLD_CHOICES, default='int', help_text='The type of value we check against.')
-    warngroups = models.ManyToManyField(Group, verbose_name='Warning Groups', related_name='warngroup', default=None, blank=True, help_text='Groups to notify on warning, if applicable.')
-    critgroups = models.ManyToManyField(Group, verbose_name='Critical Groups', related_name='critgroup', default=None, blank=True, help_text='Groups to notify on critical, if applicable.')
-    okgroups = models.ManyToManyField(Group, verbose_name='Recovery Groups', related_name='okgroup', default=None, blank=True, help_text='Groups to notify on recovery, if applicable.')
-    errgroups = models.ManyToManyField(Group, verbose_name='Error Groups', related_name='errgroup', default=None, blank=True, help_text='Groups to notify on errors, if applicable.')
-    warntpl = models.ForeignKey('Template', verbose_name='Warning template', related_name='warntpl', default=None, null=True, blank=True, on_delete=models.PROTECT, limit_choices_to={'event': 'warn', 'obj': 'thold'}, help_text='Template to use when sending out warning emails.')
-    crittpl = models.ForeignKey('Template', verbose_name='Critical template', related_name='crittpl', default=None, null=True, blank=True, on_delete=models.PROTECT, limit_choices_to={'event': 'crit', 'obj': 'thold'}, help_text='Template to use when sending out critical emails.')
-    oktpl = models.ForeignKey('Template', verbose_name='Recovery template', related_name='oktpl', default=None, null=True, blank=True, on_delete=models.PROTECT, limit_choices_to={'event': 'ok', 'obj': 'thold'}, help_text='Template to use when sending out recovery emails.')
-    errtpl = models.ForeignKey('Template', verbose_name='Error template', related_name='errtpl', default=None, null=True, blank=True, on_delete=models.PROTECT, limit_choices_to={'event': 'err', 'obj': 'thold'}, help_text='Template to use when sending out error emails.')
-    warnrepeat = models.IntegerField('Warning Interval', default=120, blank=True, null=True, help_text='How often, in seconds, we send the warnings. Set to 0 to not rate limit, blank to send only once.')
-    critrepeat = models.IntegerField('Critical Interval', default=120, blank=True, null=True, help_text='How often, in seconds, we send the criticals. Set to 0 to not rate limit, blank to send only once.')
-    lowwarn = models.FloatField('INT Low Warning', blank=True, null=True, default=None, help_text='For Integer checks, the low warning value.  for Internal Use.')
-    lowcrit = models.FloatField('INT Low Critical', blank=True, null=True, default=None, help_text='For Integer checks, the low critical value.  Affects the SLA.')
-    highwarn = models.FloatField('INT High Warning', blank=True, null=True, default=None, help_text='For Integer checks, the high warning value.  for Internal Use.')
-    highcrit = models.FloatField('INT High Critical', blank=True, null=True, default=None, help_text='For Integer checks, the high critical value.  Affects the SLA.')
-    boolgood = models.NullBooleanField('BOOL Good', default=None, help_text='For Boolean checks, This is the expected value.  Anything else affects the SLA.  Leave UNKOWN to disable')
-    boolbad = models.NullBooleanField('BOOL Bad', default=None, help_text='For Boolean checks, If seen, this affects the SLA.  All other values OK.  Leave UNKOWN to disable.')
-    boolwarn = models.NullBooleanField('BOOL Warn', default=None, help_text='For Boolean checks, If seen, this triggers a warning email.  Leave UNKOWN to disable.')
-    strgood = models.CharField('STR Good', max_length=1024, blank=True, null=True, default=None, help_text='For string checks. expected value.  Anything else affects the SLA.')
-    strwarn = models.CharField('STR Bad', max_length=1024, blank=True, null=True, default=None, help_text='For string checks. If seen, this affects the SLA.')
-    strbad = models.CharField('STR Warning', max_length=1024, blank=True, null=True, default=None, help_text='For string checks. If seen, Emit a warning.  For internal use.')
+    type = models.CharField('Type', max_length=4, choices=THOLD_CHOICES, default='int',
+                            help_text='The type of value we check against.')
+    warngroups = models.ManyToManyField(Group, verbose_name='Warning Groups', related_name='warngroup', default=None,
+                                        blank=True, help_text='Groups to notify on warning, if applicable.')
+    critgroups = models.ManyToManyField(Group, verbose_name='Critical Groups', related_name='critgroup', default=None,
+                                        blank=True, help_text='Groups to notify on critical, if applicable.')
+    okgroups = models.ManyToManyField(Group, verbose_name='Recovery Groups', related_name='okgroup', default=None,
+                                      blank=True, help_text='Groups to notify on recovery, if applicable.')
+    errgroups = models.ManyToManyField(Group, verbose_name='Error Groups', related_name='errgroup', default=None,
+                                       blank=True, help_text='Groups to notify on errors, if applicable.')
+    warntpl = models.ForeignKey('Template', verbose_name='Warning template', related_name='warntpl', default=None,
+                                null=True, blank=True, on_delete=models.PROTECT,
+                                limit_choices_to={'event': 'warn', 'obj': 'thold'},
+                                help_text='Template to use when sending out warning emails.')
+    crittpl = models.ForeignKey('Template', verbose_name='Critical template', related_name='crittpl', default=None,
+                                null=True, blank=True, on_delete=models.PROTECT,
+                                limit_choices_to={'event': 'crit', 'obj': 'thold'},
+                                help_text='Template to use when sending out critical emails.')
+    oktpl = models.ForeignKey('Template', verbose_name='Recovery template', related_name='oktpl', default=None,
+                              null=True, blank=True, on_delete=models.PROTECT,
+                              limit_choices_to={'event': 'ok', 'obj': 'thold'},
+                              help_text='Template to use when sending out recovery emails.')
+    errtpl = models.ForeignKey('Template', verbose_name='Error template', related_name='errtpl', default=None,
+                               null=True, blank=True, on_delete=models.PROTECT,
+                               limit_choices_to={'event': 'err', 'obj': 'thold'},
+                               help_text='Template to use when sending out error emails.')
+    warnrepeat = models.IntegerField('Warning Interval', default=120, blank=True, null=True,
+                                     help_text='How often, in seconds, we send the warnings. Set to 0 to not rate limit, blank to send only once.')
+    critrepeat = models.IntegerField('Critical Interval', default=120, blank=True, null=True,
+                                     help_text='How often, in seconds, we send the criticals. Set to 0 to not rate limit, blank to send only once.')
+    lowwarn = models.FloatField('INT Low Warning', blank=True, null=True, default=None,
+                                help_text='For Integer checks, the low warning value.  for Internal Use.')
+    lowcrit = models.FloatField('INT Low Critical', blank=True, null=True, default=None,
+                                help_text='For Integer checks, the low critical value.  Affects the SLA.')
+    highwarn = models.FloatField('INT High Warning', blank=True, null=True, default=None,
+                                 help_text='For Integer checks, the high warning value.  for Internal Use.')
+    highcrit = models.FloatField('INT High Critical', blank=True, null=True, default=None,
+                                 help_text='For Integer checks, the high critical value.  Affects the SLA.')
+    boolgood = models.NullBooleanField('BOOL Good', default=None,
+                                       help_text='For Boolean checks, This is the expected value.  Anything else affects the SLA.  Leave UNKOWN to disable')
+    boolbad = models.NullBooleanField('BOOL Bad', default=None,
+                                      help_text='For Boolean checks, If seen, this affects the SLA.  All other values OK.  Leave UNKOWN to disable.')
+    boolwarn = models.NullBooleanField('BOOL Warn', default=None,
+                                       help_text='For Boolean checks, If seen, this triggers a warning email.  Leave UNKOWN to disable.')
+    strgood = models.CharField('STR Good', max_length=1024, blank=True, null=True, default=None,
+                               help_text='For string checks. expected value.  Anything else affects the SLA.')
+    strwarn = models.CharField('STR Bad', max_length=1024, blank=True, null=True, default=None,
+                               help_text='For string checks. If seen, this affects the SLA.')
+    strbad = models.CharField('STR Warning', max_length=1024, blank=True, null=True, default=None,
+                              help_text='For string checks. If seen, Emit a warning.  For internal use.')
     enabled = models.BooleanField('Active', default=True, help_text='Is this threshold active ?')
-    note = models.CharField('Note', max_length=4096, null=True, blank=True, default=None, help_text='Additional information that could be usefull.')
+    note = models.CharField('Note', max_length=4096, null=True, blank=True, default=None,
+                            help_text='Additional information that could be usefull.')
 
     def __str__(self):
         return str(self.name)
@@ -190,7 +235,7 @@ class Thresholds(models.Model):
             if self.boolwarn is not None and tocheck is self.boolwarn:
                 error['hasError'] = True
                 error['boolwarn'] = True
-                self.doWarn(tocheck, error, check, host)            
+                self.doWarn(tocheck, error, check, host)
             if self.boolgood is not None and tocheck is not self.boolgood:
                 error['hasError'] = True
                 error['boolgood'] = True
@@ -226,13 +271,17 @@ class Thresholds(models.Model):
 
     def doWarn(self, value, error, check, host):
         # a warn means notify warn group, but dont fail the service.
+        global subj
         now = timezone.now().strftime('%s')
         doit = False
         setMetadata(host.name + ':' + check.name + ':thold-' + self.name + '::laststatus', 'warn')
 
-        if self.warnrepeat is None and int(getMetadata(host.name + ':' + check.name + ':thold-' + self.name + '::lastwarn', 0) == 0):
+        if self.warnrepeat is None and int(
+                getMetadata(host.name + ':' + check.name + ':thold-' + self.name + '::lastwarn', 0) == 0):
             doit = True
-        elif self.critrepeat is not None and int(getMetadata(host.name + ':' + check.name + ':thold-' + self.name + '::lastwarn', 0)) < int(now) - int(self.warnrepeat):
+        elif self.critrepeat is not None and int(
+                getMetadata(host.name + ':' + check.name + ':thold-' + self.name + '::lastwarn', 0)) < int(now) - int(
+            self.warnrepeat):
             doit = True
         if getMetadata(host.name + ':' + check.name + '::notifs', 'True') == 'False':
             doit = False
@@ -257,7 +306,8 @@ class Thresholds(models.Model):
                     # This is where the user decides where to receive his notifications.
                     mail = UserProfile.objects.get(user=user).notifemail
                     if mail is not None and mail != '':
-                        emails.append((subj, self.renderMail(value, error, check, host, 'warn'), 'm4@m4system.com', [mail]))
+                        emails.append(
+                            (subj, self.renderMail(value, error, check, host, 'warn'), 'm4@m4system.com', [mail]))
             send_mass_mail(tuple(emails), fail_silently=False)
         return True
 
@@ -270,9 +320,12 @@ class Thresholds(models.Model):
         now = timezone.now().strftime('%s')
         doit = False
 
-        if self.critrepeat is None and int(getMetadata(host.name + ':' + check.name + ':thold-' + self.name + '::lastcrit', 0)) == 0:
+        if self.critrepeat is None and int(
+                getMetadata(host.name + ':' + check.name + ':thold-' + self.name + '::lastcrit', 0)) == 0:
             doit = True
-        elif self.critrepeat is not None and int(getMetadata(host.name + ':' + check.name + ':thold-' + self.name + '::lastcrit', 0)) < int(now) - int(self.critrepeat):
+        elif self.critrepeat is not None and int(
+                getMetadata(host.name + ':' + check.name + ':thold-' + self.name + '::lastcrit', 0)) < int(now) - int(
+            self.critrepeat):
             doit = True
         if getMetadata(host.name + ':' + check.name + '::notifs', 'True') == 'False':
             doit = False
@@ -281,10 +334,11 @@ class Thresholds(models.Model):
             setMetadata(host.name + ':' + check.name + ':thold-' + self.name + '::laststatus', 'crit')
             setMetadata(host.name + ':' + check.name + ':thold-' + self.name + '::lastcrit', int(now))
             setMetadata(host.name + ':' + check.name + '::checkstatus', 'failed')
-            check.save() # This is required to trigger the SLA failure check
-            if getMetadata(host.name + ':' + check.name + '::notifs', True) != False:
+            check.save()  # This is required to trigger the SLA failure check
+            if getMetadata(host.name + ':' + check.name + '::notifs', True):
                 if self.type == 'bool':
-                    subj = '[M4 - CRITICAL] ' + check.name + ' on ' + host.name + ' = ' + booltostr(strtobool(str(value)))
+                    subj = '[M4 - CRITICAL] ' + check.name + ' on ' + host.name + ' = ' + booltostr(
+                        strtobool(str(value)))
                     from webview.models import UserProfile
                     emails = []
                     # This is generating some errors sometimes https://pm.m4system.com/issues/3289
@@ -297,7 +351,8 @@ class Thresholds(models.Model):
                             mail = UserProfile.objects.get(user=user).notifemail
                             # dbg( user.username + ' is ' + mail)
                             if mail is not None and mail != '':
-                                emails.append((subj, self.renderMail(value, error, check, host, 'crit'), 'm4@m4system.com', [mail]))
+                                emails.append((subj, self.renderMail(value, error, check, host, 'crit'),
+                                               'm4@m4system.com', [mail]))
                     send_mass_mail(tuple(emails), fail_silently=False)
                 elif self.type == 'str':
                     subj = '[M4 - CRITICAL] ' + check.name + ' on ' + host.name + ' is ' + str(value)
@@ -313,10 +368,12 @@ class Thresholds(models.Model):
                             mail = UserProfile.objects.get(user=user).notifemail
                             # dbg( user.username + ' is ' + mail)
                             if mail is not None and mail != '':
-                                emails.append((subj, self.renderMail(value, error, check, host, 'crit'), 'm4@m4system.com', [mail]))
+                                emails.append((subj, self.renderMail(value, error, check, host, 'crit'),
+                                               'm4@m4system.com', [mail]))
                     send_mass_mail(tuple(emails), fail_silently=False)
                 elif self.type == 'int':
-                    subj = '[M4 - CRITICAL] ' + check.name + ' on ' + host.name + ' is at ' + str(value) + " " + check.unit
+                    subj = '[M4 - CRITICAL] ' + check.name + ' on ' + host.name + ' is at ' + str(
+                        value) + " " + check.unit
                     from webview.models import UserProfile
                     emails = []
                     # This is generating some errors sometimes https://pm.m4system.com/issues/3289
@@ -329,22 +386,25 @@ class Thresholds(models.Model):
                             mail = UserProfile.objects.get(user=user).notifemail
                             # dbg( user.username + ' is ' + mail)
                             if mail is not None and mail != '':
-                                emails.append((subj, self.renderMail(value, error, check, host, 'crit'), 'm4@m4system.com', [mail]))
+                                emails.append((subj, self.renderMail(value, error, check, host, 'crit'),
+                                               'm4@m4system.com', [mail]))
                     send_mass_mail(tuple(emails), fail_silently=False)
             # Log a fail event for all SLA that have this check assigned
             for sla in Sla.objects.filter(hostchecks=check):
-                EventLog(sla=sla, hostcheck=check, host=host, threshold=self, event='bad', value=value, data=error).save()
+                EventLog(sla=sla, hostcheck=check, host=host, threshold=self, event='bad', value=value,
+                         data=error).save()
         return True
 
     def doOK(self, value, error, check, host):
         # Go back to ok state for SLA calculation.
+        global subj
         if getMetadata(host.name + ':' + check.name + ':thold-' + self.name + '::laststatus', False) != 'OK':
             setMetadata(host.name + ':' + check.name + '::notifs', True)
             setMetadata(host.name + ':' + check.name + ':thold-' + self.name + '::lastwarn', 0)
             setMetadata(host.name + ':' + check.name + ':thold-' + self.name + '::lastcrit', 0)
             setMetadata(host.name + ':' + check.name + ':thold-' + self.name + '::laststatus', 'OK')
-            setMetadata(host.name + ':' + check.name  + '::checkstatus', 'OK')
-            check.save() # This is required to trigger the SLA failure check
+            setMetadata(host.name + ':' + check.name + '::checkstatus', 'OK')
+            check.save()  # This is required to trigger the SLA failure check
             if self.type == 'bool':
                 subj = '[M4 - OK] ' + check.name + ' on ' + host.name + ' = ' + booltostr(strtobool(str(value)))
             elif self.type == 'int':
@@ -362,11 +422,13 @@ class Thresholds(models.Model):
                     # This is where the user decides where to receive his notifications.
                     mail = UserProfile.objects.get(user=user).notifemail
                     if mail is not None and mail != '':
-                        emails.append((subj, self.renderMail(value, error, check, host, 'ok'), 'm4@m4system.com', [mail]))
+                        emails.append(
+                            (subj, self.renderMail(value, error, check, host, 'ok'), 'm4@m4system.com', [mail]))
             send_mass_mail(tuple(emails), fail_silently=False)
             # Log a fail event for all SLA that have this check assigned
             for sla in Sla.objects.filter(hostchecks=check):
-                EventLog(sla=sla, hostcheck=check, host=host, threshold=self, event='good', value=value, data=error).save()        
+                EventLog(sla=sla, hostcheck=check, host=host, threshold=self, event='good', value=value,
+                         data=error).save()
         return True
 
     def renderMail(self, value, error, check, host, type):
@@ -384,7 +446,7 @@ class Thresholds(models.Model):
             except Exception as e:
                 dbg(e)
                 t = None
-        elif type == 'ok':        
+        elif type == 'ok':
             try:
                 t = django_engine.from_string(self.oktpl.content)
             except Exception as e:
@@ -414,11 +476,14 @@ class Historical(models.Model):
     value = models.CharField('Value', max_length=4096, help_text='Value returned by check.')
     data = models.CharField('Metadata', max_length=4096, default='{}', help_text='JSON encoded metadata')
     timestamp = models.DateTimeField('Timestamp', auto_now_add=True, help_text='Timestamp for the event.')
-    exported = models.BooleanField('To Delete', default=False, help_text='Set to True if it was exported to InfluxDB and can be deleted')
+    exported = models.BooleanField('To Delete', default=False,
+                                   help_text='Set to True if it was exported to InfluxDB and can be deleted')
+
     # exportedk = models.BooleanField('To Delete K', default=False, help_text='Set to True if it was exported to Kafka and can be deleted')
 
     def __str__(self):
-        return str(self.host.name) + '[' + str(self.hostcheck.name) + '] = ' + str(self.value) + ' on ' + str(self.timestamp)
+        return str(self.host.name) + '[' + str(self.hostcheck.name) + '] = ' + str(self.value) + ' on ' + str(
+            self.timestamp)
 
     class Meta:
         verbose_name = 'Historical data'
@@ -426,25 +491,44 @@ class Historical(models.Model):
         ordering = ['-pk']
 
 
+# noinspection PyUnusedLocal,PyUnusedLocal,PyUnusedLocal,PyUnusedLocal,PyUnusedLocal,PyUnusedLocal,PyUnusedLocal,PyUnusedLocal,PyUnusedLocal,PyUnusedLocal,PyUnusedLocal,PyUnusedLocal,PyUnusedLocal,PyUnusedLocal,PyUnusedLocal,PyUnusedLocal,PyUnusedLocal,PyUnusedLocal,PyUnusedLocal,PyUnusedLocal,PyUnusedLocal,PyUnusedLocal,PyUnusedLocal,PyUnusedLocal,PyBroadException,PyBroadException,PyBroadException,PyBroadException,PyBroadException
 class Sla(models.Model):
     """
     This model stores SLA data from thresholds fail, related to :model:`scheduler.HostChecks`.
     """
     name = models.SlugField('Name', max_length=128, unique=True, help_text='Name of the SLA.')
     verbosename = models.CharField('Full Name', max_length=256, blank=True, help_text='Verbose name as displayed.')
-    currentvalue = models.FloatField('Rolling window value', blank=True, null=True, default='100', help_text='30 Day Rolling window value')
-    status = models.CharField('Current Status', max_length=16, default='OK', help_text='Current condition of the SLA.  Failing or OK')
-    critical = models.FloatField('Value in percentile for criticality', blank=True, null=True, default='99', help_text='Consider the SLA critical at this value.  Email alertgroups.')
-    warngroups = models.ManyToManyField(Group, verbose_name='Warning Groups', related_name='slawarngroup', default=None, blank=True, help_text='Groups to notify on warning, if applicable.')
-    critgroups = models.ManyToManyField(Group, verbose_name='Critical Groups', related_name='slacritgroup', default=None, blank=True, help_text='Groups to notify on critical, if applicable.')
-    okgroups = models.ManyToManyField(Group, verbose_name='Recovery Groups', related_name='slaokgroup', default=None, blank=True, help_text='Groups to notify on recovery, if applicable.')
-    warntpl = models.ForeignKey('Template', verbose_name='Warning template', related_name='slawarntpl', default=None, null=True, blank=True, on_delete=models.PROTECT, limit_choices_to={'event': 'warn', 'obj': 'sla'}, help_text='Template to use when sending out warning emails when the SLA is being affected.')
-    crittpl = models.ForeignKey('Template', verbose_name='Critical template', related_name='slacrittpl', default=None, null=True, blank=True, on_delete=models.PROTECT, limit_choices_to={'event': 'crit', 'obj': 'sla'}, help_text='Template to use when sending out critical emails when the SLA goes under the critical threshold.')
-    oktpl = models.ForeignKey('Template', verbose_name='Recovery template', related_name='slaoktpl', default=None, null=True, blank=True, on_delete=models.PROTECT, limit_choices_to={'event': 'ok', 'obj': 'sla'}, help_text='Template to use when sending out recovery emails.')
+    currentvalue = models.FloatField('Rolling window value', blank=True, null=True, default='100',
+                                     help_text='30 Day Rolling window value')
+    status = models.CharField('Current Status', max_length=16, default='OK',
+                              help_text='Current condition of the SLA.  Failing or OK')
+    critical = models.FloatField('Value in percentile for criticality', blank=True, null=True, default='99',
+                                 help_text='Consider the SLA critical at this value.  Email alertgroups.')
+    warngroups = models.ManyToManyField(Group, verbose_name='Warning Groups', related_name='slawarngroup', default=None,
+                                        blank=True, help_text='Groups to notify on warning, if applicable.')
+    critgroups = models.ManyToManyField(Group, verbose_name='Critical Groups', related_name='slacritgroup',
+                                        default=None, blank=True,
+                                        help_text='Groups to notify on critical, if applicable.')
+    okgroups = models.ManyToManyField(Group, verbose_name='Recovery Groups', related_name='slaokgroup', default=None,
+                                      blank=True, help_text='Groups to notify on recovery, if applicable.')
+    warntpl = models.ForeignKey('Template', verbose_name='Warning template', related_name='slawarntpl', default=None,
+                                null=True, blank=True, on_delete=models.PROTECT,
+                                limit_choices_to={'event': 'warn', 'obj': 'sla'},
+                                help_text='Template to use when sending out warning emails when the SLA is being affected.')
+    crittpl = models.ForeignKey('Template', verbose_name='Critical template', related_name='slacrittpl', default=None,
+                                null=True, blank=True, on_delete=models.PROTECT,
+                                limit_choices_to={'event': 'crit', 'obj': 'sla'},
+                                help_text='Template to use when sending out critical emails when the SLA goes under the critical threshold.')
+    oktpl = models.ForeignKey('Template', verbose_name='Recovery template', related_name='slaoktpl', default=None,
+                              null=True, blank=True, on_delete=models.PROTECT,
+                              limit_choices_to={'event': 'ok', 'obj': 'sla'},
+                              help_text='Template to use when sending out recovery emails.')
     # data = models.CharField('Metadata', max_length=4096, default='{}', help_text='JSON encoded metadata')
-    allchecks = models.BooleanField('Require all checks to fail', default=False, help_text='When more than one check is assigned to an SLA, require all of them to fail before we consider the SLA event.')
+    allchecks = models.BooleanField('Require all checks to fail', default=False,
+                                    help_text='When more than one check is assigned to an SLA, require all of them to fail before we consider the SLA event.')
     enabled = models.BooleanField('Active', default=True, help_text='Is this SLA active ?')
-    note = models.CharField('Note', max_length=4096, null=True, blank=True, default=None, help_text='Additional information that could be usefull.')
+    note = models.CharField('Note', max_length=4096, null=True, blank=True, default=None,
+                            help_text='Additional information that could be usefull.')
 
     def __str__(self):
         return str(self.name) + '@' + str(self.currentvalue)
@@ -456,7 +540,8 @@ class Sla(models.Model):
             if self.status == 'failing' and getMetadata('sla-' + self.name + '::laststatus', False) != 'failing':
                 setMetadata('sla-' + self.name + '::laststatus', self.status)
                 self.doWarn()
-            if float(self.currentvalue) <= float(self.critical) and self.status == 'failing' and getMetadata('sla-' + self.name + '::laststatus', False) != 'failing':
+            if float(self.currentvalue) <= float(self.critical) and self.status == 'failing' and getMetadata(
+                    'sla-' + self.name + '::laststatus', False) != 'failing':
                 setMetadata('sla-' + self.name + '::laststatus', self.status)
                 self.doCrit()
             elif self.status == 'OK' and getMetadata('sla-' + self.name + '::laststatus', False) != 'OK':
@@ -474,7 +559,8 @@ class Sla(models.Model):
             for user in users:
                 mail = UserProfile.objects.get(user=user).notifemail
                 if mail is not None and mail != '':
-                    emails.append(('[M4] SLA Warning for ' + self.name, self.renderMail('warn'), 'm4@m4system.com', [mail]))
+                    emails.append(
+                        ('[M4] SLA Warning for ' + self.name, self.renderMail('warn'), 'm4@m4system.com', [mail]))
         send_mass_mail(tuple(emails), fail_silently=False)
         return True
 
@@ -487,7 +573,8 @@ class Sla(models.Model):
             for user in users:
                 mail = UserProfile.objects.get(user=user).notifemail
                 if mail is not None and mail != '':
-                    emails.append(('[M4] ***CRITICAL SLA*** for ' + self.name, self.renderMail('crit'), 'm4@m4system.com', [mail]))
+                    emails.append(('[M4] ***CRITICAL SLA*** for ' + self.name, self.renderMail('crit'),
+                                   'm4@m4system.com', [mail]))
         send_mass_mail(tuple(emails), fail_silently=False)
         return True
 
@@ -500,7 +587,8 @@ class Sla(models.Model):
             for user in users:
                 mail = UserProfile.objects.get(user=user).notifemail
                 if mail is not None and mail != '':
-                    emails.append(('[M4] SLA Restored for ' + self.name, self.renderMail('ok'), 'm4@m4system.com', [mail]))
+                    emails.append(
+                        ('[M4] SLA Restored for ' + self.name, self.renderMail('ok'), 'm4@m4system.com', [mail]))
         send_mass_mail(tuple(emails), fail_silently=False)
         return True
 
@@ -519,7 +607,7 @@ class Sla(models.Model):
             except Exception as e:
                 dbg(e)
                 t = None
-        elif type == 'ok':        
+        elif type == 'ok':
             try:
                 t = django_engine.from_string(self.oktpl.content)
             except Exception as e:
@@ -537,6 +625,7 @@ class Sla(models.Model):
     def computeSLA(self):
         # Compute the SLA.  Can be called from the management shell:  m4@m4dev:~$ manage computesla
         # A100 wants this in amount of failures per periods instead of %.
+        global lastevent, lastbad
         now = timezone.now()
         monthbefore = now - datetime.timedelta(days=30)
         # Compute last 30 days
@@ -694,17 +783,22 @@ class EventLog(models.Model):
     This model stores event data related to the thresholds, related to :model:`scheduler.Sla`.
     """
     EVENT_CHOICES = (('bad', 'Failure'), ('good', 'Restored'))
-    sla = models.ForeignKey('Sla', on_delete=models.PROTECT, null=True, blank=True, help_text='SLA this data relates to.')
-    hostcheck = models.ForeignKey('HostChecks', on_delete=models.PROTECT, null=True, blank=True, help_text='Check this data relates to.')
-    host = models.ForeignKey('Hosts', on_delete=models.PROTECT, null=True, blank=True, help_text='Host this data relates to.')
+    sla = models.ForeignKey('Sla', on_delete=models.PROTECT, null=True, blank=True,
+                            help_text='SLA this data relates to.')
+    hostcheck = models.ForeignKey('HostChecks', on_delete=models.PROTECT, null=True, blank=True,
+                                  help_text='Check this data relates to.')
+    host = models.ForeignKey('Hosts', on_delete=models.PROTECT, null=True, blank=True,
+                             help_text='Host this data relates to.')
     threshold = models.ForeignKey('Thresholds', blank=True, null=True, help_text='Threshold the data relates to.')
-    event = models.CharField('Event', max_length=4, choices=EVENT_CHOICES, default='bad', help_text='What type of event are we logging.')
+    event = models.CharField('Event', max_length=4, choices=EVENT_CHOICES, default='bad',
+                             help_text='What type of event are we logging.')
     value = models.CharField('Value', max_length=4096, help_text='Value of the event.')
     data = models.CharField('Metadata', max_length=4096, default='{}', help_text='JSON encoded metadata')
     timestamp = models.DateTimeField('Timestamp', auto_now_add=True, help_text='Timestamp for the event.')
 
     def __str__(self):
-        return str(self.threshold.name) + ' on ' + str(self.hostcheck.name) + ' ' + str(get_choicename(self, 'event')[1]) + ' -> ' + str(self.value) + ' @ ' + str(self.timestamp)
+        return str(self.threshold.name) + ' on ' + str(self.hostcheck.name) + ' ' + str(
+            get_choicename(self, 'event')[1]) + ' -> ' + str(self.value) + ' @ ' + str(self.timestamp)
 
     class Meta:
         verbose_name = 'Threshold Event Log'
@@ -717,13 +811,16 @@ class SlaLog(models.Model):
     This model stores event data related to the SLA, related to :model:`scheduler.Sla`.
     """
     EVENT_CHOICES = (('bad', 'Failure'), ('good', 'Restored'))
-    sla = models.ForeignKey('Sla', on_delete=models.PROTECT, null=True, blank=True, help_text='SLA this data relates to.')
-    event = models.CharField('Event', max_length=4, choices=EVENT_CHOICES, default='bad', help_text='What type of event are we logging.')
+    sla = models.ForeignKey('Sla', on_delete=models.PROTECT, null=True, blank=True,
+                            help_text='SLA this data relates to.')
+    event = models.CharField('Event', max_length=4, choices=EVENT_CHOICES, default='bad',
+                             help_text='What type of event are we logging.')
     data = models.CharField('Metadata', max_length=4096, default='{}', help_text='JSON encoded metadata')
     timestamp = models.DateTimeField('Timestamp', auto_now_add=True, help_text='Timestamp for the event.')
 
     def __str__(self):
-        return str(self.sla.name) + ' ' + str(get_choicename(self, 'event')[1]) + ' -> ' + str(self.event) + ' @ ' + str(self.timestamp)
+        return str(self.sla.name) + ' ' + str(get_choicename(self, 'event')[1]) + ' -> ' + str(
+            self.event) + ' @ ' + str(self.timestamp)
 
     class Meta:
         verbose_name = 'Sla Log'
@@ -735,8 +832,10 @@ class ErrorLog(models.Model):
     """
     This model stores error data related to the hostchecks, related to :model:`scheduler.Hostchecks`.
     """
-    hostcheck = models.ForeignKey('HostChecks', on_delete=models.PROTECT, null=True, blank=True, help_text='Check this data relates to.')
-    host = models.ForeignKey('Hosts', on_delete=models.PROTECT, null=True, blank=True, help_text='Host this data relates to.')
+    hostcheck = models.ForeignKey('HostChecks', on_delete=models.PROTECT, null=True, blank=True,
+                                  help_text='Check this data relates to.')
+    host = models.ForeignKey('Hosts', on_delete=models.PROTECT, null=True, blank=True,
+                             help_text='Host this data relates to.')
     event = models.CharField('Event', max_length=64, help_text='What was the exception.')
     error = models.CharField('Error', max_length=4096, null=True, blank=True, help_text='Verbose text of the error.')
     value = models.CharField('Value', max_length=4096, null=True, blank=True, help_text='Value of the check.')
@@ -744,7 +843,8 @@ class ErrorLog(models.Model):
     timestamp = models.DateTimeField('Timestamp', auto_now_add=True, help_text='Timestamp for the event.')
 
     def __str__(self):
-        return str(self.hostcheck.name)  + ' on ' + str(self.host.name) + ' got ' + ' [' + self.event + '] with ' + str(self.value) + ' -> ' + self.error + ' @ ' + str(self.timestamp)
+        return str(self.hostcheck.name) + ' on ' + str(self.host.name) + ' got ' + ' [' + self.event + '] with ' + str(
+            self.value) + ' -> ' + self.error + ' @ ' + str(self.timestamp)
 
     class Meta:
         verbose_name = 'Check Error Log'
@@ -756,7 +856,8 @@ class Metadata(models.Model):
     This model stores meta data for all models.
     """
     key = models.CharField('Key', max_length=128, unique=True, help_text='Key to the data.')
-    data = models.CharField('Data', max_length=4096, default='{}', null=True, blank=True, help_text='JSON encoded metadata')
+    data = models.CharField('Data', max_length=4096, default='{}', null=True, blank=True,
+                            help_text='JSON encoded metadata')
     timestamp = models.DateTimeField('Timestamp', auto_now=True, help_text='Timestamp for the last write to this key.')
 
     def __str__(self):
@@ -771,7 +872,8 @@ class Trap(models.Model):
     """
     This model stores traps received by the sink
     """
-    host = models.ForeignKey('Hosts', on_delete=models.PROTECT, null=True, blank=True, help_text='Host this data relates to.')
+    host = models.ForeignKey('Hosts', on_delete=models.PROTECT, null=True, blank=True,
+                             help_text='Host this data relates to.')
     oid = models.CharField('OID', max_length=128, help_text='OID received.')
     value = models.CharField('Value', max_length=4096, help_text='Message received')
     timestamp = models.DateTimeField('Timestamp', auto_now=True, db_index=True, help_text='Timestamp for the event.')
@@ -793,8 +895,10 @@ class Template(models.Model):
     EVENT_CHOICES = (('warn', 'Warning'), ('crit', 'Critical'), ('ok', 'Recovery'), ('err', 'Error'))
     name = models.SlugField('Name', max_length=128, help_text='Slug for the Template.')
     verbosename = models.CharField('Full Name', max_length=256, help_text='Verbose name as displayed.')
-    obj = models.CharField('Object type', max_length=32, choices=OBJ_CHOICES, blank=False, null=False, help_text='The object type this template relates to.')
-    event = models.CharField('Event type', max_length=32, choices=EVENT_CHOICES, blank=False, null=False, help_text='The event type this template relates to.')
+    obj = models.CharField('Object type', max_length=32, choices=OBJ_CHOICES, blank=False, null=False,
+                           help_text='The object type this template relates to.')
+    event = models.CharField('Event type', max_length=32, choices=EVENT_CHOICES, blank=False, null=False,
+                             help_text='The event type this template relates to.')
     subject = models.TextField('Template Subject', help_text='The template subject, django template syntax supported.')
     content = models.TextField('Template Content', help_text='The template content, django template syntax supported.')
     timestamp = models.DateTimeField('Timestamp', auto_now=True, help_text='Last modification date.')
@@ -860,7 +964,9 @@ def do_events(sender, instance, **kwargs):
         failedchecks = 0
         # This is generating some errors sometimes https://pm.m4system.com/issues/3289
         # It is also an issue for users who dont log on often and have lots of threshold events.
-        add_msg('25', instance.hostcheck.name + ' on ' + instance.host.name + ' suceeded threshold named ' + instance.threshold.name + ' with value ' + str(instance.value), instance.threshold.warngroups.all())
+        add_msg('25',
+                instance.hostcheck.name + ' on ' + instance.host.name + ' suceeded threshold named ' + instance.threshold.name + ' with value ' + str(
+                    instance.value), instance.threshold.warngroups.all())
         checks = HostChecks.objects.filter(sla=instance.sla, sla__enabled=True, enabled=True)
         # dbg(checks)
         for check in checks:
@@ -895,6 +1001,7 @@ def do_events(sender, instance, **kwargs):
 @receiver(m2m_changed, sender=HostChecks.hosts.through, dispatch_uid="Create_them_models")
 def create_them_models(sender, instance, action, reverse, *args, **kwargs):
     # Create the celery task to update the check
+    global Widgets
     if action == 'post_add' and not reverse:
         for host in instance.hosts.all():
             try:
@@ -903,7 +1010,10 @@ def create_them_models(sender, instance, action, reverse, *args, **kwargs):
                 dbg(e)
                 gettask = None
             if gettask is None:
-                task = PeriodicTask(name=host.name + '-' + instance.name, interval=IntervalSchedule.objects.get(every=instance.interval), task=instance.checktype, args='["' + host.name + '", "' + instance.name + '"]', last_run_at=timezone.now(), exchange=None, routing_key=None, queue=None)
+                task = PeriodicTask(name=host.name + '-' + instance.name,
+                                    interval=IntervalSchedule.objects.get(every=instance.interval),
+                                    task=instance.checktype, args='["' + host.name + '", "' + instance.name + '"]',
+                                    last_run_at=timezone.now(), exchange=None, routing_key=None, queue=None)
                 task.save()
             else:
                 gettask.name = host.name + '-' + instance.name
@@ -920,7 +1030,8 @@ def create_them_models(sender, instance, action, reverse, *args, **kwargs):
                 getwidget = None
             # Autocreating widets
             if getwidget is None:
-                widget = Widgets(name=host.name + '-' + instance.name, verbosename=instance.verbosename, hostcheck=instance, host=host, unit=instance.unit, template=instance.checktype)
+                widget = Widgets(name=host.name + '-' + instance.name, verbosename=instance.verbosename,
+                                 hostcheck=instance, host=host, unit=instance.unit, template=instance.checktype)
                 widget.save()
             else:
                 getwidget.name = host.name + '-' + instance.name
@@ -936,7 +1047,9 @@ def create_them_models(sender, instance, action, reverse, *args, **kwargs):
                 dbg(e)
                 getwidgetgraph = None
             if getwidgetgraph is None:
-                widgetgraph = Widgets(name=host.name + '-' + instance.name + '-graph', verbosename=instance.verbosename + ' Graph', hostcheck=instance, host=host, unit=instance.unit, template=instance.checktype + 'graph')
+                widgetgraph = Widgets(name=host.name + '-' + instance.name + '-graph',
+                                      verbosename=instance.verbosename + ' Graph', hostcheck=instance, host=host,
+                                      unit=instance.unit, template=instance.checktype + 'graph')
                 widgetgraph.save()
             else:
                 getwidgetgraph.name = host.name + '-' + instance.name + '-graph'
@@ -952,7 +1065,9 @@ def create_them_models(sender, instance, action, reverse, *args, **kwargs):
                 dbg(e)
                 getwidgetinfo = None
             if getwidgetinfo is None:
-                widgetinfo = Widgets(name=host.name + '-' + instance.name + '-info', verbosename=instance.verbosename + ' Info', hostcheck=instance, host=host, unit=instance.unit, template=instance.checktype + 'info')
+                widgetinfo = Widgets(name=host.name + '-' + instance.name + '-info',
+                                     verbosename=instance.verbosename + ' Info', hostcheck=instance, host=host,
+                                     unit=instance.unit, template=instance.checktype + 'info')
                 widgetinfo.save()
             else:
                 getwidgetinfo.name = host.name + '-' + instance.name + '-info'
@@ -963,9 +1078,11 @@ def create_them_models(sender, instance, action, reverse, *args, **kwargs):
                 getwidgetinfo.save()
     return True
 
+
 @receiver(post_save, sender=HostChecks, dispatch_uid="edit_hostchecks")
 def edit_hostchecks(sender, instance, **kwargs):
     # Create the celery task to update the check
+    global Widgets
     for host in instance.hosts.all():
         try:
             gettask = PeriodicTask.objects.get(name=host.name + '-' + instance.name)
@@ -973,7 +1090,10 @@ def edit_hostchecks(sender, instance, **kwargs):
             dbg(e)
             gettask = None
         if gettask is None:
-            task = PeriodicTask(name=host.name + '-' + instance.name, interval=IntervalSchedule.objects.get(every=instance.interval), task=instance.checktype, args='["' + host.name + '", "' + instance.name + '"]', last_run_at=timezone.now(), exchange=None, routing_key=None, queue=None)
+            task = PeriodicTask(name=host.name + '-' + instance.name,
+                                interval=IntervalSchedule.objects.get(every=instance.interval), task=instance.checktype,
+                                args='["' + host.name + '", "' + instance.name + '"]', last_run_at=timezone.now(),
+                                exchange=None, routing_key=None, queue=None)
             task.save()
         else:
             gettask.name = host.name + '-' + instance.name
@@ -990,7 +1110,8 @@ def edit_hostchecks(sender, instance, **kwargs):
             getwidget = None
         # Autocreating widets
         if getwidget is None:
-            widget = Widgets(name=host.name + '-' + instance.name, verbosename=instance.verbosename, hostcheck=instance, host=host, unit=instance.unit, template=instance.checktype)
+            widget = Widgets(name=host.name + '-' + instance.name, verbosename=instance.verbosename, hostcheck=instance,
+                             host=host, unit=instance.unit, template=instance.checktype)
             widget.save()
         else:
             getwidget.name = host.name + '-' + instance.name
@@ -1006,7 +1127,9 @@ def edit_hostchecks(sender, instance, **kwargs):
             dbg(e)
             getwidgetgraph = None
         if getwidgetgraph is None:
-            widgetgraph = Widgets(name=host.name + '-' + instance.name + '-graph', verbosename=instance.verbosename + ' Graph', hostcheck=instance, host=host, unit=instance.unit, template=instance.checktype + 'graph')
+            widgetgraph = Widgets(name=host.name + '-' + instance.name + '-graph',
+                                  verbosename=instance.verbosename + ' Graph', hostcheck=instance, host=host,
+                                  unit=instance.unit, template=instance.checktype + 'graph')
             widgetgraph.save()
         else:
             getwidgetgraph.name = host.name + '-' + instance.name + '-graph'
@@ -1022,7 +1145,9 @@ def edit_hostchecks(sender, instance, **kwargs):
             dbg(e)
             getwidgetinfo = None
         if getwidgetinfo is None:
-            widgetinfo = Widgets(name=host.name + '-' + instance.name + '-info', verbosename=instance.verbosename + ' Info', hostcheck=instance, host=host, unit=instance.unit, template=instance.checktype + 'info')
+            widgetinfo = Widgets(name=host.name + '-' + instance.name + '-info',
+                                 verbosename=instance.verbosename + ' Info', hostcheck=instance, host=host,
+                                 unit=instance.unit, template=instance.checktype + 'info')
             widgetinfo.save()
         else:
             getwidgetinfo.name = host.name + '-' + instance.name + '-info'
@@ -1040,8 +1165,8 @@ def edit_hostchecks(sender, instance, **kwargs):
 def error_to_ui(sender, instance, **kwargs):
     # When an error gets logged, we want to display a notification for it in the UI
     from webview.models import UserView
-    host = None;
-    hostcheck = None;
+    host = None
+    hostcheck = None
     if isinstance(instance.host, Hosts):
         host = instance.host.name
     elif isinstance(instance.host, str):
@@ -1051,6 +1176,7 @@ def error_to_ui(sender, instance, **kwargs):
     elif isinstance(instance.hostcheck, str):
         hostcheck = instance.hostcheck
     if getMetadata(host + ':' + hostcheck + '::notifs', 'True') == 'True':
-        groups = UserView.objects.filter(widgets__name=host + '-' + hostcheck).values_list('group', flat=True).distinct()
+        groups = UserView.objects.filter(widgets__name=host + '-' + hostcheck).values_list('group',
+                                                                                           flat=True).distinct()
         add_msg(level='99', msg=instance, groups=groups)
     return True

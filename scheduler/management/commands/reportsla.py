@@ -20,7 +20,6 @@ def convertEvent(event):
         return event
 
 
-
 class Command(BaseCommand):
     help = 'Report on SLAs'
 
@@ -39,37 +38,61 @@ class Command(BaseCommand):
             self.stdout.write("Report for user " + user.username)
             self.stdout.write(' ')
             slas = {}
-            for sla in Sla.objects.filter(enabled=True, critgroups__name__in=user.groups.all().values_list('name',flat=True)):
-                slas[sla.name] = {'30daybad': {'count': str(getMetadata('sla-' + sla.name + '::30daybad')), 'slalog': []}, 'note': sla.note}
+            for sla in Sla.objects.filter(enabled=True,
+                                          critgroups__name__in=user.groups.all().values_list('name', flat=True)):
+                slas[sla.name] = {
+                    '30daybad': {'count': str(getMetadata('sla-' + sla.name + '::30daybad')), 'slalog': []},
+                    'note': sla.note}
                 if sla.note != '':
                     title = " Statistics for " + sla.name + " (" + sla.note + "):"
                 else:
                     title = " Statistics for " + sla.name + ":"
                 self.stdout.write(title)
-                self.stdout.write("     SLA events in the past 30 days: " + str(getMetadata('sla-' + sla.name + '::30daybad')))
+                self.stdout.write(
+                    "     SLA events in the past 30 days: " + str(getMetadata('sla-' + sla.name + '::30daybad')))
                 for log in SlaLog.objects.filter(timestamp__range=[onemonthbefore, now], sla=sla).order_by('pk'):
-                    slas[sla.name]['30daybad']['slalog'].append("         " + log.timestamp.strftime('%Y-%m-%d %H:%M:%S %Z') + " -> " + convertEvent(log.event))
-                    self.stdout.write("         " + log.timestamp.strftime('%Y-%m-%d %H:%M:%S %Z') + " -> " + convertEvent(log.event))
-                self.stdout.write("     SLA events in the past 60 days: " + str(getMetadata('sla-' + sla.name + '::60daybad')))
+                    slas[sla.name]['30daybad']['slalog'].append(
+                        "         " + log.timestamp.strftime('%Y-%m-%d %H:%M:%S %Z') + " -> " + convertEvent(log.event))
+                    self.stdout.write(
+                        "         " + log.timestamp.strftime('%Y-%m-%d %H:%M:%S %Z') + " -> " + convertEvent(log.event))
+                self.stdout.write(
+                    "     SLA events in the past 60 days: " + str(getMetadata('sla-' + sla.name + '::60daybad')))
                 slas[sla.name]['60daybad'] = {'count': str(getMetadata('sla-' + sla.name + '::60daybad')), 'slalog': []}
-                for log in SlaLog.objects.filter(timestamp__range=[twomonthbefore, onemonthbefore], sla=sla).order_by('pk'):
-                    slas[sla.name]['60daybad']['slalog'].append("         " + log.timestamp.strftime('%Y-%m-%d %H:%M:%S %Z') + " -> " + convertEvent(log.event))
-                    self.stdout.write("         " + log.timestamp.strftime('%Y-%m-%d %H:%M:%S %Z') + " -> " + convertEvent(log.event))
-                self.stdout.write("     SLA events in the past 90 days: " + str(getMetadata('sla-' + sla.name + '::90daybad')))
+                for log in SlaLog.objects.filter(timestamp__range=[twomonthbefore, onemonthbefore], sla=sla).order_by(
+                        'pk'):
+                    slas[sla.name]['60daybad']['slalog'].append(
+                        "         " + log.timestamp.strftime('%Y-%m-%d %H:%M:%S %Z') + " -> " + convertEvent(log.event))
+                    self.stdout.write(
+                        "         " + log.timestamp.strftime('%Y-%m-%d %H:%M:%S %Z') + " -> " + convertEvent(log.event))
+                self.stdout.write(
+                    "     SLA events in the past 90 days: " + str(getMetadata('sla-' + sla.name + '::90daybad')))
                 slas[sla.name]['90daybad'] = {'count': str(getMetadata('sla-' + sla.name + '::90daybad')), 'slalog': []}
-                for log in SlaLog.objects.filter(timestamp__range=[threemonthbefore, twomonthbefore], sla=sla).order_by('pk'):
-                    slas[sla.name]['90daybad']['slalog'].append("         " + log.timestamp.strftime('%Y-%m-%d %H:%M:%S %Z') + " -> " + convertEvent(log.event))
-                    self.stdout.write("         " + log.timestamp.strftime('%Y-%m-%d %H:%M:%S %Z') + " -> " + convertEvent(log.event))
-                self.stdout.write("     SLA events in the past 180 days: " + str(getMetadata('sla-' + sla.name + '::180daybad')))
-                slas[sla.name]['180daybad'] = {'count': str(getMetadata('sla-' + sla.name + '::180daybad')), 'slalog': []}
-                for log in SlaLog.objects.filter(timestamp__range=[sixmonthbefore, threemonthbefore], sla=sla).order_by('pk'):
-                    slas[sla.name]['180daybad']['slalog'].append("         " + log.timestamp.strftime('%Y-%m-%d %H:%M:%S %Z') + " -> " + convertEvent(log.event))
-                    self.stdout.write("         " + log.timestamp.strftime('%Y-%m-%d %H:%M:%S %Z') + " -> " + convertEvent(log.event))
-                self.stdout.write("     SLA events in the past 365 days: " + str(getMetadata('sla-' + sla.name + '::365daybad')))
-                slas[sla.name]['365daybad'] = {'count': str(getMetadata('sla-' + sla.name + '::365daybad')), 'slalog': []}
-                for log in SlaLog.objects.filter(timestamp__range=[twelvemonthbefore, sixmonthbefore], sla=sla).order_by('pk'):
-                    slas[sla.name]['365daybad']['slalog'].append("         " + log.timestamp.strftime('%Y-%m-%d %H:%M:%S %Z') + " -> " + convertEvent(log.event))
-                    self.stdout.write("         " + log.timestamp.strftime('%Y-%m-%d %H:%M:%S %Z') + " -> " + convertEvent(log.event))
+                for log in SlaLog.objects.filter(timestamp__range=[threemonthbefore, twomonthbefore], sla=sla).order_by(
+                        'pk'):
+                    slas[sla.name]['90daybad']['slalog'].append(
+                        "         " + log.timestamp.strftime('%Y-%m-%d %H:%M:%S %Z') + " -> " + convertEvent(log.event))
+                    self.stdout.write(
+                        "         " + log.timestamp.strftime('%Y-%m-%d %H:%M:%S %Z') + " -> " + convertEvent(log.event))
+                self.stdout.write(
+                    "     SLA events in the past 180 days: " + str(getMetadata('sla-' + sla.name + '::180daybad')))
+                slas[sla.name]['180daybad'] = {'count': str(getMetadata('sla-' + sla.name + '::180daybad')),
+                                               'slalog': []}
+                for log in SlaLog.objects.filter(timestamp__range=[sixmonthbefore, threemonthbefore], sla=sla).order_by(
+                        'pk'):
+                    slas[sla.name]['180daybad']['slalog'].append(
+                        "         " + log.timestamp.strftime('%Y-%m-%d %H:%M:%S %Z') + " -> " + convertEvent(log.event))
+                    self.stdout.write(
+                        "         " + log.timestamp.strftime('%Y-%m-%d %H:%M:%S %Z') + " -> " + convertEvent(log.event))
+                self.stdout.write(
+                    "     SLA events in the past 365 days: " + str(getMetadata('sla-' + sla.name + '::365daybad')))
+                slas[sla.name]['365daybad'] = {'count': str(getMetadata('sla-' + sla.name + '::365daybad')),
+                                               'slalog': []}
+                for log in SlaLog.objects.filter(timestamp__range=[twelvemonthbefore, sixmonthbefore],
+                                                 sla=sla).order_by('pk'):
+                    slas[sla.name]['365daybad']['slalog'].append(
+                        "         " + log.timestamp.strftime('%Y-%m-%d %H:%M:%S %Z') + " -> " + convertEvent(log.event))
+                    self.stdout.write(
+                        "         " + log.timestamp.strftime('%Y-%m-%d %H:%M:%S %Z') + " -> " + convertEvent(log.event))
             self.stdout.write(' ')
             self.stdout.write(' ')
             data['slas'] = slas

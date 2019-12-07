@@ -11,15 +11,15 @@ def computeint(check, host, value):
     from .models import Historical
     # create the db record
     history = Historical(host=host, hostcheck=check, value=value, timestamp=timezone.now())
-    setMetadata(host.name + ':' + check.name + '::lastvalue', getMetadata(host.name + ':' + check.name + '::value', 'No Data'))
+    setMetadata(host.name + ':' + check.name + '::lastvalue',
+                getMetadata(host.name + ':' + check.name + '::value', 'No Data'))
     now = int(timezone.now().timestamp())
     setMetadata(host.name + ':' + check.name + '::lastcheck', now)
     setMetadata(host.name + ':' + check.name + '::value', value)
-    metadata = {}
-    metadata['min'] = getMetadata(host.name + ':' + check.name + '::min', 'No Data')
-    metadata['max'] = getMetadata(host.name + ':' + check.name + '::max', 'No Data')
-    metadata['avg'] = getMetadata(host.name + ':' + check.name + '::avg', 'No Data')
-    metadata['error'] = getMetadata(host.name + ':' + check.name + '::error', 'OK') 
+    metadata = {'min': getMetadata(host.name + ':' + check.name + '::min', 'No Data'),
+                'max': getMetadata(host.name + ':' + check.name + '::max', 'No Data'),
+                'avg': getMetadata(host.name + ':' + check.name + '::avg', 'No Data'),
+                'error': getMetadata(host.name + ':' + check.name + '::error', 'OK')}
 
     # disable avg calculation for now.  will do it out of band to avoid running late of checks
     # if (now - metadata.get('laststats', 0)) > check.statsinterval:
@@ -39,7 +39,7 @@ def computeint(check, host, value):
 
     # Update min if we are under
     # print(metadata)
-    mdmin =  metadata['min']
+    mdmin = metadata['min']
     if mdmin == 'None' or float(value) < float(mdmin):
         metadata['min'] = setMetadata(host.name + ':' + check.name + '::min', str(value))
     # Update max if we are over
@@ -67,7 +67,7 @@ def computeint(check, host, value):
                 elif error.get('lowwarn', False) or error.get('highwarn', False):
                     thiserror = 'warn'
             elif error.get('hasError', None) is False:
-                    thiserror = 'ok'
+                thiserror = 'ok'
     metadata['error'] = setMetadata(host.name + ':' + check.name + '::error', str(thiserror))
     # save a snapshot of the metadata when the check ran
     history.data = json.dumps(metadata)
@@ -79,12 +79,12 @@ def computestr(check, host, value):
     from .models import Historical
     # create the db record
     history = Historical(host=host, hostcheck=check, value=value, timestamp=timezone.now())
-    setMetadata(host.name + ':' + check.name + '::lastvalue', getMetadata(host.name + ':' + check.name + '::value', 'No Data'))
+    setMetadata(host.name + ':' + check.name + '::lastvalue',
+                getMetadata(host.name + ':' + check.name + '::value', 'No Data'))
     now = int(timezone.now().strftime('%s'))
     setMetadata(host.name + ':' + check.name + '::lastcheck', now)
     setMetadata(host.name + ':' + check.name + '::value', value)
-    metadata = {}
-    metadata['error'] = getMetadata(host.name + ':' + check.name + '::error', 'OK')
+    metadata = {'error': getMetadata(host.name + ':' + check.name + '::error', 'OK')}
     thiserror = 'false'
     metadata['error'] = 'false'
     errors = alertstr(check, host, value)
@@ -103,11 +103,11 @@ def computestr(check, host, value):
         for error in errors:
             if error.get('hasError', True):
                 if error.get('strwarn', False):
-                    thiserror = 'warn'                
+                    thiserror = 'warn'
                 if error.get('strgood', False) or error.get('strbad', False):
                     thiserror = 'crit'
             elif error.get('hasError', None) is False:
-                    thiserror = 'ok'
+                thiserror = 'ok'
     metadata['error'] = setMetadata(host.name + ':' + check.name + '::error', thiserror)
     # save a snapshot of the metadata when the check ran
     history.data = json.dumps(metadata)
@@ -121,23 +121,25 @@ def computebool(check, host, value):
     from .models import Historical
     # create the db record
     history = Historical(host=host, hostcheck=check, value=value, timestamp=timezone.now())
-    setMetadata(host.name + ':' + check.name + '::lastvalue', getMetadata(host.name + ':' + check.name + '::value', 'No Data'))
+    setMetadata(host.name + ':' + check.name + '::lastvalue',
+                getMetadata(host.name + ':' + check.name + '::value', 'No Data'))
     now = int(timezone.now().strftime('%s'))
     setMetadata(host.name + ':' + check.name + '::lastcheck', now)
     setMetadata(host.name + ':' + check.name + '::value', value)
-    metadata = {}
-    metadata['nbtrue'] = getMetadata(host.name + ':' + check.name + '::nbtrue', '0')
-    metadata['nbfalse'] = getMetadata(host.name + ':' + check.name + '::nbfalse', '0')
-    metadata['lasttrue'] = getMetadata(host.name + ':' + check.name + '::lasttrue', 'No Data')
-    metadata['lastfalse'] = getMetadata(host.name + ':' + check.name + '::lastfalse', 'No Data')
-    metadata['error'] = getMetadata(host.name + ':' + check.name + '::error', 'OK')
+    metadata = {'nbtrue': getMetadata(host.name + ':' + check.name + '::nbtrue', '0'),
+                'nbfalse': getMetadata(host.name + ':' + check.name + '::nbfalse', '0'),
+                'lasttrue': getMetadata(host.name + ':' + check.name + '::lasttrue', 'No Data'),
+                'lastfalse': getMetadata(host.name + ':' + check.name + '::lastfalse', 'No Data'),
+                'error': getMetadata(host.name + ':' + check.name + '::error', 'OK')}
     # Update the metadata
     if value == 0:
         metadata['nbfalse'] = setMetadata(host.name + ':' + check.name + '::nbfalse', int(metadata['nbfalse']) + 1)
-        metadata['lastfalse'] = setMetadata(host.name + ':' + check.name + '::lastfalse', timezone.now().strftime("%m/%d/%Y %H:%M:%S"))
+        metadata['lastfalse'] = setMetadata(host.name + ':' + check.name + '::lastfalse',
+                                            timezone.now().strftime("%m/%d/%Y %H:%M:%S"))
     elif value == 1:
         metadata['nbtrue'] = setMetadata(host.name + ':' + check.name + '::nbtrue', int(metadata['nbtrue']) + 1)
-        metadata['lasttrue'] = setMetadata(host.name + ':' + check.name + '::lasttrue', timezone.now().strftime("%m/%d/%Y %H:%M:%S"))
+        metadata['lasttrue'] = setMetadata(host.name + ':' + check.name + '::lasttrue',
+                                           timezone.now().strftime("%m/%d/%Y %H:%M:%S"))
     thiserror = 'false'
     metadata['error'] = 'false'
     errors = alertbool(check, host, value)
@@ -158,7 +160,7 @@ def computebool(check, host, value):
                 if error.get('boolgood', False) or error.get('boolbad', False):
                     thiserror = 'crit'
             elif error.get('hasError', None) is False:
-                    thiserror = 'ok'
+                thiserror = 'ok'
     metadata['error'] = setMetadata(host.name + ':' + check.name + '::error', thiserror)
     # save a snapshot of the metadata when the check ran
     history.data = json.dumps(metadata)

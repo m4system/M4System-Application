@@ -14,7 +14,7 @@ COMPARISON_DICT = {
     'less_or_equal': lambda x: x <= 0,
     'greater_or_equal': lambda x: x >= 0,
     'greater': lambda x: x > 0,
-    }
+}
 
 
 class ComparisonNode(template.Node):
@@ -83,6 +83,7 @@ def do_comparison(parser, token):
         nodelist_false = template.NodeList()
     comparison = bits[0].split('if_')[1]
     return ComparisonNode(bits[1], bits[2], comparison, nodelist_true, nodelist_false)
+
 
 register = template.Library()
 for tag_name in ('if_less', 'if_less_or_equal', 'if_greater_or_equal', 'if_greater'):

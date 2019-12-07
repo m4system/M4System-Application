@@ -38,41 +38,50 @@ def index(request, view):
 
     :template:`webview/index.html`
     """
+    global slalist
     data = []
     view = view[5:]
     # Get the list of hosts so that we can loop through them and create the rows
     if view == '':
         # load hosts from the default view
-        hosts = sorted(set(UserView.objects.filter(group__name__in=request.user.groups.all().values_list('name',flat=True), default=True)[0].widgets.filter(active=True, host__enabled=True).values_list('host__name', flat=True).order_by('-name')), reverse=True)
+        hosts = sorted(set(
+            UserView.objects.filter(group__name__in=request.user.groups.all().values_list('name', flat=True),
+                                    default=True)[0].widgets.filter(active=True, host__enabled=True).values_list(
+                'host__name', flat=True).order_by('-name')), reverse=True)
     else:
         # load hosts from the view specified in the url
-        hosts = sorted(set(UserView.objects.get(name=view).widgets.filter(active=True, host__enabled=True).values_list('host__name', flat=True).order_by('-name')), reverse=True)
+        hosts = sorted(set(
+            UserView.objects.get(name=view).widgets.filter(active=True, host__enabled=True).values_list('host__name',
+                                                                                                        flat=True).order_by(
+                '-name')), reverse=True)
     for host in hosts:
         # For each host, we will get generate the widgets in it's row
         thishost = {}
         wdgts = []
         if view == '':
             # load this host's widgets from the default userview
-            uv = UserView.objects.filter(group__name__in=request.user.groups.all().values_list('name',flat=True), default=True)[0].widgets.filter(host__name=host, active=True)
+            uv = UserView.objects.filter(group__name__in=request.user.groups.all().values_list('name', flat=True),
+                                         default=True)[0].widgets.filter(host__name=host, active=True)
         else:
             # load this host's widgets from the view specified in the url
             uv = UserView.objects.get(name=view).widgets.filter(host__name=host, active=True)
         for widget in uv:
-            thisdata = {}
-            thisdata['name'] = widget.name
-            thisdata['note'] = widget.note
-            thisdata['data'] = widget.renderWidget(user=request.user)
+            thisdata = {'name': widget.name, 'note': widget.note, 'data': widget.renderWidget(user=request.user)}
             wdgts.append(thisdata)
         thishost['widgets'] = wdgts
         thishost['name'] = host
         thishost['note'] = Hosts.objects.get(name=host).note
-        data.append(thishost)       
-    # Preloads the sla widget with any SLAs relating to the user's group.
+        data.append(thishost)
+        # Preloads the sla widget with any SLAs relating to the user's group.
     sla = None
+    slalist = None
     if request.user.has_perm('webview.view_sla'):
-        sla = Sla.objects.filter(Q(enabled=True, warngroups__name__in=request.user.groups.all().values_list('name',flat=True)) | Q(enabled=True, okgroups__name__in=request.user.groups.all().values_list('name',flat=True)) | Q(enabled=True, critgroups__name__in=request.user.groups.all().values_list('name',flat=True))).distinct()
+        sla = Sla.objects.filter(
+            Q(enabled=True, warngroups__name__in=request.user.groups.all().values_list('name', flat=True)) | Q(
+                enabled=True, okgroups__name__in=request.user.groups.all().values_list('name', flat=True)) | Q(
+                enabled=True, critgroups__name__in=request.user.groups.all().values_list('name', flat=True))).distinct()
     if request.user.has_perm('webview.view_thresholdlog') or request.user.has_perm('webview.view_slalog'):
-        slalist = sla.values_list('name',flat=True)
+        slalist = sla.values_list('name', flat=True)
     eventlog = None
     if request.user.has_perm('webview.view_thresholdlog'):
         # Need to figure out if this is useful or not.  Currently, we log all threshold success, making this worthless
@@ -87,11 +96,13 @@ def index(request, view):
         onehour = now - datetime.timedelta(hours=24)
         trap = Trap.objects.filter(timestamp__gt=onehour)
     # Load the list of available userviews for the logged in user
-    uvlist = UserView.objects.filter(group__name__in=request.user.groups.all().values_list('name',flat=True))
-    context = {'data': data, 'eventlog': eventlog, 'slas': sla, 'slalog': slalog, 'uvlist': uvlist, 'taskdelay': getMetadata('taskdelay-1'), 'trap': trap}
+    uvlist = UserView.objects.filter(group__name__in=request.user.groups.all().values_list('name', flat=True))
+    context = {'data': data, 'eventlog': eventlog, 'slas': sla, 'slalog': slalog, 'uvlist': uvlist,
+               'taskdelay': getMetadata('taskdelay-1'), 'trap': trap}
     # Load pending message for that user from the database and push them to the UI using the message framework.
     if request.user.has_perm('webview.view_notifs'):
-        msgs = UIMsg.objects.filter(group__name__in=request.user.groups.all().values_list('name',flat=True)).exclude(user__username=request.user.username)[:100]
+        msgs = UIMsg.objects.filter(group__name__in=request.user.groups.all().values_list('name', flat=True)).exclude(
+            user__username=request.user.username)[:100]
         for mymsg in msgs:
             msg(request, mymsg.level, mymsg.msg)
             if not mymsg.sticky:
@@ -127,11 +138,13 @@ def settings(request):
             profile.notifcallback = form.cleaned_data['notifcallback']
             profile.save()
             # We push a success notification to the notification drop down on the top-left
-            messages.success(request, 'settings saved - ' + json.dumps(form.cleaned_data), extra_tags=timezone.localtime(timezone.now()).strftime('%Y-%m-%d %H:%M:%S %Z'))
+            messages.success(request, 'settings saved - ' + json.dumps(form.cleaned_data),
+                             extra_tags=timezone.localtime(timezone.now()).strftime('%Y-%m-%d %H:%M:%S %Z'))
             return render(request, 'settings.html', {'form': form})
         else:
             # or we push a failure
-            messages.error(request, 'Some field did not validate', extra_tags=timezone.localtime(timezone.now()).strftime('%Y-%m-%d %H:%M:%S %Z'))
+            messages.error(request, 'Some field did not validate',
+                           extra_tags=timezone.localtime(timezone.now()).strftime('%Y-%m-%d %H:%M:%S %Z'))
             return render(request, 'settings.html', {'form': form}, status=400)
     else:
         # load the settings when showing the modal
@@ -173,14 +186,14 @@ def getCheck(request, host, check, checktype):
     get_object_or_404(Hosts, name=host)
     get_object_or_404(HostChecks, name=check)
     # uv = UserView.objects.get(group__name__in=request.user.groups.all().values_list('name',flat=True), default=True).widgets.filter(host__name=host, hostcheck__name=check, active=True)
-    uv = Widgets.objects.get(name=host+'-'+check).userview_set.filter(group__name__in=request.user.groups.all().values_list('name',flat=True))
+    uv = Widgets.objects.get(name=host + '-' + check).userview_set.filter(
+        group__name__in=request.user.groups.all().values_list('name', flat=True))
     if len(uv) == 0:
         raise PermissionDenied
     # Grab all the data for that object from the cache
-    data = {}
-    data['data'] = getMetadata(host + ':' + check + '::value', 'No Data')
-    data['alert'] = getMetadata(host + ':' + check + '::error', 'No Data')
-    data['lastcheck'] = getMetadata(host + ':' + check + '::lastcheck', 'No Data')
+    data = {'data': getMetadata(host + ':' + check + '::value', 'No Data'),
+            'alert': getMetadata(host + ':' + check + '::error', 'No Data'),
+            'lastcheck': getMetadata(host + ':' + check + '::lastcheck', 'No Data')}
     notifs = getMetadata(host + ':' + check + '::notifs', 'No Data')
     if notifs == 'False':
         data['notifs'] = 'false'
@@ -201,7 +214,9 @@ def getCheck(request, host, check, checktype):
 @never_cache
 @login_required
 def getGraphData(request, host, check, qty):
-    uv = UserView.objects.filter(group__name__in=request.user.groups.all().values_list('name',flat=True), default=True)[0].widgets.filter(host__name=host, hostcheck__name=check, active=True)
+    uv = \
+        UserView.objects.filter(group__name__in=request.user.groups.all().values_list('name', flat=True), default=True)[
+            0].widgets.filter(host__name=host, hostcheck__name=check, active=True)
     if len(uv) == 0:
         raise PermissionDenied
     if qty is None:
@@ -210,7 +225,9 @@ def getGraphData(request, host, check, qty):
     host = get_object_or_404(Hosts, name=host)
     check = get_object_or_404(HostChecks, name=check)
     # grab the data used in the graph
-    bootstrapgraph = Historical.objects.values_list('value', 'timestamp', 'data').filter(host=host, hostcheck=check).order_by('-timestamp')[:int(qty)]
+    bootstrapgraph = Historical.objects.values_list('value', 'timestamp', 'data').filter(host=host,
+                                                                                         hostcheck=check).order_by(
+        '-timestamp')[:int(qty)]
     # dbg(bootstrapgraph)
     data = []
     # Format it to be used by the front end
@@ -218,9 +235,13 @@ def getGraphData(request, host, check, qty):
         if mddata != '{}':
             metadata = json.loads(mddata)
             if check.checktype == 'snmpgetint' or check.checktype == 'execint':
-                data.append({'datetime': timestamp.strftime("%m/%d/%Y %H:%M:%S %z"), 'value': value, 'avg': metadata['avg'], 'max': metadata['max'], 'min': metadata['min']})
+                data.append(
+                    {'datetime': timestamp.strftime("%m/%d/%Y %H:%M:%S %z"), 'value': value, 'avg': metadata['avg'],
+                     'max': metadata['max'], 'min': metadata['min']})
             elif check.checktype == 'snmpgetbool':
-                data.append({'datetime': timestamp.strftime("%m/%d/%Y %H:%M:%S %z"), 'value': value, 'nbtrue': metadata['nbtrue'], 'nbfalse': metadata['nbfalse'], 'lasttrue': metadata['lasttrue'], 'lastfalse': metadata['lastfalse']})
+                data.append({'datetime': timestamp.strftime("%m/%d/%Y %H:%M:%S %z"), 'value': value,
+                             'nbtrue': metadata['nbtrue'], 'nbfalse': metadata['nbfalse'],
+                             'lasttrue': metadata['lasttrue'], 'lastfalse': metadata['lastfalse']})
     return JsonResponse(data, safe=False)
 
 
@@ -230,7 +251,9 @@ def getGraphData(request, host, check, qty):
 def getWidget(request, host, check, name):
     get_object_or_404(Hosts, name=host)
     get_object_or_404(HostChecks, name=check)
-    uv = UserView.objects.filter(group__name__in=request.user.groups.all().values_list('name',flat=True), default=True)[0].widgets.filter(host__name=host, hostcheck__name=check, active=True)
+    uv = \
+        UserView.objects.filter(group__name__in=request.user.groups.all().values_list('name', flat=True), default=True)[
+            0].widgets.filter(host__name=host, hostcheck__name=check, active=True)
     if len(uv) == 0:
         raise PermissionDenied
     # Get a widget to display in the UI and render it with the internal function.  Used for graphs and info modals.
@@ -247,8 +270,13 @@ def getEvents(request, qty):
         raise PermissionDenied
     if qty is None:
         qty = "10"
-    sla = Sla.objects.filter(Q(enabled=True, warngroups__name__in=request.user.groups.all().values_list('name',flat=True)) | Q(enabled=True, critgroups__name__in=request.user.groups.all().values_list('name',flat=True)) | Q(enabled=True, okgroups__name__in=request.user.groups.all().values_list('name',flat=True))).distinct()
-    slalist = sla.values_list('name',flat=True)
+    sla = Sla.objects.filter(
+        Q(enabled=True, warngroups__name__in=request.user.groups.all().values_list('name', flat=True)) | Q(enabled=True,
+                                                                                                           critgroups__name__in=request.user.groups.all().values_list(
+                                                                                                               'name',
+                                                                                                               flat=True)) | Q(
+            enabled=True, okgroups__name__in=request.user.groups.all().values_list('name', flat=True))).distinct()
+    slalist = sla.values_list('name', flat=True)
     eventlog = EventLog.objects.filter(sla__name__in=slalist).order_by('-timestamp')[:int(qty)]
     return render_to_response('widgets/eventlog.html', {'eventlog': eventlog})
 
@@ -260,7 +288,12 @@ def getSla(request):
     if not request.user.has_perm('webview.view_sla'):
         raise PermissionDenied
     # display SLAs in the UI based on which group you belong to.
-    sla = Sla.objects.filter(Q(enabled=True, warngroups__name__in=request.user.groups.all().values_list('name',flat=True)) | Q(enabled=True, critgroups__name__in=request.user.groups.all().values_list('name',flat=True)) | Q(enabled=True, okgroups__name__in=request.user.groups.all().values_list('name',flat=True))).distinct()
+    sla = Sla.objects.filter(
+        Q(enabled=True, warngroups__name__in=request.user.groups.all().values_list('name', flat=True)) | Q(enabled=True,
+                                                                                                           critgroups__name__in=request.user.groups.all().values_list(
+                                                                                                               'name',
+                                                                                                               flat=True)) | Q(
+            enabled=True, okgroups__name__in=request.user.groups.all().values_list('name', flat=True))).distinct()
     return render_to_response('widgets/sla.html', {'slas': sla})
 
 
@@ -273,8 +306,13 @@ def getSlaLog(request, qty):
     # display SLA Logs in the UI based on which group you belong to.
     if qty is None:
         qty = "10"
-    sla = Sla.objects.filter(Q(enabled=True, warngroups__name__in=request.user.groups.all().values_list('name',flat=True)) | Q(enabled=True, critgroups__name__in=request.user.groups.all().values_list('name',flat=True)) | Q(enabled=True, okgroups__name__in=request.user.groups.all().values_list('name',flat=True))).distinct()
-    slalist = sla.values_list('name',flat=True)
+    sla = Sla.objects.filter(
+        Q(enabled=True, warngroups__name__in=request.user.groups.all().values_list('name', flat=True)) | Q(enabled=True,
+                                                                                                           critgroups__name__in=request.user.groups.all().values_list(
+                                                                                                               'name',
+                                                                                                               flat=True)) | Q(
+            enabled=True, okgroups__name__in=request.user.groups.all().values_list('name', flat=True))).distinct()
+    slalist = sla.values_list('name', flat=True)
     slalog = SlaLog.objects.filter(sla__name__in=slalist).order_by('-timestamp')[:int(qty)]
     return render_to_response('widgets/slalog.html', {'slalog': slalog})
 
@@ -292,7 +330,6 @@ def getTraps(request):
     return render_to_response('widgets/trap.html', {'trap': trap})
 
 
-
 @cache_control(private=True)
 @vary_on_cookie
 @login_required
@@ -300,7 +337,8 @@ def getMsg(request):
     if not request.user.has_perm('webview.view_notifs'):
         raise PermissionDenied
     # Used by the notification refresh button.  gets a list of pending notifications and writes them of as read if not sticky.
-    msgs = UIMsg.objects.filter(group__name__in=request.user.groups.all().values_list('name',flat=True)).exclude(user__username=request.user.username)
+    msgs = UIMsg.objects.filter(group__name__in=request.user.groups.all().values_list('name', flat=True)).exclude(
+        user__username=request.user.username)
     for mymsg in msgs:
         msg(request, mymsg.level, mymsg.msg)
         if not mymsg.sticky:
@@ -322,7 +360,7 @@ def reports(request, host, check):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename=report-' + host.name + '-' + check.name + '.csv'
     writer = csv.writer(response, csv.excel)
-    response.write(u'\ufeff'.encode('utf8')) # BOM (optional...Excel needs it to open UTF-8 file properly)
+    response.write(u'\ufeff'.encode('utf8'))  # BOM (optional...Excel needs it to open UTF-8 file properly)
     writer.writerow([
         smart_str(u"id"),
         smart_str(u"timestamp"),
@@ -345,7 +383,9 @@ def getDelay(request, days):
         days = 1
     # meandelay = getMetadata('taskdelay-' + str(days), None)
     # if meandelay is None:
-    tasks = TaskState.objects.filter(tstamp__range=[timezone.now()-datetime.timedelta(days=int(days)), timezone.now()]).exclude(runtime=None).values_list('runtime', flat=True)
+    tasks = TaskState.objects.filter(
+        tstamp__range=[timezone.now() - datetime.timedelta(days=int(days)), timezone.now()]).exclude(
+        runtime=None).values_list('runtime', flat=True)
     meandelay = mean(tasks)
     setMetadata('taskdelay-' + str(days), meandelay)
     return HttpResponse(meandelay)

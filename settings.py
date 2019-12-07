@@ -10,11 +10,12 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 import os
 
+DBG = False
+
 # Load the right settings based on the environement variable loaded in ~/.env
 # You need to create this file manually when setting up a new environement
 if os.getenv('ENVIRONEMENT', 'windev') == 'prod':
     # DBG = True
-    DBG = False
     ALLOWED_HOSTS = ['example.com', '127.0.0.1']
     STATIC_URL = 'https://example.com/public/'
     SECURE_SSL_HOST = "example.com"
@@ -35,7 +36,6 @@ elif os.getenv('ENVIRONEMENT', 'windev') == 'windev':
     INFLUXDB_HOST = '127.0.0.1'
     DB_HOST = '127.0.0.1'
 
-
 BASE_DIR = '.'
 
 FIXTURE_DIRS = (BASE_DIR + '/fixtures',)
@@ -48,6 +48,7 @@ DEBUG = DBG
 
 # Default message level for the MSGs
 from django.contrib.messages import constants as message_constants
+
 MESSAGE_LEVEL = message_constants.DEBUG
 
 INTERNAL_IPS = ['127.0.0.1']
@@ -117,7 +118,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -181,9 +181,12 @@ CACHE_MIDDLEWARE_ALIAS = 'default'
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 CACHALOT_ENABLED = True
-CACHALOT_TIMEOUT = None # infinite
-#CACHALOT_ONLY_CACHABLE_TABLES = ('webview_widgets', 'webview_userview', 'webview_userview_group', 'webview_userview_widgets', 'auth_user', 'auth_user_groups', 'auth_user_user_permissions', 'auth_group', 'auth_group_permissions', 'auth_permission', 'scheduler' )
-CACHALOT_UNCACHABLE_TABLES = ('scheduler_historical', 'scheduler_metadata', 'webview_uimsg', 'reversion_revision', 'reversion_version', 'django_session', 'django_migrations', 'scheduler_errorlog', 'djcelery_taskstate', 'djcelery_workerstate', 'djcelery_periodictask', 'djcelery_periodictasks')
+CACHALOT_TIMEOUT = None  # infinite
+# CACHALOT_ONLY_CACHABLE_TABLES = ('webview_widgets', 'webview_userview', 'webview_userview_group', 'webview_userview_widgets', 'auth_user', 'auth_user_groups', 'auth_user_user_permissions', 'auth_group', 'auth_group_permissions', 'auth_permission', 'scheduler' )
+CACHALOT_UNCACHABLE_TABLES = (
+    'scheduler_historical', 'scheduler_metadata', 'webview_uimsg', 'reversion_revision', 'reversion_version',
+    'django_session', 'django_migrations', 'scheduler_errorlog', 'djcelery_taskstate', 'djcelery_workerstate',
+    'djcelery_periodictask', 'djcelery_periodictasks')
 
 # Requires opendkim and full mta setup
 EMAIL_HOST = '127.0.0.1'
@@ -210,7 +213,8 @@ DEFAULT_CHARSET = 'UTF-8'
 # This needs nodejs and lessc: http://lesscss.org/
 COMPRESS_PRECOMPILERS = (('text/less', 'lessc {infile} {outfile}'),)
 
-STATICFILES_FINDERS = ["django.contrib.staticfiles.finders.FileSystemFinder", "django.contrib.staticfiles.finders.AppDirectoriesFinder", "compressor.finders.CompressorFinder"]
+STATICFILES_FINDERS = ["django.contrib.staticfiles.finders.FileSystemFinder",
+                       "django.contrib.staticfiles.finders.AppDirectoriesFinder", "compressor.finders.CompressorFinder"]
 
 # Needed for django debug toolbar logging
 LOGGING = {
@@ -318,11 +322,15 @@ DEBUG_TOOLBAR_PANELS = [
     'cachalot.panels.CachalotPanel',
 ]
 
+
 # Override for when we really want to display the debug bar
+# noinspection PyUnusedLocal
 def show_toolbar(request):
     return DBG
+
+
 DEBUG_TOOLBAR_CONFIG = {
-    "SHOW_TOOLBAR_CALLBACK" : show_toolbar,
+    "SHOW_TOOLBAR_CALLBACK": show_toolbar,
 }
 
 # tell django where to find the root urls and the wsgi bootstrap.  required since we use the home folder as the django root
@@ -345,4 +353,5 @@ else:
     CELERY_SEND_TASK_ERROR_EMAILS = True
 # Since settings is loaded before anything else, we are bootstraping djcelery here
 import djcelery
+
 djcelery.setup_loader()

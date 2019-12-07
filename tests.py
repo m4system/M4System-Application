@@ -5,7 +5,7 @@ from scheduler.models import HostChecks
 
 
 class WebviewLoginPageTest(TestCase):
-    fixtures = ['djcelery.json', 'user.json','auth.json', 'scheduler.json','webview.json']
+    fixtures = ['djcelery.json', 'user.json', 'auth.json', 'scheduler.json', 'webview.json']
 
     def test_loading_login_page(self):
         """
@@ -35,4 +35,3 @@ class WebviewLoginPageTest(TestCase):
         check.save()
         task = PeriodicTask.objects.get(name='Localhost-Test1')
         self.assertEqual(task.interval.every, 10)
-

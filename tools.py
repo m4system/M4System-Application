@@ -1,7 +1,8 @@
 import inspect
 import logging
+
 logger = logging.getLogger('m4')
-del logging # To prevent accidentally using it
+del logging  # To prevent accidentally using it
 import json
 from django.contrib import messages
 from django.utils import timezone
@@ -30,13 +31,15 @@ def savemd(md):
     # dbg('savemd called')
     return json.dumps(md)
 
+
 # Phasing out
 def loadmd(md):
     # dbg('loadmd called')
     return json.loads(md)
 
+
 # get a value with an optional default value from the cached key-value store
-def getMetadata(key, default = None):
+def getMetadata(key, default=None):
     # local import to avoid import loop
     from scheduler.models import Metadata
     fromcache = cache.get(key, None)
@@ -54,6 +57,7 @@ def getMetadata(key, default = None):
         cache.set(key, md)
         # dbg('got key ' + key + ' as ' + str(md))
         return md
+
 
 # set a value on the cached key-value store
 def setMetadata(key, data):
@@ -73,6 +77,7 @@ def setMetadata(key, data):
     # dbg('set key ' + key + ' as ' + str(md.data))
     return md.data
 
+
 # Phasing out
 def setmd(md, key, value):
     # dbg('setmd called')
@@ -80,33 +85,41 @@ def setmd(md, key, value):
     data[key] = value
     return savemd(data)
 
+
 # Phasing out
-def getmd(md, key, default = 0):
+def getmd(md, key, default=0):
     # dbg('getmd called')
     data = loadmd(md)
     return data.get(key, default)
+
 
 # Add messages in the UI
 def debug_msg(request, msg):
     messages.debug(request, str(msg), extra_tags=timezone.localtime(timezone.now()).strftime('%Y-%m-%d %H:%M:%S %Z'))
     return True
 
+
 def error_msg(request, msg):
     messages.error(request, str(msg), extra_tags=timezone.localtime(timezone.now()).strftime('%Y-%m-%d %H:%M:%S %Z'))
     return True
+
 
 def info_msg(request, msg):
     messages.info(request, str(msg), extra_tags=timezone.localtime(timezone.now()).strftime('%Y-%m-%d %H:%M:%S %Z'))
     return True
 
+
 def warning_msg(request, msg):
     messages.warning(request, str(msg), extra_tags=timezone.localtime(timezone.now()).strftime('%Y-%m-%d %H:%M:%S %Z'))
     return True
 
+
 # Add a msg with a custom level
 def msg(request, level, msg):
-    messages.add_message(request, level, str(msg), extra_tags=timezone.localtime(timezone.now()).strftime('%Y-%m-%d %H:%M:%S %Z'))
+    messages.add_message(request, level, str(msg),
+                         extra_tags=timezone.localtime(timezone.now()).strftime('%Y-%m-%d %H:%M:%S %Z'))
     return True
+
 
 # Add a notification to be displayed in the UI.
 # It will be displayed to the groups provided.
@@ -125,12 +138,12 @@ def add_msg(level, msg, groups):
 
 
 def dump(obj):
-  '''return a printable representation of an object for debugging'''
-  newobj=obj
-  if '__dict__' in dir(obj):
-    newobj=obj.__dict__
-    if ' object at ' in str(obj) and not newobj.has_key('__type__'):
-      newobj['__type__']=str(obj)
-    for attr in newobj:
-      newobj[attr]=dump(newobj[attr])
-  return newobj
+    """return a printable representation of an object for debugging"""
+    newobj = obj
+    if '__dict__' in dir(obj):
+        newobj = obj.__dict__
+        if ' object at ' in str(obj) and not newobj.has_key('__type__'):
+            newobj['__type__'] = str(obj)
+        for attr in newobj:
+            newobj[attr] = dump(newobj[attr])
+    return newobj

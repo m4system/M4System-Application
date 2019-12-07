@@ -15,8 +15,8 @@ class WidgetsAdmin(VersionAdmin):
     fields = ('name', 'verbosename', 'active', 'hostcheck', 'host', 'unit', 'template', 'note',)
     list_display = ('name', 'verbosename', 'active', 'unit', 'template', 'note',)
     list_display_links = ('name', 'verbosename',)
-    list_filter = ('name', 'verbosename', 'active', 'hostcheck', 'host', 'unit', 'template', )
-    search_fields = ['name', 'verbosename', 'note', 'unit',]
+    list_filter = ('name', 'verbosename', 'active', 'hostcheck', 'host', 'unit', 'template',)
+    search_fields = ['name', 'verbosename', 'note', 'unit', ]
 
 
 class UserViewAdmin(VersionAdmin):
@@ -26,21 +26,27 @@ class UserViewAdmin(VersionAdmin):
 class UIMsgAdmin(VersionAdmin):
     pass
 
+
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Widgets, WidgetsAdmin)
 admin.site.register(UserView, UserViewAdmin)
 admin.site.register(UIMsg, UIMsgAdmin)
 
-
 admin.site.unregister(User)
+
+
 @admin.register(User)
 class MyUserAdmin(VersionAdmin, UserAdmin):
     pass
 
+
 admin.site.unregister(Group)
+
+
 @admin.register(Group)
 class MyGroupAdmin(VersionAdmin, GroupAdmin):
     pass
+
 
 # from reversion.helpers import patch_admin
 from djcelery.models import PeriodicTask, IntervalSchedule, CrontabSchedule
@@ -48,20 +54,29 @@ from djcelery.admin import PeriodicTaskAdmin
 
 # Add reversion to djcelery
 admin.site.unregister(PeriodicTask)
+
+
 @admin.register(PeriodicTask)
 class MyPeriodicTaskAdmin(VersionAdmin, PeriodicTaskAdmin):
-    search_fields = ['name',]
+    search_fields = ['name', ]
     pass
 
+
 admin.site.unregister(IntervalSchedule)
+
+
 @admin.register(IntervalSchedule)
 class MyIntervalScheduleAdmin(VersionAdmin):
     pass
 
+
 admin.site.unregister(CrontabSchedule)
+
+
 @admin.register(CrontabSchedule)
 class MyCrontabScheduleAdmin(VersionAdmin):
     pass
+
 
 # Ovverride the default text in the admin
 admin.site.site_header = ''
