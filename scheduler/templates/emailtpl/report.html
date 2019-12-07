@@ -1,0 +1,14 @@
+Report for user {{ data.username }}
+{% for key, val in data.slas.items %}
+	Statistics for {{ key }}{% if val.note %} ({{val.note|safe}}){% endif %}:
+		SLA events in the past 30 days: {{ val.30daybad.count }}{% for sla in val.30daybad.slalog %}
+		{{sla|safe}}{% endfor %}
+		SLA events in the past 60 days: {{ val.60daybad.count }}{% for sla in val.60daybad.slalog %}
+		{{sla|safe}}{% endfor %}
+		SLA events in the past 90 days: {{ val.90daybad.count }}{% for sla in val.90daybad.slalog %}
+		{{sla|safe}}{% endfor %}
+		SLA events in the past 180 days: {{ val.180daybad.count }}{% for sla in val.180daybad.slalog %}
+		{{sla|safe}}{% endfor %}
+		SLA events in the past 365 days: {{ val.365daybad.count }}{% for sla in val.365daybad.slalog %}
+		{{sla|safe}}{% endfor %}
+{% endfor %}

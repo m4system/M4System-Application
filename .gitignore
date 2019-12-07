@@ -1,0 +1,15 @@
+.bash_history
+.mysql_history
+__pycache__
+.pip
+logs
+public
+.nano_history
+celerybeat.pid
+celeryev.pid
+.python_history
+.selected_editor
+master.pid
+wsgi.ini
+.env
+public/js/*

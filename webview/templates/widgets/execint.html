@@ -1,0 +1,54 @@
+<script type="text/javascript"> 
+$(function() { 
+    $.periodic({period: 10000, decay: 1.2, max_period: 120000}, function() {
+        updateSNMPint('{{ host.name }}', '{{ hostcheck.name }}', '{{ unit }}');
+    });
+});
+</script>
+<!-- {{ host.name }}-{{ hostcheck.name }} -->
+<div class="col-sm-2 col-md-2" id='m4-{{ host.name }}-{{ hostcheck.name }}-content'>
+    <div class="panel {{ color }}">
+        <div class="panel-body">
+            <div class="heading-elements">
+                <ul class="icons-list">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog3"></i> <span class="caret"></span></a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a href="javascript:updateSNMPint('{{ host.name }}', '{{ hostcheck.name }}', '{{ unit }}');"><i class="icon-sync"></i> Update data</a></li>
+                            <li><a href="/widget/{{ host.name }}/{{ hostcheck.name }}/info/" data-toggle="modal" data-target="#m4-{{ host.name }}-{{ hostcheck.name }}-info-modal"><i class="icon-list-unordered"></i> Detailed info</a></li>
+                            <li><a href="/widget/{{ host.name }}/{{ hostcheck.name }}/graph/" data-toggle="modal" data-target="#m4-{{ host.name }}-{{ hostcheck.name }}-graph-modal"><i class="icon-pie5"></i> Statistics</a></li>
+                            <li><a href="/report/{{ host.name }}/{{ hostcheck.name }}/" target="_blank"><i class=" icon-file-stats"></i> Download CSV</a></li>                      
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <h3 class="no-margin" id='m4-{{ host.name }}-{{ hostcheck.name }}'>{{ value|floatformat:2 }} {{ unit }}</h3>
+            {{ host.name|upper }} {{ verbosename }}
+            {% if host.note %}<br /><i>{{ hostcheck.note }}</i></small>{% endif %}
+            {% if user.is_staff %}<form class="heading-form" action="#">
+                <div class="form-group">
+                    <label class="checkbox-inline checkbox-switchery checkbox-right switchery-xs">
+                        <input type="checkbox" class="switch" {% if notifs != 'False' %}checked="checked"{% endif %} name="m4-{{ host.name }}--{{ hostcheck.name }}-notifs" id="m4-{{ host.name }}--{{ hostcheck.name }}-notifs" {% if notifs != 'False' %}checked {% endif %}/>
+                        Notifications:
+                    </label>
+                </div>
+            </form>{% endif %}
+        </div>
+    </div>
+</div>
+<!-- Modal with remote source -->
+<div id="m4-{{ host.name }}-{{ hostcheck.name }}-graph-modal" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content"></div>
+    </div>
+</div>
+<!-- /modal with remote source -->
+<!-- Modal with remote source -->
+<div id="m4-{{ host.name }}-{{ hostcheck.name }}-info-modal" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content"></div>
+    </div>
+</div>
+<!-- /modal with remote source -->
+<!-- {{ host.name }}-{{ hostcheck.name }} -->
