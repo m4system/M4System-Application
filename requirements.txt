@@ -16,14 +16,13 @@ django-compressor==2.0
 django-crispy-forms==1.6.0
 django-debug-toolbar==1.4
 django-extensions==1.6.1
-django-jet==0.1.4
+django-jet>0.1.4
 django-reversion==2.0.6
 docutils==0.15.2
 feedparser==5.2.1
 html5lib==0.999
 humanize==0.5.1
 idna==2.8
-influxdb==3.0.0
 kafka-python==1.4.6
 kombu==3.0.35
 lesscpy==0.11.1
@@ -35,7 +34,6 @@ prompt-toolkit==2.0.10
 pyasn1==0.4.8
 pycryptodomex==3.9.4
 pymodbus==2.1.0
-pyserial==3.4
 pysmi==0.3.4
 pysnmp==4.4.12
 python-dateutil==2.5.2
@@ -49,7 +47,6 @@ sqlparse==0.1.19
 template-utils===0.4p2
 threadpool==1.3.2
 tzlocal==1.2.2
-uModbus==1.0.2
 urllib3==1.24.2
 wcwidth==0.1.7
 Werkzeug==0.16.0
