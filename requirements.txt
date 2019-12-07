@@ -50,6 +50,6 @@ template-utils===0.4p2
 threadpool==1.3.2
 tzlocal==1.2.2
 uModbus==1.0.2
-urllib3==1.9.1
+urllib3==1.24.2
 wcwidth==0.1.7
 Werkzeug==0.11.5
