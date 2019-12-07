@@ -6,7 +6,7 @@ description:
   This setup is not designed for production use.
 ---
 
-[![Actions Status](https://github.com/dgagnon/M3-Website/workflows/M4%20Unit%20Test/badge.svg)](https://github.com/dgagnon/m4system/actions)
+[![Actions Status](https://github.com/dgagnon/m4system/workflows/M4%20Unit%20Test/badge.svg)](https://github.com/dgagnon/m4system/actions)
 
 
 ## Install Python
