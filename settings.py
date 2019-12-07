@@ -100,7 +100,7 @@ INSTALLED_APPS = [
     'compressor',
 ]
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'webview.middleware.SetRemoteAddrFromForwardedFor',
     'debug_toolbar.middleware.DebugToolbarMiddleware',

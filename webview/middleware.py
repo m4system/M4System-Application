@@ -1,5 +1,13 @@
+from django.http import HttpResponse
+
 class SetRemoteAddrFromForwardedFor(object):
     # Add support for reverse proxying django
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        return self.get_response(request)
+
     def process_request(self, request):
         try:
             real_ip = request.META['HTTP_X_FORWARDED_FOR']
