@@ -156,7 +156,7 @@ TEMPLATES = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'db.sqlite',
+        'NAME': 'db.sqlite3',
         # 'USER': 'm4',
         # 'PASSWORD': 'traC4Uwe',
         # 'HOST': DB_HOST,
