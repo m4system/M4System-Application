@@ -21,7 +21,7 @@ $(function() {
 		var mapOptions = {
 			zoom: 12,
 			center: myLatlng
-		}
+		};
 
 		// Apply options
 		var map = new google.maps.Map($('.map-layer-traffic')[0], mapOptions);

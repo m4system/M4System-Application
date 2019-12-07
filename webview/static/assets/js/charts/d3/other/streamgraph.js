@@ -31,7 +31,7 @@ $(function () {
         var tooltip = d3Container
             .append("div")
             .attr("class", "d3-tip e")
-            .style("display", "none")
+            .style("display", "none");
 
         // Format date
         var format = d3.time.format("%m/%d/%y %H:%M");
@@ -95,7 +95,7 @@ $(function () {
         // ------------------------------
 
         // Container
-        var container = d3Container.append("svg")
+        var container = d3Container.append("svg");
 
         // SVG element
         var svg = container
@@ -194,7 +194,7 @@ $(function () {
                 .transition()
                     .duration(750)
                     .delay(function(d, i) { return i * 50; })
-                    .style('opacity', 1)
+                    .style('opacity', 1);
 
 
 
@@ -308,7 +308,7 @@ $(function () {
                         invertedx = invertedx.getHours();
                         var selected = (d.values);
                         for (var k = 0; k < selected.length; k++) {
-                            datearray[k] = selected[k].date
+                            datearray[k] = selected[k].date;
                             datearray[k] = datearray[k].getHours();
                         }
                         mousedate = datearray.indexOf(invertedx);
@@ -378,7 +378,7 @@ $(function () {
 
 
                     // Move tooltip vertically
-                    tooltip.style("top", (mousey - ($('.d3-tip').outerHeight() / 2)) - 2 + "px") // Half tooltip height - half arrow width
+                    tooltip.style("top", (mousey - ($('.d3-tip').outerHeight() / 2)) - 2 + "px"); // Half tooltip height - half arrow width
 
                     // Move tooltip horizontally
                     if(mousex >= ($(element).outerWidth() - $('.d3-tip').outerWidth() - margin.right - (tooltipOffset * 2))) {
@@ -438,7 +438,7 @@ $(function () {
             svg.selectAll('.d3-axis-subticks').attr("x1", x).attr("x2", x);
 
             // Grid lines width
-            svg.selectAll(".d3-grid-dashed").call(gridAxis.tickSize(-width, 0, 0))
+            svg.selectAll(".d3-grid-dashed").call(gridAxis.tickSize(-width, 0, 0));
 
             // Right vertical axis
             svg.selectAll(".d3-axis-right").attr("transform", "translate(" + width + ", 0)");

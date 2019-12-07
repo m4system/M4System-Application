@@ -38,13 +38,13 @@ $(function() {
     // Edit
     $('#edit').on('click', function() {
         $('.click2edit').summernote({focus: true});
-    })
+    });
 
     // Save
     $('#save').on('click', function() {
         var aHTML = $('.click2edit').code(); //save HTML If you need(aHTML: array).
         $('.click2edit').destroy();
-    })
+    });
 
 
 

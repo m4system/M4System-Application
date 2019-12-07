@@ -81,7 +81,7 @@ $(function() {
         var tooltip = d3Container
             .append("div")
             .attr("class", "d3-tip e")
-            .style("display", "none")
+            .style("display", "none");
 
         // Format date
         var format = d3.time.format("%m/%d/%y %H:%M");
@@ -145,7 +145,7 @@ $(function() {
         // ------------------------------
 
         // Container
-        var container = d3Container.append("svg")
+        var container = d3Container.append("svg");
 
         // SVG element
         var svg = container
@@ -244,7 +244,7 @@ $(function() {
                 .transition()
                     .duration(750)
                     .delay(function(d, i) { return i * 50; })
-                    .style('opacity', 1)
+                    .style('opacity', 1);
 
 
 
@@ -358,7 +358,7 @@ $(function() {
                         invertedx = invertedx.getHours();
                         var selected = (d.values);
                         for (var k = 0; k < selected.length; k++) {
-                            datearray[k] = selected[k].date
+                            datearray[k] = selected[k].date;
                             datearray[k] = datearray[k].getHours();
                         }
                         mousedate = datearray.indexOf(invertedx);
@@ -428,7 +428,7 @@ $(function() {
 
 
                     // Move tooltip vertically
-                    tooltip.style("top", (mousey - ($('.d3-tip').outerHeight() / 2)) - 2 + "px") // Half tooltip height - half arrow width
+                    tooltip.style("top", (mousey - ($('.d3-tip').outerHeight() / 2)) - 2 + "px"); // Half tooltip height - half arrow width
 
                     // Move tooltip horizontally
                     if(mousex >= ($(element).outerWidth() - $('.d3-tip').outerWidth() - margin.right - (tooltipOffset * 2))) {
@@ -488,7 +488,7 @@ $(function() {
             svg.selectAll('.d3-axis-subticks').attr("x1", x).attr("x2", x);
 
             // Grid lines width
-            svg.selectAll(".d3-grid-dashed").call(gridAxis.tickSize(-width, 0, 0))
+            svg.selectAll(".d3-grid-dashed").call(gridAxis.tickSize(-width, 0, 0));
 
             // Right vertical axis
             svg.selectAll(".d3-axis-right").attr("transform", "translate(" + width + ", 0)");
@@ -617,7 +617,7 @@ $(function() {
             // Create data nests
             var nested = d3.nest()
                 .key(function(d) { return d.type; })
-                .map(formatted)
+                .map(formatted);
             
             // Get value from menu selection
             // the option values correspond
@@ -714,7 +714,7 @@ $(function() {
 
             // Bind the data
             var lines = svg.selectAll(".lines")
-                .data(linedata)
+                .data(linedata);
          
             // Append a group tag for each line
             var lineGroup = lines
@@ -794,7 +794,7 @@ $(function() {
                         // Animate circle radius
                         d3.select(this).transition().duration(250).attr('r', 3);
                     });
-            })
+            });
 
             // Change tooltip direction of last point
             // to always keep it inside chart, useful on mobiles
@@ -812,7 +812,7 @@ $(function() {
                         // Animate circle radius
                         d3.select(this).transition().duration(250).attr('r', 3);
                     })
-            })
+            });
 
 
 
@@ -936,7 +936,7 @@ $(function() {
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom)
             .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
 
@@ -948,7 +948,7 @@ $(function() {
             .x(function(d) { return x(d.date); })
             .y0(height)
             .y1(function(d) { return y(d.value); })
-            .interpolate('monotone')
+            .interpolate('monotone');
 
 
         // Construct scales
@@ -1075,7 +1075,7 @@ $(function() {
                 .attr("y1", 0)
                 .attr("y2", -maxY)
                 .style("stroke", "#e5e5e5")
-                .style('shape-rendering', 'crispEdges')
+                .style('shape-rendering', 'crispEdges');
 
 
             //
@@ -1092,7 +1092,7 @@ $(function() {
                 .attr("r", 3)
                 .style("fill", "#fff")
                 .style('stroke', color)
-                .style('stroke-width', 1)
+                .style('stroke-width', 1);
 
 
             //
@@ -1122,7 +1122,7 @@ $(function() {
                 .attr("height", height)
                     .on("mouseover", function() {
                         focusPointer.style("display", null);        
-                        focusLine.style("display", null)
+                        focusLine.style("display", null);
                         focusText.style("display", null);
                     })
                     .on("mouseout", function() {
@@ -1254,7 +1254,7 @@ $(function() {
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom)
             .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
         // Construct chart layout
@@ -1265,7 +1265,7 @@ $(function() {
             .x(function(d) { return x(d.date); })
             .y0(height)
             .y1(function(d) { return y(d.value); })
-            .interpolate('monotone')
+            .interpolate('monotone');
 
 
         // Construct scales
@@ -1426,10 +1426,10 @@ $(function() {
         // ------------------------------
 
         // Horizontal
-        x.domain([1, qty - 3])
+        x.domain([1, qty - 3]);
 
         // Vertical
-        y.domain([0, qty])
+        y.domain([0, qty]);
             
 
 
@@ -1476,7 +1476,7 @@ $(function() {
         // Add clip path
         var clip = svg.append("defs")
             .append("clipPath")
-            .attr('id', function(d, i) { return "load-clip-" + element.substring(1) })
+            .attr('id', function(d, i) { return "load-clip-" + element.substring(1) });
 
         // Add clip shape
         var clips = clip.append("rect")
@@ -1906,7 +1906,7 @@ $(function() {
 
                 // Animate circle radius
                 d3.select(this).transition().duration(250).attr('r', 3);
-            })
+            });
 
 
 
@@ -2003,7 +2003,7 @@ $(function() {
             .outerRadius(radius)
             .endAngle(function(d) {
               return (d.value / d.size) * 2 * Math.PI; 
-            })
+            });
 
 
 
@@ -2100,7 +2100,7 @@ $(function() {
         var d3Container = d3.select(element),
             distance = 2, // reserve 2px space for mouseover arc moving
             radius = (size/2) - distance,
-            sum = d3.sum(data, function(d) { return d.value; })
+            sum = d3.sum(data, function(d) { return d.value; });
 
 
 
@@ -2117,7 +2117,7 @@ $(function() {
                     "<li>" + "Visits: &nbsp;" + "<span class='text-semibold pull-right'>" + d.value + "</span>" + "</li>" +
                     "<li>" + "Share: &nbsp;" + "<span class='text-semibold pull-right'>" + (100 / (sum / d.value)).toFixed(2) + "%" + "</span>" + "</li>" +
                 "</ul>";
-            })
+            });
 
 
 
@@ -2270,7 +2270,7 @@ $(function() {
         var d3Container = d3.select(element),
             distance = 2, // reserve 2px space for mouseover arc moving
             radius = (size/2) - distance,
-            sum = d3.sum(data, function(d) { return d.value; })
+            sum = d3.sum(data, function(d) { return d.value; });
 
 
 
@@ -2287,7 +2287,7 @@ $(function() {
                     "<li>" + "Total: &nbsp;" + "<span class='text-semibold pull-right'>" + d.value + "</span>" + "</li>" +
                     "<li>" + "Share: &nbsp;" + "<span class='text-semibold pull-right'>" + (100 / (sum / d.value)).toFixed(2) + "%" + "</span>" + "</li>" +
                 "</ul>";
-            })
+            });
 
 
 
@@ -2435,7 +2435,7 @@ $(function() {
         var d3Container = d3.select(element),
             distance = 2, // reserve 2px space for mouseover arc moving
             radius = (size/2) - distance,
-            sum = d3.sum(data, function(d) { return d.value; })
+            sum = d3.sum(data, function(d) { return d.value; });
 
 
 
@@ -2452,7 +2452,7 @@ $(function() {
                     "<li>" + "Total: &nbsp;" + "<span class='text-semibold pull-right'>" + d.value + "</span>" + "</li>" +
                     "<li>" + "Share: &nbsp;" + "<span class='text-semibold pull-right'>" + (100 / (sum / d.value)).toFixed(2) + "%" + "</span>" + "</li>" +
                 "</ul>";
-            })
+            });
 
 
 
@@ -2595,7 +2595,7 @@ $(function() {
 
         // Horizontal
         var x = d3.scale.ordinal()
-            .rangeBands([0, width], 0.3)
+            .rangeBands([0, width], 0.3);
 
         // Vertical
         var y = d3.scale.linear()
@@ -2607,10 +2607,10 @@ $(function() {
         // ------------------------------
 
         // Horizontal
-        x.domain(d3.range(0, bardata.length))
+        x.domain(d3.range(0, bardata.length));
 
         // Vertical
-        y.domain([0, d3.max(bardata)])
+        y.domain([0, d3.max(bardata)]);
 
 
 
@@ -2789,8 +2789,8 @@ $(function() {
     // ------------------------------
 
     // Initialize charts
-    progressCounter('#hours-available-progress', 38, 2, "#F06292", 0.68, "icon-watch text-pink-400", 'Hours available', '64% average')
-    progressCounter('#goal-progress', 38, 2, "#5C6BC0", 0.82, "icon-trophy3 text-indigo-400", 'Productivity goal', '87% average')
+    progressCounter('#hours-available-progress', 38, 2, "#F06292", 0.68, "icon-watch text-pink-400", 'Hours available', '64% average');
+    progressCounter('#goal-progress', 38, 2, "#5C6BC0", 0.82, "icon-trophy3 text-indigo-400", 'Productivity goal', '87% average');
 
     // Chart setup
     function progressCounter(element, radius, border, color, end, iconClass, textTitle, textAverage) {
@@ -2876,7 +2876,7 @@ $(function() {
         // Percentage text value
         var numberText = d3.select(element)
             .append('h2')
-                .attr('class', 'mt-15 mb-5')
+                .attr('class', 'mt-15 mb-5');
 
         // Icon
         d3.select(element)

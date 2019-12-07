@@ -30,7 +30,7 @@ $(function() {
         minimumResultsForSearch: '-1',
         allowClear: true,
         dropdownCssClass: 'bg-slate-600'
-    })
+    });
 
 
 

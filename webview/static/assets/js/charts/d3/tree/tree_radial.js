@@ -87,7 +87,7 @@ $(function () {
                 .enter()
                 .append("g")
                     .attr("class", "d3-tree-node")
-                    .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
+                    .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; });
 
             // Append circles
             node.append("circle")

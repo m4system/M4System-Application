@@ -242,7 +242,7 @@ $(function () {
 
 
             // Top mask
-            svg.select('.mask-above').attr("d", area.y0(function(d) { return y(d["San Francisco"]); }))
+            svg.select('.mask-above').attr("d", area.y0(function(d) { return y(d["San Francisco"]); }));
 
             // Bottom mask
             svg.select('.mask-below').attr("d", area);

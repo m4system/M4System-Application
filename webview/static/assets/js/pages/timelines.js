@@ -213,7 +213,7 @@ $(function() {
                     sales.resize();
                     daily_stats.resize();
                 }, 200)
-            }
+            };
 
 
             // Resize in tabs

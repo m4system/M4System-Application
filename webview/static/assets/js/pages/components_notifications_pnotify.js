@@ -344,7 +344,7 @@ $(function() {
         // Remove if cancelled
         notice.get().find('button[name=cancel]').on('click', function() {
             notice.remove();
-        })
+        });
 
         // Submit form
         notice.get().submit(function() {
@@ -438,12 +438,12 @@ $(function() {
             history: {
                 history: false
             }
-        })
+        });
 
         // On confirm
         notice.get().on('pnotify.confirm', function() {
             alert('Ok, cool.');
-        })
+        });
 
         // On cancel
         notice.get().on('pnotify.cancel', function() {
@@ -498,7 +498,7 @@ $(function() {
                     sticker: true
                 }
             });
-        })
+        });
 
         // On cancel
         notice.get().on('pnotify.cancel', function(e, notice) {

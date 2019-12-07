@@ -28,7 +28,7 @@ $(function () {
         var myChart = new dimple.chart(svg, data);
 
         // Set bounds
-        myChart.setBounds(0, 0, "100%", "100%")
+        myChart.setBounds(0, 0, "100%", "100%");
 
         // Set margins
         myChart.setMargins(5, 5, 5, 5);

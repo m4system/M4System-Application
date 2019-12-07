@@ -229,7 +229,7 @@ $(function () {
             matrix.push(row);
         }
         return matrix;
-    };
+    }
 
 
 

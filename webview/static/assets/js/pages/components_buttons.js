@@ -18,7 +18,7 @@ $(function() {
     // Initialize on button click
     $('.btn-loading').click(function () {
         var btn = $(this);
-        btn.button('loading')
+        btn.button('loading');
         setTimeout(function () {
             btn.button('reset')
         }, 3000)

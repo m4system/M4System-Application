@@ -102,14 +102,14 @@ $(function() {
     // When address is selected
     $(addressPicker).on('addresspicker:selected', function (event, result) {
         Prism.highlightAll();
-        html = ["Address: " + result.address()]
-        html.push("Latitude: " + result.lat())
-        html.push("Longitude: " + result.lng())
-        html.push("Long names:")
+        html = ["Address: " + result.address()];
+        html.push("Latitude: " + result.lat());
+        html.push("Longitude: " + result.lng());
+        html.push("Long names:");
         result.addressTypes().forEach(function(type) {
             html.push("  " + type + ": " + result.nameForType(type))
         });
-        html.push("Short names:")
+        html.push("Short names:");
         result.addressTypes().forEach(function(type) {
             html.push("  " + type + ": " + result.nameForType(type, true))
         });

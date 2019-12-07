@@ -35,7 +35,7 @@ $(function () {
             height = height - margin.top - margin.bottom - 5;
 
         // Colors
-        var colors = ['#EF5350', '#5C6BC0', '#66BB6A']
+        var colors = ['#EF5350', '#5C6BC0', '#66BB6A'];
 
    
 

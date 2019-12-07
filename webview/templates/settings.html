@@ -43,14 +43,14 @@
 					data: $('.settingsform').serialize(),
 					success: function(msg){
 						// $(".modal-content").html(msg)
-						$(".text-center .content-group").append("<span>Settings saved with success</span>")
-						$(".text-center .content-group span").addClass('alert alert-success').fadeOut(5000)
+						$(".text-center .content-group").append("<span>Settings saved with success</span>");
+						$(".text-center .content-group span").addClass('alert alert-success').fadeOut(5000);
 						$(".errorlist").hide()
 					},
 					error: function(msg){
-						$(".modal-content").html(msg.responseText)
-						$(".text-center .content-group").append("<span>Failed saving settings</span>")
-						$(".text-center .content-group span").addClass('alert text-danger').fadeOut(10000)
+						$(".modal-content").html(msg.responseText);
+						$(".text-center .content-group").append("<span>Failed saving settings</span>");
+						$(".text-center .content-group span").addClass('alert text-danger').fadeOut(10000);
 						$(".modal-content .errorlist").addClass('alert text-danger')
 					},
 				});

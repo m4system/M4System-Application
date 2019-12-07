@@ -322,7 +322,7 @@ $(function() {
                     visits.resize();
                     plans.resize();
                 }, 200);
-            }
+            };
 
 
             // Resize in tabs

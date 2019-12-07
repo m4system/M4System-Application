@@ -78,7 +78,7 @@ $(function() {
 	// Toggle method
 	$('#toggle-tooltip-method').on('click', function() {
 		$('#toggle-tooltip-method-target').tooltip('toggle')
-	})
+	});
 
 	// Destroy method
 	$('#destroy-tooltip-method').on('click', function() {
@@ -154,7 +154,7 @@ $(function() {
 	// Show method
 	$('#show-popover-method').on('click', function() {
 		$('#show-popover-method-target').popover('show')
-	})
+	});
 
 	// Hide method
 	$('#hide-popover-method-target').on('mouseenter', function() {
@@ -167,7 +167,7 @@ $(function() {
 	// Toggle method
 	$('#toggle-popover-method').on('click', function() {
 		$('#toggle-popover-method-target').popover('toggle')
-	})
+	});
 
 	// Destroy method
 	$('#destroy-popover-method').on('click', function() {

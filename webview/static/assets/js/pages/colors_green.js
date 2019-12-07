@@ -54,7 +54,7 @@ $(function() {
     $.fn.selectpicker.defaults = {
         iconBase: '',
         tickIcon: 'icon-checkmark-circle'
-    }
+    };
     $('.bootstrap-select').selectpicker();
 
 

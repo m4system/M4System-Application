@@ -85,7 +85,7 @@ $(function() {
             if($(window).width() <= 768) {
 
                 // Remove affix on mobile
-                $(window).off('.affix')
+                $(window).off('.affix');
                 $('.sidebar-fixed').removeData('affix').removeClass('affix affix-top affix-bottom');
             }
         }, 100);

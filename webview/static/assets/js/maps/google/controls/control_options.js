@@ -26,7 +26,7 @@ $(function() {
             zoomControlOptions: {
                 style: google.maps.ZoomControlStyle.SMALL
             }
-        }
+        };
 
         // Apply options
         var map = new google.maps.Map($('.map-control-options')[0], mapOptions);

@@ -521,7 +521,7 @@
                 var y = j * height / samples;
                 var point = {'x' : x, 'y' : y};
 
-                var contained = []
+                var contained = [];
 
                 for (var k = 0; k < sets.length; ++k) {
                     if (venn.distance(point, sets[k]) <= sets[k].radius) {

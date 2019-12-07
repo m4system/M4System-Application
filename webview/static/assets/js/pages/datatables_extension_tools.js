@@ -39,7 +39,7 @@ $(function() {
 
 
     // Define default path for DataTables SWF file
-    $.fn.dataTable.TableTools.defaults.sSwfPath = "assets/swf/datatables/copy_csv_xls_pdf.swf"
+    $.fn.dataTable.TableTools.defaults.sSwfPath = "assets/swf/datatables/copy_csv_xls_pdf.swf";
 
 
     // Tabletools defaults

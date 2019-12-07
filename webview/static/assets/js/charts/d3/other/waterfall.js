@@ -72,7 +72,7 @@ $(function () {
         // ------------------------------
 
         // Container
-        var container = d3Container.append("svg")
+        var container = d3Container.append("svg");
 
         // SVG element
         var svg = container

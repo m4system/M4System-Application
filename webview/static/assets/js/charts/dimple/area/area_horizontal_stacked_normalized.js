@@ -21,7 +21,7 @@ $(function () {
     d3.tsv("assets/demo_data/dimple/demo_data.tsv", function (data) {
 
         // Filter data
-        data = dimple.filterData(data, "Owner", ["Aperture", "Black Mesa"])
+        data = dimple.filterData(data, "Owner", ["Aperture", "Black Mesa"]);
 
 
         // Create chart

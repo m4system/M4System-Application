@@ -16,7 +16,7 @@ $(function() {
     // -------------------------
 
     // Hide closer
-    $.jGrowl.defaults.closer = false
+    $.jGrowl.defaults.closer = false;
 
 
     // Add bounceIn animation

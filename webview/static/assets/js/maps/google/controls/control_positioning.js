@@ -37,7 +37,7 @@ $(function() {
         streetViewControlOptions: {
             position: google.maps.ControlPosition.LEFT_TOP
         }
-    }
+    };
 
     // Apply options
     var map = new google.maps.Map($('.map-control-positioning')[0], mapOptions);

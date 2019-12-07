@@ -105,7 +105,7 @@ $(function() {
     // Hide icons
     $.fn.selectpicker.defaults = {
         iconBase: ''
-    }
+    };
 
     // Initialize
     $('.bootstrap-select').selectpicker();

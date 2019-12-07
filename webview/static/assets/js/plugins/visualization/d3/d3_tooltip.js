@@ -10,7 +10,7 @@
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS
     module.exports = function(d3) {
-      d3.tip = factory(d3)
+      d3.tip = factory(d3);
       return d3.tip
     }
   } else {
@@ -29,11 +29,11 @@
         node      = initNode(),
         svg       = null,
         point     = null,
-        target    = null
+        target    = null;
 
     function tip(vis) {
-      svg = getSVGNode(vis)
-      point = svg.createSVGPoint()
+      svg = getSVGNode(vis);
+      point = svg.createSVGPoint();
       document.body.appendChild(node)
     }
 
@@ -41,8 +41,8 @@
     //
     // Returns a tip
     tip.show = function() {
-      var args = Array.prototype.slice.call(arguments)
-      if(args[args.length - 1] instanceof SVGElement) target = args.pop()
+      var args = Array.prototype.slice.call(arguments);
+      if(args[args.length - 1] instanceof SVGElement) target = args.pop();
 
       var content = html.apply(this, args),
           poffset = offset.apply(this, args),
@@ -51,33 +51,33 @@
           i       = directions.length,
           coords,
           scrollTop  = document.documentElement.scrollTop || document.body.scrollTop,
-          scrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft
+          scrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft;
 
       nodel.html(content)
         .style({ display: 'block', 'pointer-events': 'all' })
-        .attr('class', 'd3-tip')
+        .attr('class', 'd3-tip');
 
-        nodel.append('div').attr('class', 'd3-tip-arrow')
+        nodel.append('div').attr('class', 'd3-tip-arrow');
 
 
-      while(i--) nodel.classed(directions[i], false)
-      coords = direction_callbacks.get(dir).apply(this)
+      while(i--) nodel.classed(directions[i], false);
+      coords = direction_callbacks.get(dir).apply(this);
       nodel.classed(dir, true).style({
         top: (coords.top +  poffset[0]) + scrollTop + 'px',
         left: (coords.left + poffset[1]) + scrollLeft + 'px'
-      })
+      });
 
       return tip
-    }
+    };
 
     // Public - hide the tooltip
     //
     // Returns a tip
     tip.hide = function() {
-      var nodel = getNodeEl()
+      var nodel = getNodeEl();
       nodel.style({ display: 'none', 'pointer-events': 'none' });
       return tip
-    }
+    };
 
     // Public: Proxy attr calls to the d3 tip container.  Sets or gets attribute value.
     //
@@ -89,12 +89,12 @@
       if (arguments.length < 2 && typeof n === 'string') {
         return getNodeEl().attr(n)
       } else {
-        var args =  Array.prototype.slice.call(arguments)
+        var args =  Array.prototype.slice.call(arguments);
         d3.selection.prototype.attr.apply(getNodeEl(), args)
       }
 
       return tip
-    }
+    };
 
     // Public: Proxy style calls to the d3 tip container.  Sets or gets a style value.
     //
@@ -106,12 +106,12 @@
       if (arguments.length < 2 && typeof n === 'string') {
         return getNodeEl().style(n)
       } else {
-        var args =  Array.prototype.slice.call(arguments)
+        var args =  Array.prototype.slice.call(arguments);
         d3.selection.prototype.style.apply(getNodeEl(), args)
       }
 
       return tip
-    }
+    };
 
     // Public: Set or get the direction of the tooltip
     //
@@ -120,11 +120,11 @@
     //
     // Returns tip or direction
     tip.direction = function(v) {
-      if (!arguments.length) return direction
-      direction = v == null ? v : d3.functor(v)
+      if (!arguments.length) return direction;
+      direction = v == null ? v : d3.functor(v);
 
       return tip
-    }
+    };
 
     // Public: Sets or gets the offset of the tip
     //
@@ -132,11 +132,11 @@
     //
     // Returns offset or
     tip.offset = function(v) {
-      if (!arguments.length) return offset
-      offset = v == null ? v : d3.functor(v)
+      if (!arguments.length) return offset;
+      offset = v == null ? v : d3.functor(v);
 
       return tip
-    }
+    };
 
     // Public: sets or gets the html value of the tooltip
     //
@@ -144,11 +144,11 @@
     //
     // Returns html value or tip
     tip.html = function(v) {
-      if (!arguments.length) return html
-      html = v == null ? v : d3.functor(v)
+      if (!arguments.length) return html;
+      html = v == null ? v : d3.functor(v);
 
       return tip
-    }
+    };
 
     // Public: destroys the tooltip and removes it from the DOM
     //
@@ -159,7 +159,7 @@
         node = null;
       }
       return tip;
-    }
+    };
 
     function d3_tip_direction() { return 'n' }
     function d3_tip_offset() { return [0, 0] }
@@ -176,10 +176,10 @@
       se: direction_se
     }),
 
-    directions = direction_callbacks.keys()
+    directions = direction_callbacks.keys();
 
     function direction_n() {
-      var bbox = getScreenBBox()
+      var bbox = getScreenBBox();
       return {
         top:  bbox.n.y - node.offsetHeight,
         left: bbox.n.x - node.offsetWidth / 2
@@ -187,7 +187,7 @@
     }
 
     function direction_s() {
-      var bbox = getScreenBBox()
+      var bbox = getScreenBBox();
       return {
         top:  bbox.s.y,
         left: bbox.s.x - node.offsetWidth / 2
@@ -195,7 +195,7 @@
     }
 
     function direction_e() {
-      var bbox = getScreenBBox()
+      var bbox = getScreenBBox();
       return {
         top:  bbox.e.y - node.offsetHeight / 2,
         left: bbox.e.x
@@ -203,7 +203,7 @@
     }
 
     function direction_w() {
-      var bbox = getScreenBBox()
+      var bbox = getScreenBBox();
       return {
         top:  bbox.w.y - node.offsetHeight / 2,
         left: bbox.w.x - node.offsetWidth
@@ -211,7 +211,7 @@
     }
 
     function direction_nw() {
-      var bbox = getScreenBBox()
+      var bbox = getScreenBBox();
       return {
         top:  bbox.nw.y - node.offsetHeight,
         left: bbox.nw.x - node.offsetWidth
@@ -219,7 +219,7 @@
     }
 
     function direction_ne() {
-      var bbox = getScreenBBox()
+      var bbox = getScreenBBox();
       return {
         top:  bbox.ne.y - node.offsetHeight,
         left: bbox.ne.x
@@ -227,7 +227,7 @@
     }
 
     function direction_sw() {
-      var bbox = getScreenBBox()
+      var bbox = getScreenBBox();
       return {
         top:  bbox.sw.y,
         left: bbox.sw.x - node.offsetWidth
@@ -235,7 +235,7 @@
     }
 
     function direction_se() {
-      var bbox = getScreenBBox()
+      var bbox = getScreenBBox();
       return {
         top:  bbox.se.y,
         left: bbox.e.x
@@ -243,22 +243,22 @@
     }
 
     function initNode() {
-      var node = d3.select(document.createElement('div'))
+      var node = d3.select(document.createElement('div'));
       node.style({
         position: 'absolute',
         top: 0,
         display: 'none',
         'pointer-events': 'none',
         'box-sizing': 'border-box'
-      })
+      });
 
       return node.node()
     }
 
     function getSVGNode(el) {
-      el = el.node()
+      el = el.node();
       if(el.tagName.toLowerCase() === 'svg')
-        return el
+        return el;
 
       return el.ownerSVGElement
     }
@@ -268,7 +268,7 @@
         node = initNode();
         // re-add node to DOM
         document.body.appendChild(node);
-      };
+      }
       return d3.select(node);
     }
 
@@ -298,26 +298,26 @@
           width      = tbbox.width,
           height     = tbbox.height,
           x          = tbbox.x,
-          y          = tbbox.y
+          y          = tbbox.y;
 
-      point.x = x
-      point.y = y
-      bbox.nw = point.matrixTransform(matrix)
-      point.x += width
-      bbox.ne = point.matrixTransform(matrix)
-      point.y += height
-      bbox.se = point.matrixTransform(matrix)
-      point.x -= width
-      bbox.sw = point.matrixTransform(matrix)
-      point.y -= height / 2
-      bbox.w  = point.matrixTransform(matrix)
-      point.x += width
-      bbox.e = point.matrixTransform(matrix)
-      point.x -= width / 2
-      point.y -= height / 2
-      bbox.n = point.matrixTransform(matrix)
-      point.y += height
-      bbox.s = point.matrixTransform(matrix)
+      point.x = x;
+      point.y = y;
+      bbox.nw = point.matrixTransform(matrix);
+      point.x += width;
+      bbox.ne = point.matrixTransform(matrix);
+      point.y += height;
+      bbox.se = point.matrixTransform(matrix);
+      point.x -= width;
+      bbox.sw = point.matrixTransform(matrix);
+      point.y -= height / 2;
+      bbox.w  = point.matrixTransform(matrix);
+      point.x += width;
+      bbox.e = point.matrixTransform(matrix);
+      point.x -= width / 2;
+      point.y -= height / 2;
+      bbox.n = point.matrixTransform(matrix);
+      point.y += height;
+      bbox.s = point.matrixTransform(matrix);
 
       return bbox
     }

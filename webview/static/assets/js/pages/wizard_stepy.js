@@ -109,7 +109,7 @@ $(function() {
                 email: true
             }
         }
-    }
+    };
 
 
 

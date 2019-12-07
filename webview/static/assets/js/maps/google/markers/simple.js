@@ -44,7 +44,7 @@ $(function() {
 			infowindow.open(map,marker);
 		});
 
-	};
+	}
 
 	// Initialize map on window load
 	google.maps.event.addDomListener(window, 'load', initialize);

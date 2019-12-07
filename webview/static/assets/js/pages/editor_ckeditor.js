@@ -44,8 +44,8 @@ $(function() {
     function toggleReadOnly(isReadOnly) {
         editor.setReadOnly(isReadOnly);
     }
-    document.getElementById('readOnlyOn').onclick=function(){ toggleReadOnly() }
-    document.getElementById('readOnlyOff').onclick=function(){ toggleReadOnly(false) }
+    document.getElementById('readOnlyOn').onclick=function(){ toggleReadOnly() };
+    document.getElementById('readOnlyOff').onclick=function(){ toggleReadOnly(false) };
 
 
 
@@ -74,13 +74,13 @@ $(function() {
     window.onload = changeEnter;
 
     // Change configuration
-    document.getElementById('xEnter').onchange=function(){changeEnter()}
-    document.getElementById('xShiftEnter').onchange=function(){changeEnter()}
+    document.getElementById('xEnter').onchange=function(){changeEnter()};
+    document.getElementById('xShiftEnter').onchange=function(){changeEnter()};
 
     // We are using Select2 selects here
     $('.select').select2({
         minimumResultsForSearch: '-1'
-    })
+    });
 
 
 

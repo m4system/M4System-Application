@@ -87,7 +87,7 @@
         locationFromLatLng: function(lnlg) {
             return {latitude: lnlg.lat(), longitude: lnlg.lng()}
         }
-    }
+    };
 
     function isPluginApplied(domObj) {
         return getContextForElement(domObj) != undefined;
@@ -198,7 +198,7 @@
                         var event = params.event;
                         var callback = params.callback;
                         if (!event || ! callback) {
-                            console.error("LocationPicker: Invalid arguments for method \"subscribe\"")
+                            console.error("LocationPicker: Invalid arguments for method \"subscribe\"");
                             return null;
                         }
                         google.maps.event.addListener(gmapContext.map, event, callback);

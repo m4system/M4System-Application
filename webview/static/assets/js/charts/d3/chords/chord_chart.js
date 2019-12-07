@@ -48,7 +48,7 @@ $(function () {
         // Add chord layout
         var chord = d3.layout.chord()
             .padding(.05)
-            .sortSubgroups(d3.descending)
+            .sortSubgroups(d3.descending);
 
 
         // Update chart
@@ -185,7 +185,7 @@ $(function () {
             matrix.push(row);
         }
         return matrix;
-    };
+    }
 
 
 

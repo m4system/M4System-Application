@@ -1,5 +1,5 @@
 // Match the timestamp format to what we do in the backend
-var parseDate = d3.time.format("%m/%d/%Y %H:%M:%S %Z").parse, formatDate = d3.time.format("%m/%d/%Y %H:%M:%S %Z")
+var parseDate = d3.time.format("%m/%d/%Y %H:%M:%S %Z").parse, formatDate = d3.time.format("%m/%d/%Y %H:%M:%S %Z");
 
 function changeSwitcheryState(el,value){
     // toggle notifications
@@ -72,7 +72,7 @@ function updateSNMPint(host, check, unit) {
         url: '/data/' + host + '/' + check + '/int/' ,
         success: function(data) {
             $('#m4-' + host + '-' + check).html(parseFloat(data.data).toFixed(2) + ' ' + unit);
-            element = $('#m4-' + host + '-' + check + '-content .panel')
+            element = $('#m4-' + host + '-' + check + '-content .panel');
             if (data.alert == 'crit') {
                 alertColor(element, 'bg-danger-400');
             } else if (data.alert == 'warn') {
@@ -102,7 +102,7 @@ function updateSNMPbool(host, check) {
         url: '/data/' + host + '/' + check + '/bool/',
         success: function(data) {
             $('#m4-' + host + '-' + check).html(booltostr(strTObool(data.data)));
-            element = $('#m4-' + host + '-' + check + '-content .panel')
+            element = $('#m4-' + host + '-' + check + '-content .panel');
             if (data.alert == 'crit') {
                 alertColor(element, 'bg-danger-400');
             } else if (data.alert == 'ok') {
@@ -130,7 +130,7 @@ function updateSNMPstr(host, check) {
         url: '/data/' + host + '/' + check + '/str/',
         success: function(data) {
             $('#m4-' + host + '-' + check).html(data.data);
-            element = $('#m4-' + host + '-' + check + '-content .panel')
+            element = $('#m4-' + host + '-' + check + '-content .panel');
             if (data.alert == 'crit') {
                 alertColor(element, 'bg-danger-400');
             } else if (data.alert == 'ok') {
@@ -210,7 +210,7 @@ function updateTaskDelay(qty) {
     $.ajax({
         url: '/delay/' + qty + '/',
         success: function(data) {
-            value = parseFloat(data)
+            value = parseFloat(data);
             $('#taskdelay').html("Avg Task delay: " + value.toFixed(5) + " seconds");
             ajaxSuccess();
             if (value > 5) {
@@ -244,7 +244,7 @@ function sparkline(element, chartType, qty, height, interpolation, duration, int
     // console.log(d3Container.node().getBoundingClientRect().width);
     // Load data
     // ------------------------------        
-    dataset = graphdata
+    dataset = graphdata;
     dataset.forEach(function (d) {
         d.datetime = parseDate(d.datetime);
     });
@@ -347,7 +347,7 @@ function sparkline(element, chartType, qty, height, interpolation, duration, int
     // Add clip path
     var clip = svg.append("defs")
         .append("clipPath")
-        .attr('id', function(d, i) { return "load-clip-" + element.substring(1) })
+        .attr('id', function(d, i) { return "load-clip-" + element.substring(1) });
 
     // Add clip shape
     var clips = clip.append("rect")
@@ -522,7 +522,7 @@ $(function() {
             };
         } else {
             console.log('was null ' + el)
-        };        
+        }
     });
 
     // resets modal windows

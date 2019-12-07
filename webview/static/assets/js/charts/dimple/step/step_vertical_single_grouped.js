@@ -21,7 +21,7 @@ $(function () {
     d3.tsv("assets/demo_data/dimple/demo_data.tsv", function (data) {
 
         // Filter data
-        data = dimple.filterData(data, "Owner", ["Aperture", "Black Mesa"])
+        data = dimple.filterData(data, "Owner", ["Aperture", "Black Mesa"]);
 
 
         // Create chart
@@ -31,7 +31,7 @@ $(function () {
         var myChart = new dimple.chart(svg, data);
 
         // Set bounds
-        myChart.setBounds(0, 0, "100%", "100%")
+        myChart.setBounds(0, 0, "100%", "100%");
 
         // Set margins
         myChart.setMargins(70, 10, 20, 45);

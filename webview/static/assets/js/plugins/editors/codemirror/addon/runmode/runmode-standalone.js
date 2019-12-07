@@ -3,7 +3,7 @@ window.CodeMirror = {};
 (function() {
 "use strict";
 
-function splitLines(string){ return string.split(/\r?\n|\r/); };
+function splitLines(string){ return string.split(/\r?\n|\r/); }
 
 function StringStream(string) {
   this.pos = this.start = 0;

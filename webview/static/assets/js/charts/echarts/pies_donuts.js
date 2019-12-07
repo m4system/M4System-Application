@@ -1095,7 +1095,7 @@ $(function () {
                         }
                     }
                 }
-            }
+            };
 
             // Bottom text label
             var labelBottom = {

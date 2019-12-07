@@ -86,7 +86,7 @@ $(function () {
         var tip = d3.tip()
             .attr('class', 'd3-tip')
             .offset([-10, 0])
-            .html(function(d) { return d })
+            .html(function(d) { return d });
 
         // Initialize tooltip
         svg.call(tip);
@@ -112,14 +112,14 @@ $(function () {
                 .attr("fill", function(d, i) { return colors(i); })
                 .style("cursor", "pointer")
                 .on('mouseover', tip.show)
-                .on('mouseout', tip.hide)
+                .on('mouseout', tip.hide);
 
         // Add bar transition
         drawBars.transition()
             .delay(200)
             .duration(1000)
             .attr("height", function(d) { return y(d) })
-            .attr("y", function(d) { return height - y(d) })
+            .attr("y", function(d) { return height - y(d) });
 
 
         // Add text labels
@@ -170,7 +170,7 @@ $(function () {
                         .ease('cubic-in-out')
                         .attr("y", function(d) { return height - y(d) })
                         .attr("height", function(d) { return y(d) })
-                        .style("fill", colors)
+                        .style("fill", colors);
 
                 // Update labels
                 var drawNewlabels = svg.selectAll("text")

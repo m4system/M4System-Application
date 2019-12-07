@@ -24,7 +24,7 @@ $(function() {
         '<div class="editable-input"></div> <div class="editable-buttons"></div>' +
         '<div class="editable-error-block"></div>' +
         '</div> ' +
-    '</form>'
+    '</form>';
 
     // Set popup mode as default
     $.fn.editable.defaults.mode = 'popup';
@@ -83,7 +83,7 @@ $(function() {
             }
         }
         s.push('--------------------------------------\n');
-    };
+    }
 
 
 

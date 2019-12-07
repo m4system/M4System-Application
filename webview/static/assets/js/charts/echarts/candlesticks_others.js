@@ -1035,7 +1035,7 @@ $(function () {
             var timeTicket2 = setInterval(function () {
                 gauge_styling_options.series[0].data[0].value = (Math.random()*100).toFixed(2) - 0;
                 gauge_styling.setOption(gauge_styling_options, true);
-            }, 2000)
+            }, 2000);
 
 
 

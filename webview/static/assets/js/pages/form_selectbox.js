@@ -257,7 +257,7 @@ $(function() {
     // Removes all of the drop down options from the list
     $('#remove-all').on('click', function() {
         $(".selectbox-remove-all").data("selectBox-selectBoxIt").remove();
-    })
+    });
 
 
 

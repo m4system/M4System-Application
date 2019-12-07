@@ -92,7 +92,7 @@ $(function () {
             .offset([-25, 0])
             .html(function(d) {
                 return "Current value: " + "<span class='text-semibold'>" + formatCount(d.y) + "</span>";
-            })
+            });
 
         // Initialize tooltip
         svg.call(tip);

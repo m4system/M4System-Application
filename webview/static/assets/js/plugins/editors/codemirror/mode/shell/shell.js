@@ -16,7 +16,7 @@ CodeMirror.defineMode('shell', function() {
     for(var i = 0; i < split.length; i++) {
       words[split[i]] = style;
     }
-  };
+  }
 
   // Atoms
   define('atom', 'true false');
@@ -94,7 +94,7 @@ CodeMirror.defineMode('shell', function() {
       }
       return (quote === '`' || quote === ')' ? 'quote' : 'string');
     };
-  };
+  }
 
   var tokenDollar = function(stream, state) {
     if (state.tokens.length > 1) stream.eat('$');
@@ -114,7 +114,7 @@ CodeMirror.defineMode('shell', function() {
 
   function tokenize(stream, state) {
     return (state.tokens[0] || tokenBase) (stream, state);
-  };
+  }
 
   return {
     startState: function() {return {tokens:[]};},

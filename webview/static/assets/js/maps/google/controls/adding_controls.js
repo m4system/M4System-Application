@@ -21,7 +21,7 @@ $(function() {
 			panControl: false,
 			zoomControl: false,
 			scaleControl: true
-		}
+		};
 
 		// Apply options
 		var map = new google.maps.Map($('.map-adding-controls')[0], mapOptions);

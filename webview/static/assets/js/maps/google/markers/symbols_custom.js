@@ -23,7 +23,7 @@ $(function() {
         var mapOptions = {
             zoom: 11,
             center: new google.maps.LatLng(-33.9, 151.2)
-        }
+        };
 
         // Apply options
         var map = new google.maps.Map($('.map-symbol-custom')[0], mapOptions);

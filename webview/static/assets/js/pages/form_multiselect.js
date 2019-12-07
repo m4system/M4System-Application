@@ -644,7 +644,7 @@ $(function() {
     $('#multiselect-reset-form').on('reset', function() {
         $('.multiselect-reset option:selected').each(function() {
             $(this).prop('selected', false);
-        })
+        });
 
         $('.multiselect-reset').multiselect('refresh');
         $.uniform.update();

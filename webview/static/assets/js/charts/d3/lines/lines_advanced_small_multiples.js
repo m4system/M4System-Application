@@ -69,7 +69,7 @@ $(function () {
             data.forEach(function(d) {
                 d.price = +d.price;
                 d.date = parseDate(d.date);
-            })
+            });
 
             // Nest data by symbol
             var symbols = d3.nest()
@@ -167,7 +167,7 @@ $(function () {
                 // -------------------------
 
                 // Line path
-                svg.selectAll('.d3-line').attr("d", function(d) { y.domain([0, d.maxPrice]); return line(d.values); })
+                svg.selectAll('.d3-line').attr("d", function(d) { y.domain([0, d.maxPrice]); return line(d.values); });
 
                 // Area path
                 svg.selectAll('.d3-area').attr("d", function(d) { y.domain([0, d.maxPrice]); return area(d.values); });
