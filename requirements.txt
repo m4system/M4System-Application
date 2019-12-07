@@ -1,3 +1,6 @@
+influxdb
+pyasn1
+reversion
 anyjson>=0.3.3
 celery<4.0
 Delorean>0.6.0

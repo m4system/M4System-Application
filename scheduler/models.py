@@ -912,6 +912,7 @@ class Template(models.Model):
         ordering = ['-pk']
 
 
+# noinspection PyUnusedLocal,PyUnusedLocal,PyUnusedLocal
 @receiver(post_save, sender=SlaLog, dispatch_uid="compute_the_sla")
 # Each time a record in save in the SLA log, we compute the SLA for the related SLA
 # We need to call this from a cronjob before doing the reporting in case there is an open incident

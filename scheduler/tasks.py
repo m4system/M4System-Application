@@ -298,8 +298,7 @@ def exportInfluxDB(count=100):
                     value = float(log.value)
                 else:
                     value = log.value
-                json_body = []
-                json_body.append({})
+                json_body = [{}]
                 json_body[0]['measurement'] = log.hostcheck.name
                 json_body[0]['tags'] = {}
                 json_body[0]['tags']['host'] = log.host.name
@@ -320,10 +319,10 @@ def exportInfluxDB(count=100):
                     # we should be writing to 2 servers to ensure high availibility
                     client.write_points(json_body, batch_size=5000)
 
-                    json_body = {'measurement': log.hostcheck.name, 'host': log.host.name, 'address': log.host.address,
-                                 'type': log.hostcheck.checktype, 'unit': log.hostcheck.unit,
-                                 'checknote': log.hostcheck.note, 'verbosename': log.hostcheck.verbosename,
-                                 'time': log.timestamp.strftime("%m/%d/%Y, %H:%M:%S"), 'value': value}
+                    # json_body = {'measurement': log.hostcheck.name, 'host': log.host.name, 'address': log.host.address,
+                    #              'type': log.hostcheck.checktype, 'unit': log.hostcheck.unit,
+                    #              'checknote': log.hostcheck.note, 'verbosename': log.hostcheck.verbosename,
+                    #              'time': log.timestamp.strftime("%m/%d/%Y, %H:%M:%S"), 'value': value}
                     # producer.send('m4-measurements', json.dumps(json_body).encode())
                     # producer.flush()
 
@@ -369,8 +368,7 @@ def exportInfluxDBnew(count=1000):
                     value = float(log.value)
                 else:
                     value = log.value
-                json_body = []
-                json_body.append({})
+                json_body = [{}]
                 json_body[0]['measurement'] = log.hostcheck.name
                 json_body[0]['tags'] = {}
                 json_body[0]['tags']['host'] = log.host.name
@@ -391,10 +389,10 @@ def exportInfluxDBnew(count=1000):
                     # we should be writing to 2 servers to ensure high availibility
                     client.write_points(json_body, batch_size=5000)
 
-                    json_body = {'measurement': log.hostcheck.name, 'host': log.host.name, 'address': log.host.address,
-                                 'type': log.hostcheck.checktype, 'unit': log.hostcheck.unit,
-                                 'checknote': log.hostcheck.note, 'verbosename': log.hostcheck.verbosename,
-                                 'time': log.timestamp.strftime("%m/%d/%Y, %H:%M:%S"), 'value': value}
+                    # json_body = {'measurement': log.hostcheck.name, 'host': log.host.name, 'address': log.host.address,
+                    #              'type': log.hostcheck.checktype, 'unit': log.hostcheck.unit,
+                    #              'checknote': log.hostcheck.note, 'verbosename': log.hostcheck.verbosename,
+                    #              'time': log.timestamp.strftime("%m/%d/%Y, %H:%M:%S"), 'value': value}
                     # producer.send('m4-measurements', json.dumps(json_body).encode())
                     # producer.flush()
 
@@ -436,9 +434,8 @@ def pruneFromDB():
 def Heartbeat():
     from django.core.mail import send_mass_mail
     print("Starting with Heartbeat")
-    emails = []
-    emails.append(('[YUL62-BMS] Heartbeat', 'This email confirms YUL62 BMS is online and operational.',
-                   'm4@m4system.com', ['m4@m4system.com']))
+    emails = [('[YUL62-BMS] Heartbeat', 'This email confirms YUL62 BMS is online and operational.',
+               'm4@m4system.com', ['m4@m4system.com'])]
     send_mass_mail(tuple(emails), fail_silently=False)
     print("Done sending Heartbeat email")
 
