@@ -67,8 +67,8 @@ class HostChecks(models.Model):
     sla = models.ManyToManyField('Sla', blank=True, help_text='SLAs this check affects.')
     allhosts = models.BooleanField('Check all hosts to fail a threshold', default=False, help_text='When more than one host is assigned to a check, require them all to fail before failing the check.')
     colorizesla = models.BooleanField('Colorize on SLA status instead of threshold', default=False, help_text='So that pumps do not always show a red widget')
-    status = models.CharField('Check global status', max_length=4096, default='{}', help_text='Ok, partial, failed, none')
-    statsinterval = models.IntegerField('Stats Interval', default='300', help_text='How often, in seconds, we recalculate the stats.')
+    # status = models.CharField('Check global status', max_length=4096, default='{}', help_text='Ok, partial, failed, none')
+    # statsinterval = models.IntegerField('Stats Interval', default='300', help_text='How often, in seconds, we recalculate the stats.')
     enabled = models.BooleanField('Active', default=True, help_text='Are checks for this host active ?')
     note = models.CharField('Note', max_length=4096, null=True, blank=True, default=None, help_text='Additional information that could be usefull.')
 
@@ -83,13 +83,13 @@ class HostChecks(models.Model):
                 if getMetadata(host.name + ':' + self.name + '::checkstatus', 'OK') == "failed":
                     nbfailed = nbfailed + 1
             if nbhosts - nbfailed <= 0:
-                self.status = 'failed'
+                # self.status = 'failed'
                 setMetadata(self.name + '::globalstatus', 'failed')
             elif nbfailed == 0:
                 setMetadata(self.name + '::globalstatus', 'OK')
-                self.status = 'OK'
+                # self.status = 'OK'
             elif nbhosts - nbfailed > 0 and nbfailed < nbhosts:
-                self.status = 'partial'
+                # self.status = 'partial'
                 setMetadata(self.name + '::globalstatus', 'partial')
             else:
                 dbg('Should not be hitting else')
@@ -102,10 +102,10 @@ class HostChecks(models.Model):
                     nbfailed = nbfailed + 1
             if nbhosts - nbfailed < nbhosts:
                 setMetadata(self.name + '::globalstatus', 'failed')
-                self.status = 'failed'
+                # self.status = 'failed'
             elif nbhosts - nbfailed == nbhosts:
                 setMetadata(self.name + '::globalstatus', 'OK')
-                self.status = 'OK'
+                # self.status = 'OK'
             else:
                 dbg('Should not be hitting else')
         super(HostChecks, self).save(*args, **kwargs)  # Call the "real" save() method.
@@ -417,7 +417,7 @@ class Historical(models.Model):
     data = models.CharField('Metadata', max_length=4096, default='{}', help_text='JSON encoded metadata')
     timestamp = models.DateTimeField('Timestamp', auto_now_add=True, help_text='Timestamp for the event.')
     exported = models.BooleanField('To Delete', default=False, help_text='Set to True if it was exported to InfluxDB and can be deleted')
-    exportedk = models.BooleanField('To Delete K', default=False, help_text='Set to True if it was exported to Kafka and can be deleted')
+    # exportedk = models.BooleanField('To Delete K', default=False, help_text='Set to True if it was exported to Kafka and can be deleted')
 
     def __str__(self):
         return str(self.host.name) + '[' + str(self.hostcheck.name) + '] = ' + str(self.value) + ' on ' + str(self.timestamp)
@@ -443,7 +443,7 @@ class Sla(models.Model):
     warntpl = models.ForeignKey('Template', verbose_name='Warning template', related_name='slawarntpl', default=None, null=True, blank=True, on_delete=models.PROTECT, limit_choices_to={'event': 'warn', 'obj': 'sla'}, help_text='Template to use when sending out warning emails when the SLA is being affected.')
     crittpl = models.ForeignKey('Template', verbose_name='Critical template', related_name='slacrittpl', default=None, null=True, blank=True, on_delete=models.PROTECT, limit_choices_to={'event': 'crit', 'obj': 'sla'}, help_text='Template to use when sending out critical emails when the SLA goes under the critical threshold.')
     oktpl = models.ForeignKey('Template', verbose_name='Recovery template', related_name='slaoktpl', default=None, null=True, blank=True, on_delete=models.PROTECT, limit_choices_to={'event': 'ok', 'obj': 'sla'}, help_text='Template to use when sending out recovery emails.')
-    data = models.CharField('Metadata', max_length=4096, default='{}', help_text='JSON encoded metadata')
+    # data = models.CharField('Metadata', max_length=4096, default='{}', help_text='JSON encoded metadata')
     allchecks = models.BooleanField('Require all checks to fail', default=False, help_text='When more than one check is assigned to an SLA, require all of them to fail before we consider the SLA event.')
     enabled = models.BooleanField('Active', default=True, help_text='Is this SLA active ?')
     note = models.CharField('Note', max_length=4096, null=True, blank=True, default=None, help_text='Additional information that could be usefull.')
@@ -862,7 +862,7 @@ def do_events(sender, instance, **kwargs):
         failedchecks = 0
         # This is generating some errors sometimes https://pm.m4system.com/issues/3289
         # It is also an issue for users who dont log on often and have lots of threshold events.
-        #add_msg('25', instance.hostcheck.name + ' on ' + instance.host.name + ' suceeded threshold named ' + instance.threshold.name + ' with value ' + str(instance.value), instance.threshold.warngroups.all())
+        add_msg('25', instance.hostcheck.name + ' on ' + instance.host.name + ' suceeded threshold named ' + instance.threshold.name + ' with value ' + str(instance.value), instance.threshold.warngroups.all())
         checks = HostChecks.objects.filter(sla=instance.sla, sla__enabled=True, enabled=True)
         # dbg(checks)
         for check in checks:
@@ -1038,21 +1038,21 @@ def edit_hostchecks(sender, instance, **kwargs):
 
 # Better to use the ErrorLog management comment on a cronjob or to use ossec.
 
-# @receiver(post_save, sender=ErrorLog, dispatch_uid="report_error")
-# def error_to_ui(sender, instance, **kwargs):
-#     # When an error gets logged, we want to display a notification for it in the UI
-#     from webview.models import UserView
-#     host = None;
-#     hostcheck = None;
-#     if isinstance(instance.host, Hosts):
-#         host = instance.host.name
-#     elif isinstance(instance.host, str):
-#         host = instance.host
-#     if isinstance(instance.hostcheck, HostChecks):
-#         hostcheck = instance.hostcheck.name
-#     elif isinstance(instance.hostcheck, str):
-#         hostcheck = instance.hostcheck
-#     if getMetadata(host + ':' + hostcheck + '::notifs', 'True') == 'True':
-#         groups = UserView.objects.filter(widgets__name=host + '-' + hostcheck).values_list('group', flat=True).distinct()    
-#         add_msg(level='99', msg=instance, groups=groups)
-#     return True
+@receiver(post_save, sender=ErrorLog, dispatch_uid="report_error")
+def error_to_ui(sender, instance, **kwargs):
+    # When an error gets logged, we want to display a notification for it in the UI
+    from webview.models import UserView
+    host = None;
+    hostcheck = None;
+    if isinstance(instance.host, Hosts):
+        host = instance.host.name
+    elif isinstance(instance.host, str):
+        host = instance.host
+    if isinstance(instance.hostcheck, HostChecks):
+        hostcheck = instance.hostcheck.name
+    elif isinstance(instance.hostcheck, str):
+        hostcheck = instance.hostcheck
+    if getMetadata(host + ':' + hostcheck + '::notifs', 'True') == 'True':
+        groups = UserView.objects.filter(widgets__name=host + '-' + hostcheck).values_list('group', flat=True).distinct()
+        add_msg(level='99', msg=instance, groups=groups)
+    return True

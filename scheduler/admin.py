@@ -12,11 +12,11 @@ class HostsAdmin(VersionAdmin):
 
 
 class HostChecksAdmin(VersionAdmin):
-    fields = ('name', 'verbosename', 'hosts', 'checktype', 'interval', 'arg', 'unit', 'quotient', 'threshold', 'sla', 'allhosts', 'colorizesla', 'status', 'statsinterval', 'enabled', 'note', )
-    list_display = ('name', 'verbosename', 'checktype', 'interval', 'arg', 'unit', 'quotient', 'allhosts', 'colorizesla', 'status', 'statsinterval', 'enabled', )
+    fields = ('name', 'verbosename', 'hosts', 'checktype', 'interval', 'arg', 'unit', 'quotient', 'threshold', 'sla', 'allhosts', 'colorizesla', 'enabled', 'note', )
+    list_display = ('name', 'verbosename', 'checktype', 'interval', 'arg', 'unit', 'quotient', 'allhosts', 'colorizesla', 'enabled', )
     list_display_links = ('name', 'verbosename',)
-    list_filter = ('hosts', 'checktype', 'interval', 'unit', 'quotient', 'threshold', 'sla', 'allhosts', 'colorizesla', 'status', 'statsinterval', 'enabled', )
-    search_fields = ['name', 'verbosename', 'checktype', 'interval', 'arg', 'unit', 'quotient', 'allhosts', 'colorizesla', 'status', 'statsinterval', 'enabled', 'note', ]
+    list_filter = ('hosts', 'checktype', 'interval', 'unit', 'quotient', 'threshold', 'sla', 'allhosts', 'colorizesla', 'enabled', )
+    search_fields = ['name', 'verbosename', 'checktype', 'interval', 'arg', 'unit', 'quotient', 'allhosts', 'colorizesla', 'enabled', 'note', ]
 
 
 

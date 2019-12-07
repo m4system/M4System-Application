@@ -21,6 +21,6 @@ python-memcached>=1.59
 pytz>2016.3
 requests>2.20.0
 six>1.11.0
-template-utils>0.4p2
+template-utils>=0.4p2
 threadpool>=1.3.2
 urllib3>1.24.2
