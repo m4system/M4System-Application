@@ -2,5 +2,5 @@ START /B c:\Python35\python.exe manage.py celery -A scheduler worker --heartbeat
 
 START /B c:\Python35\python.exe manage.py celery -A scheduler beat
 
-START /B c:\Python35\python.exe manage.py celerycam --frequency=10.0
+REM START /B c:\Python35\python.exe manage.py celerycam --frequency=10.0
 

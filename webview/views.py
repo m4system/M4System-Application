@@ -379,14 +379,15 @@ def reports(request, host, check):
 @login_required
 def getDelay(request, days):
     # Pulls the info for the avg task delay info bubble at the top )
-    if days is None:
-        days = 1
+    # if days is None:
+    #     days = 1
     # meandelay = getMetadata('taskdelay-' + str(days), None)
     # if meandelay is None:
-    tasks = TaskState.objects.filter(
-        tstamp__range=[timezone.now() - datetime.timedelta(days=int(days)), timezone.now()]).exclude(
-        runtime=None).values_list('runtime', flat=True)
-    meandelay = mean(tasks)
+    # tasks = TaskState.objects.filter(
+    #     tstamp__range=[timezone.now() - datetime.timedelta(days=int(days)), timezone.now()]).exclude(
+    #     runtime=None).values_list('runtime', flat=True)
+    # meandelay = mean(tasks)
+    meandelay = 1
     setMetadata('taskdelay-' + str(days), meandelay)
     return HttpResponse(meandelay)
 

@@ -62,7 +62,7 @@ def snmpgetint(self, host, check):
             startedAt = time()
 
             def cbTimerFun(timeNow):
-                if timeNow - startedAt > 25:
+                if timeNow - startedAt > 3:
                     raise Exception("Request timed out")
 
             # noinspection PyUnusedLocal,PyUnusedLocal
@@ -92,7 +92,7 @@ def snmpgetint(self, host, check):
             transportDispatcher = AsyncoreDispatcher()
 
             transportDispatcher.registerRecvCbFun(cbRecvFun)
-            transportDispatcher.registerTimerCbFun(cbTimerFun)
+            # transportDispatcher.registerTimerCbFun(cbTimerFun)
 
             # UDP/IPv4
             transportDispatcher.registerTransport(
@@ -132,6 +132,13 @@ def snmpgetint(self, host, check):
 
             transportDispatcher.closeDispatcher()
             # print(transportDispatcher)
+            del transportDispatcher
+            del pMod
+            del reqPDU
+            del reqMsg
+            del startedAt
+            del cbTimerFun
+            del cbRecvFun
 
             # computeint(check, host, res)
             # print(oid + ' on ' + address + ' equals ' + res)

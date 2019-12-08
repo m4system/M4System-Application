@@ -11,7 +11,7 @@ from djcelery.models import IntervalSchedule, PeriodicTask
 
 # from delorean import Delorean
 from scheduler.utils import strtobool, booltostr
-from tools import dbg, setmd, add_msg, getMetadata, setMetadata
+from tools import dbg, add_msg, getMetadata, setMetadata
 
 
 # noinspection PyProtectedMember
@@ -205,6 +205,8 @@ class Thresholds(models.Model):
     def checkForIntWith(self, value, check, host):
         # Compile the list of possible error and trigger actions
         error = {'hasError': False, 'lowwarn': False, 'lowcrit': False, 'highwarn': False, 'highcrit': False, }
+        # print(value)
+        # print("highcrit" + str(self.highcrit))
 
         if self.enabled:
             tocheck = float(value)
@@ -226,6 +228,7 @@ class Thresholds(models.Model):
                 self.doWarn(tocheck, error, check, host)
             if error['hasError'] is False:
                 self.doOK(tocheck, error, check, host)
+        # print(str(err r))
         return error
 
     def checkForBoolWith(self, value, check, host):
@@ -300,7 +303,7 @@ class Thresholds(models.Model):
             emails = []
             
             # It is also an issue for users who dont log on often and have lots of threshold events.
-            add_msg('30', check.name + ' on ' + host.name + ' failed threshold named ' + self.name + ' with value ' + str(value), self.warngroups.all())
+            # add_msg('30', check.name + ' on ' + host.name + ' failed threshold named ' + self.name + ' with value ' + str(value), self.warngroups.all())
             for group in self.warngroups.all():
                 users = User.objects.filter(groups=group)
                 for user in users:
@@ -309,17 +312,17 @@ class Thresholds(models.Model):
                     if mail is not None and mail != '':
                         emails.append(
                             (subj, self.renderMail(value, error, check, host, 'warn'), 'm4@m4system.com', [mail]))
-            send_mass_mail(tuple(emails), fail_silently=False)
+            send_mass_mail(tuple(emails), fail_silently=True)
         return True
 
     def doCrit(self, value, error, check, host):
         # A crit means fail this host-check combo and, depending on settings, fail any SLA that are linked to that check
         # Happens only once.  Use warngroups if you want repearing alerts.
         # It is also an issue for users who dont log on often and have lots of threshold events.
-        # add_msg('30', check.name + ' on ' + host.name + ' critically failed threshold named ' + self.name + ' with value ' + str(value), self.warngroups.all())
+        add_msg('30', check.name + ' on ' + host.name + ' critically failed threshold named ' + self.name + ' with value ' + str(value), self.warngroups.all())
         now = timezone.now().timestamp()
         doit = False
-
+        # print("doCrit mopre EARLY")
         if self.critrepeat is None and int(
                 getMetadata(host.name + ':' + check.name + ':thold-' + self.name + '::lastcrit', 0)) == 0:
             doit = True
@@ -341,7 +344,8 @@ class Thresholds(models.Model):
                         strtobool(str(value)))
                     from webview.models import UserProfile
                     emails = []
-                    
+
+
                     # It is also an issue for users who dont log on often and have lots of threshold events.
                     # add_msg('30', check.name + ' on ' + host.name + ' failed threshold named ' + self.name + ' with value ' + str(value), self.warngroups.all())
                     for group in self.critgroups.all():
@@ -376,7 +380,7 @@ class Thresholds(models.Model):
                         value) + " " + check.unit
                     from webview.models import UserProfile
                     emails = []
-                    
+
                     # It is also an issue for users who dont log on often and have lots of threshold events.
                     # add_msg('30', check.name + ' on ' + host.name + ' failed threshold named ' + self.name + ' with value ' + str(value), self.warngroups.all())
                     for group in self.critgroups.all():
@@ -388,8 +392,10 @@ class Thresholds(models.Model):
                             if mail is not None and mail != '':
                                 emails.append((subj, self.renderMail(value, error, check, host, 'crit'),
                                                'm4@m4system.com', [mail]))
-                    send_mass_mail(tuple(emails), fail_silently=False)
+                    send_mass_mail(tuple(emails), fail_silently=True)
             # Log a fail event for all SLA that have this check assigned
+            # print("doCrit LATE")
+
             for sla in Sla.objects.filter(hostchecks=check):
                 EventLog(sla=sla, hostcheck=check, host=host, threshold=self, event='bad', value=value,
                          data=error).save()
@@ -415,7 +421,7 @@ class Thresholds(models.Model):
             emails = []
             
             # It is also an issue for users who dont log on often and have lots of threshold events.
-            # add_msg('30', check.name + ' on ' + host.name + ' failed threshold named ' + self.name + ' with value ' + str(value), self.warngroups.all())
+            add_msg('30', check.name + ' on ' + host.name + ' passed threshold named ' + self.name + ' with value ' + str(value), self.warngroups.all())
             for group in self.okgroups.all():
                 users = User.objects.filter(groups=group)
                 for user in users:
@@ -424,7 +430,7 @@ class Thresholds(models.Model):
                     if mail is not None and mail != '':
                         emails.append(
                             (subj, self.renderMail(value, error, check, host, 'ok'), 'm4@m4system.com', [mail]))
-            send_mass_mail(tuple(emails), fail_silently=False)
+            send_mass_mail(tuple(emails), fail_silently=True)
             # Log a fail event for all SLA that have this check assigned
             for sla in Sla.objects.filter(hostchecks=check):
                 EventLog(sla=sla, hostcheck=check, host=host, threshold=self, event='good', value=value,
@@ -561,7 +567,7 @@ class Sla(models.Model):
                 if mail is not None and mail != '':
                     emails.append(
                         ('[M4] SLA Warning for ' + self.name, self.renderMail('warn'), 'm4@m4system.com', [mail]))
-        send_mass_mail(tuple(emails), fail_silently=False)
+        send_mass_mail(tuple(emails), fail_silently=True)
         return True
 
     def doCrit(self):
@@ -575,7 +581,7 @@ class Sla(models.Model):
                 if mail is not None and mail != '':
                     emails.append(('[M4] ***CRITICAL SLA*** for ' + self.name, self.renderMail('crit'),
                                    'm4@m4system.com', [mail]))
-        send_mass_mail(tuple(emails), fail_silently=False)
+        send_mass_mail(tuple(emails), fail_silently=True)
         return True
 
     def doOk(self):
@@ -589,7 +595,7 @@ class Sla(models.Model):
                 if mail is not None and mail != '':
                     emails.append(
                         ('[M4] SLA Restored for ' + self.name, self.renderMail('ok'), 'm4@m4system.com', [mail]))
-        send_mass_mail(tuple(emails), fail_silently=False)
+        send_mass_mail(tuple(emails), fail_silently=True)
         return True
 
     def renderMail(self, type):
@@ -943,19 +949,19 @@ def do_events(sender, instance, **kwargs):
                 setMetadata('sla-' + instance.sla.name + '::laststatus', instance.sla.status)
                 instance.sla.status = 'failing'
                 timefailed = int(getMetadata('sla-' + instance.sla.name + '::timefailed', 0))
-                instance.sla.data = setmd(instance.sla.data, 'timefailed', timefailed + 1)
+                # instance.sla.data = setmd(instance.sla.data, 'timefailed', timefailed + 1)
                 setMetadata('sla-' + instance.sla.name + '::timefailed', str(timefailed + 1))
                 instance.sla.save()
-                SlaLog(sla=instance.sla, event='bad', data=instance.sla.data).save()
+                SlaLog(sla=instance.sla, event='bad', data='{}').save()
         else:
             # We fail the sla since the check failed and allchecks is false.  AllHost is supposed to have been checked already at this point
             setMetadata('sla-' + instance.sla.name + '::laststatus', instance.sla.status)
             instance.sla.status = 'failing'
             timefailed = int(getMetadata('sla-' + instance.sla.name + '::timefailed', 0))
-            instance.sla.data = setmd(instance.sla.data, 'timefailed', timefailed + 1)
+            # instance.sla.data = setmd(instance.sla.data, 'timefailed', timefailed + 1)
             setMetadata('sla-' + instance.sla.name + '::timefailed', str(timefailed + 1))
             instance.sla.save()
-            SlaLog(sla=instance.sla, event='bad', data=instance.sla.data).save()
+            SlaLog(sla=instance.sla, event='bad', data='{}').save()
     elif instance.event == 'good' and instance.sla.status != 'OK':
         # We become good from a bad state
         # dbg('her I guess I become good')
@@ -980,19 +986,19 @@ def do_events(sender, instance, **kwargs):
             setMetadata('sla-' + instance.sla.name + '::laststatus', instance.sla.status)
             instance.sla.status = 'OK'
             timerecovered = int(getMetadata('sla-' + instance.sla.name + '::timerecovered', 0))
-            instance.sla.data = setmd(instance.sla.data, 'timerecovered', timerecovered + 1)
+            # instance.sla.data = setmd(instance.sla.data, 'timerecovered', timerecovered + 1)
             setMetadata('sla-' + instance.sla.name + '::timerecovered', timerecovered + 1)
             instance.sla.save()
-            SlaLog(sla=instance.sla, event='good', data=instance.sla.data).save()
+            SlaLog(sla=instance.sla, event='good', data='{}').save()
         elif totalchecks - failedchecks == totalchecks:
             # allchecks is false and we have no failed checks
             setMetadata('sla-' + instance.sla.name + '::laststatus', instance.sla.status)
             instance.sla.status = 'OK'
             timerecovered = int(getMetadata('sla-' + instance.sla.name + '::timerecovered', 0))
-            instance.sla.data = setmd(instance.sla.data, 'timerecovered', timerecovered + 1)
+            # instance.sla.data = setmd(instance.sla.data, 'timerecovered', timerecovered + 1)
             setMetadata('sla-' + instance.sla.name + '::timerecovered', timerecovered + 1)
             instance.sla.save()
-            SlaLog(sla=instance.sla, event='good', data=instance.sla.data).save()
+            SlaLog(sla=instance.sla, event='good', data='{}').save()
     return True
 
 
