@@ -29,6 +29,13 @@ pip install -r requirements.txt
 
 Follow the instruction here: https://www.rabbitmq.com/install-windows.html
 
+```
+rabbitmqctl add_user m4 changeme
+rabbitmqctl add_vhost m4
+rabbitmqctl set_user_tags m4 m4
+rabbitmqctl set_permissions -p m4 m4 ".*" ".*" ".*"
+```
+
 ## Install lessc
 
 npm install lessc -g
