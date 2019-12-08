@@ -29,6 +29,9 @@ pip install -r requirements.txt
 
 Follow the instruction here: https://www.rabbitmq.com/install-windows.html
 
+## Install lessc
+
+npm install lessc -g
 
 ## Setup SNMP
 
