@@ -319,7 +319,7 @@ class Thresholds(models.Model):
         # A crit means fail this host-check combo and, depending on settings, fail any SLA that are linked to that check
         # Happens only once.  Use warngroups if you want repearing alerts.
         # It is also an issue for users who dont log on often and have lots of threshold events.
-        add_msg('30', check.name + ' on ' + host.name + ' critically failed threshold named ' + self.name + ' with value ' + str(value), self.warngroups.all())
+        add_msg('99', check.name + ' on ' + host.name + ' critically failed threshold named ' + self.name + ' with value ' + str(value), self.warngroups.all())
         now = timezone.now().timestamp()
         doit = False
         # print("doCrit mopre EARLY")
@@ -421,7 +421,7 @@ class Thresholds(models.Model):
             emails = []
             
             # It is also an issue for users who dont log on often and have lots of threshold events.
-            add_msg('30', check.name + ' on ' + host.name + ' passed threshold named ' + self.name + ' with value ' + str(value), self.warngroups.all())
+            add_msg('25', check.name + ' on ' + host.name + ' passed threshold named ' + self.name + ' with value ' + str(value), self.warngroups.all())
             for group in self.okgroups.all():
                 users = User.objects.filter(groups=group)
                 for user in users:
