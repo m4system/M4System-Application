@@ -205,6 +205,7 @@ class Thresholds(models.Model):
     def checkForIntWith(self, value, check, host):
         # Compile the list of possible error and trigger actions
         error = {'hasError': False, 'lowwarn': False, 'lowcrit': False, 'highwarn': False, 'highcrit': False, }
+
         if self.enabled:
             tocheck = float(value)
             if self.lowcrit is not None and tocheck <= self.lowcrit:
@@ -272,7 +273,7 @@ class Thresholds(models.Model):
     def doWarn(self, value, error, check, host):
         # a warn means notify warn group, but dont fail the service.
         global subj
-        now = timezone.now().strftime('%s')
+        now = timezone.now().timestamp()
         doit = False
         setMetadata(host.name + ':' + check.name + ':thold-' + self.name + '::laststatus', 'warn')
 
@@ -297,9 +298,9 @@ class Thresholds(models.Model):
                 subj = '[M4 - WARNING] ' + check.name + ' on ' + host.name + ' is ' + str(value)
             from webview.models import UserProfile
             emails = []
-            # This is generating some errors sometimes https://pm.m4system.com/issues/3289
+            
             # It is also an issue for users who dont log on often and have lots of threshold events.
-            # add_msg('30', check.name + ' on ' + host.name + ' failed threshold named ' + self.name + ' with value ' + str(value), self.warngroups.all())
+            add_msg('30', check.name + ' on ' + host.name + ' failed threshold named ' + self.name + ' with value ' + str(value), self.warngroups.all())
             for group in self.warngroups.all():
                 users = User.objects.filter(groups=group)
                 for user in users:
@@ -314,10 +315,9 @@ class Thresholds(models.Model):
     def doCrit(self, value, error, check, host):
         # A crit means fail this host-check combo and, depending on settings, fail any SLA that are linked to that check
         # Happens only once.  Use warngroups if you want repearing alerts.
-        # This is generating some errors sometimes https://pm.m4system.com/issues/3289
         # It is also an issue for users who dont log on often and have lots of threshold events.
         # add_msg('30', check.name + ' on ' + host.name + ' critically failed threshold named ' + self.name + ' with value ' + str(value), self.warngroups.all())
-        now = timezone.now().strftime('%s')
+        now = timezone.now().timestamp()
         doit = False
 
         if self.critrepeat is None and int(
@@ -341,7 +341,7 @@ class Thresholds(models.Model):
                         strtobool(str(value)))
                     from webview.models import UserProfile
                     emails = []
-                    # This is generating some errors sometimes https://pm.m4system.com/issues/3289
+                    
                     # It is also an issue for users who dont log on often and have lots of threshold events.
                     # add_msg('30', check.name + ' on ' + host.name + ' failed threshold named ' + self.name + ' with value ' + str(value), self.warngroups.all())
                     for group in self.critgroups.all():
@@ -358,7 +358,7 @@ class Thresholds(models.Model):
                     subj = '[M4 - CRITICAL] ' + check.name + ' on ' + host.name + ' is ' + str(value)
                     from webview.models import UserProfile
                     emails = []
-                    # This is generating some errors sometimes https://pm.m4system.com/issues/3289
+                    
                     # It is also an issue for users who dont log on often and have lots of threshold events.
                     # add_msg('30', check.name + ' on ' + host.name + ' failed threshold named ' + self.name + ' with value ' + str(value), self.warngroups.all())
                     for group in self.critgroups.all():
@@ -376,7 +376,7 @@ class Thresholds(models.Model):
                         value) + " " + check.unit
                     from webview.models import UserProfile
                     emails = []
-                    # This is generating some errors sometimes https://pm.m4system.com/issues/3289
+                    
                     # It is also an issue for users who dont log on often and have lots of threshold events.
                     # add_msg('30', check.name + ' on ' + host.name + ' failed threshold named ' + self.name + ' with value ' + str(value), self.warngroups.all())
                     for group in self.critgroups.all():
@@ -413,7 +413,7 @@ class Thresholds(models.Model):
                 subj = '[M4 - OK] ' + check.name + ' on ' + host.name + ' is ' + str(value)
             from webview.models import UserProfile
             emails = []
-            # This is generating some errors sometimes https://pm.m4system.com/issues/3289
+            
             # It is also an issue for users who dont log on often and have lots of threshold events.
             # add_msg('30', check.name + ' on ' + host.name + ' failed threshold named ' + self.name + ' with value ' + str(value), self.warngroups.all())
             for group in self.okgroups.all():
@@ -664,8 +664,8 @@ class Sla(models.Model):
             self.currentvalue = goodinseconds / monthinseconds * 100
             setMetadata('sla-' + self.name + '::30daybad', countbad)
             # self.data = setmd(self.data, '30daybad', countbad)
-            setMetadata('sla-' + self.name + '::30lastcompute', int(now.strftime('%s')))
-            # self.data = setmd(self.data, '30lastcompute', int(now.strftime('%s')))
+            setMetadata('sla-' + self.name + '::30lastcompute', int(now.timestamp()))
+            # self.data = setmd(self.data, '30lastcompute', int(now.timestamp()))
             self.save()
         except:
             dbg("could not compute SLA for " + self.name)
@@ -693,8 +693,8 @@ class Sla(models.Model):
                 #     lastevent = 'good'
             # self.data = setmd(self.data, '60daybad', countbad)
             setMetadata('sla-' + self.name + '::60daybad', countbad)
-            # self.data = setmd(self.data, '60lastcompute', int(now.strftime('%s')))
-            setMetadata('sla-' + self.name + '::60lastcompute', int(now.strftime('%s')))
+            # self.data = setmd(self.data, '60lastcompute', int(now.timestamp()))
+            setMetadata('sla-' + self.name + '::60lastcompute', int(now.timestamp()))
             # self.save()
         except:
             dbg("could not compute 60 day SLA for " + self.name)
@@ -717,8 +717,8 @@ class Sla(models.Model):
                     lastevent = 'bad'
             # self.data = setmd(self.data, '90daybad', countbad)
             setMetadata('sla-' + self.name + '::90daybad', countbad)
-            # self.data = setmd(self.data, '90lastcompute', int(now.strftime('%s')))
-            setMetadata('sla-' + self.name + '::90lastcompute', int(now.strftime('%s')))
+            # self.data = setmd(self.data, '90lastcompute', int(now.timestamp()))
+            setMetadata('sla-' + self.name + '::90lastcompute', int(now.timestamp()))
             # self.save()
         except:
             dbg("could not compute 90 day SLA for " + self.name)
@@ -741,8 +741,8 @@ class Sla(models.Model):
                     lastevent = 'bad'
             # self.data = setmd(self.data, '180daybad', countbad)
             setMetadata('sla-' + self.name + '::180daybad', countbad)
-            # self.data = setmd(self.data, '180lastcompute', int(now.strftime('%s')))
-            setMetadata('sla-' + self.name + '::180lastcompute', int(now.strftime('%s')))
+            # self.data = setmd(self.data, '180lastcompute', int(now.timestamp()))
+            setMetadata('sla-' + self.name + '::180lastcompute', int(now.timestamp()))
             # self.save()
         except:
             dbg("could not compute 180 day SLA for " + self.name)
@@ -763,10 +763,8 @@ class Sla(models.Model):
                 if event.event == 'bad' and lastevent == 'good':
                     countbad = countbad + 1
                     lastevent = 'bad'
-            # self.data = setmd(self.data, '365daybad', countbad)
             setMetadata('sla-' + self.name + '::365daybad', countbad)
-            # self.data = setmd(self.data, '365lastcompute', int(now.strftime('%s')))
-            setMetadata('sla-' + self.name + '::365lastcompute', int(now.strftime('%s')))
+            setMetadata('sla-' + self.name + '::365lastcompute', int(now.timestamp()))
             # self.save()
         except:
             dbg("could not compute 365 day SLA for " + self.name)
@@ -963,7 +961,7 @@ def do_events(sender, instance, **kwargs):
         # dbg('her I guess I become good')
         totalchecks = 0
         failedchecks = 0
-        # This is generating some errors sometimes https://pm.m4system.com/issues/3289
+        
         # It is also an issue for users who dont log on often and have lots of threshold events.
         add_msg('25',
                 instance.hostcheck.name + ' on ' + instance.host.name + ' suceeded threshold named ' + instance.threshold.name + ' with value ' + str(
@@ -1022,7 +1020,7 @@ def create_them_models(sender, instance, action, reverse, *args, **kwargs):
                 gettask.interval = IntervalSchedule.objects.get(every=instance.interval)
                 gettask.args = '["' + host.name + '", "' + instance.name + '"]'
                 gettask.save()
-
+            print(host.name + '-' + instance.name)
             try:
                 from webview.models import Widgets
                 getwidget = Widgets.objects.get(name=host.name + '-' + instance.name)

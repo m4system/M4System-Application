@@ -28,7 +28,7 @@ res = None
 
 
 @shared_task(bind=True, name='snmpgetint')
-def snmpgetint(host, check):
+def snmpgetint(self, host, check):
     global checkname
     global hostname
     global res
@@ -62,7 +62,7 @@ def snmpgetint(host, check):
             startedAt = time()
 
             def cbTimerFun(timeNow):
-                if timeNow - startedAt > 3:
+                if timeNow - startedAt > 25:
                     raise Exception("Request timed out")
 
             # noinspection PyUnusedLocal,PyUnusedLocal
@@ -79,7 +79,7 @@ def snmpgetint(host, check):
                             print(errorStatus.prettyPrint())
                         else:
                             for oid, val in pMod.apiPDU.getVarBinds(rspPDU):
-                                print('%s = %s' % (oid.prettyPrint(), val.prettyPrint()))
+                                # print('%s = %s' % (oid.prettyPrint(), val.prettyPrint()))
                                 # res = str(float(val.prettyPrint() * float(check.quotient)))
                                 global checkname
                                 global hostname
@@ -148,7 +148,7 @@ def snmpgetint(host, check):
 
 
 @shared_task(bind=True, name='snmpgetstr')
-def snmpgetstr(host, check):
+def snmpgetstr(self, host, check):
     res = None
     try:
         print('doing ' + check + ' on ' + host)
@@ -173,7 +173,7 @@ def snmpgetstr(host, check):
 
 
 @shared_task(bind=True, name='snmpgetbool')
-def snmpgetbool(host, check):
+def snmpgetbool(self, host, check):
     res = None
     try:
         print('doing ' + check + ' on ' + host)
@@ -203,7 +203,7 @@ def dump_context(self):
 
 
 @shared_task(bind=True, name='execint')
-def execint(host, check):
+def execint(self, host, check):
     res = None
     try:
         print('doing ' + check + ' on ' + host)
@@ -226,7 +226,7 @@ def execint(host, check):
 
 
 @shared_task(bind=True, name='execbool')
-def execbool(host, check):
+def execbool(self, host, check):
     res = None
     try:
         print('doing ' + check + ' on ' + host)
@@ -249,7 +249,7 @@ def execbool(host, check):
 
 
 @shared_task(bind=True, name='execstr')
-def execstr(host, check):
+def execstr(self, host, check):
     res = None
     try:
         print('doing ' + check + ' on ' + host)

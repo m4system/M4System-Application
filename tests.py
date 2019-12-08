@@ -27,11 +27,11 @@ class WebviewLoginPageTest(TestCase):
         Update a check and confirm all sub objects are updated.
         """
         check = HostChecks.objects.get(name='Test1')
-        check.interval = "30"
-        check.save()
-        task = PeriodicTask.objects.get(name='Localhost-Test1')
-        self.assertEqual(task.interval.every, 30)
         check.interval = "10"
         check.save()
         task = PeriodicTask.objects.get(name='Localhost-Test1')
         self.assertEqual(task.interval.every, 10)
+        check.interval = "30"
+        check.save()
+        task = PeriodicTask.objects.get(name='Localhost-Test1')
+        self.assertEqual(task.interval.every, 30)

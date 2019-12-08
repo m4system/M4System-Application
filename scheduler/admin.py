@@ -63,7 +63,7 @@ class SlaAdmin(VersionAdmin):
     fieldsets = (
         (None, {
             'fields': (
-                'name', 'verbosename', 'currentvalue', 'status', 'critical', 'allchecks', 'enabled', 'note', 'data')
+                'name', 'verbosename', 'currentvalue', 'status', 'critical', 'allchecks', 'enabled', 'note')
         }),
         ('Alerting options', {
             'fields': ('critgroups', 'crittpl', 'warngroups', 'warntpl', 'okgroups', 'oktpl')
@@ -74,7 +74,7 @@ class SlaAdmin(VersionAdmin):
     list_display_links = ('name', 'currentvalue', 'status', 'critical')
     list_filter = (
         'status', 'critgroups', 'warngroups', 'crittpl', 'warntpl', 'oktpl', 'okgroups', 'allchecks', 'enabled',)
-    search_fields = ['name', 'verbosename', 'currentvalue', 'status', 'critical', 'data', 'allchecks', 'enabled',
+    search_fields = ['name', 'verbosename', 'currentvalue', 'status', 'critical', 'allchecks', 'enabled',
                      'note']
 
 

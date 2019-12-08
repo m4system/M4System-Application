@@ -40,11 +40,11 @@ def computeint(check, host, value):
     # Update min if we are under
     # print(metadata)
     mdmin = metadata['min']
-    if mdmin == 'None' or float(value) < float(mdmin):
+    if mdmin == 'No Data' or float(value) < float(mdmin):
         metadata['min'] = setMetadata(host.name + ':' + check.name + '::min', str(value))
     # Update max if we are over
-    mdmax = getMetadata(host.name + ':' + check.name + '::max', None)
-    if mdmax == 'None' or float(value) > float(mdmax):
+    mdmax = metadata['max']
+    if mdmax == 'No Data' or float(value) > float(mdmax):
         metadata['max'] = setMetadata(host.name + ':' + check.name + '::max', str(value))
     # process any alerts that could arise
     errors = alertint(check, host, value)
@@ -81,7 +81,7 @@ def computestr(check, host, value):
     history = Historical(host=host, hostcheck=check, value=value, timestamp=timezone.now())
     setMetadata(host.name + ':' + check.name + '::lastvalue',
                 getMetadata(host.name + ':' + check.name + '::value', 'No Data'))
-    now = int(timezone.now().strftime('%s'))
+    now = int(timezone.now().timestamp())
     setMetadata(host.name + ':' + check.name + '::lastcheck', now)
     setMetadata(host.name + ':' + check.name + '::value', value)
     metadata = {'error': getMetadata(host.name + ':' + check.name + '::error', 'OK')}
@@ -123,7 +123,7 @@ def computebool(check, host, value):
     history = Historical(host=host, hostcheck=check, value=value, timestamp=timezone.now())
     setMetadata(host.name + ':' + check.name + '::lastvalue',
                 getMetadata(host.name + ':' + check.name + '::value', 'No Data'))
-    now = int(timezone.now().strftime('%s'))
+    now = int(timezone.now().timestamp())
     setMetadata(host.name + ':' + check.name + '::lastcheck', now)
     setMetadata(host.name + ':' + check.name + '::value', value)
     metadata = {'nbtrue': getMetadata(host.name + ':' + check.name + '::nbtrue', '0'),

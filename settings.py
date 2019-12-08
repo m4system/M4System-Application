@@ -157,6 +157,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'db.sqlite3',
+        'timeout': 30
         # 'USER': 'm4',
         # 'PASSWORD': 'traC4Uwe',
         # 'HOST': DB_HOST,
@@ -345,12 +346,12 @@ CELERY_RESULT_SERIALIZER = 'pickle'
 CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 CELERY_SEND_EVENTS = True
 CELERY_RESULT_BACKEND = 'djcelery.backends.cache:CacheBackend'
-CELERY_RESULT_PERSISTENT = False
-CELERY_TASK_RESULT_EXPIRES = 86400
+CELERY_RESULT_PERSISTENT = True
+CELERY_TASK_RESULT_EXPIRES = 3600
 if DBG:
     CELERY_SEND_TASK_ERROR_EMAILS = False
 else:
-    CELERY_SEND_TASK_ERROR_EMAILS = True
+    CELERY_SEND_TASK_ERROR_EMAILS = False
 # Since settings is loaded before anything else, we are bootstraping djcelery here
 import djcelery
 
