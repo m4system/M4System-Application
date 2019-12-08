@@ -58,9 +58,26 @@ m4 / Changeme1!
 
 ## Screenshots
 
+Frontend notifications of polling errors
+
 ![Frontend notifications of polling errors](https://github.com/dgagnon/M4-Website/blob/master/content/en/m4%20screenshot%201.png)
+
+Tiles are red when in critical status
+
 ![Tiles are red when in critical status](https://github.com/dgagnon/M4-Website/blob/master/content/en/m4%20screenshot%202.PNG)
+
+A Threshold fails a check which fails a SLA
+
 ![A Threshold fails a check which fails a SLA](https://github.com/dgagnon/M4-Website/blob/master/content/en/m4%20screenshot%203.PNG)
+
+Can also be a warning, where we notify but are not yet in trouble.
+
 ![Can also be a warning, where we notify but are not yet in trouble.](https://github.com/dgagnon/M4-Website/blob/master/content/en/m4%20screenshot4.PNG)
+
+Mobile Friendly
+
 ![Mobile Friendly](https://github.com/dgagnon/M4-Website/blob/master/content/en/m4%20screenshot5.PNG)
+
+More mobile friendliness
+
 ![More mobile friendliness](https://github.com/dgagnon/M4-Website/blob/master/content/en/m4%20screenshot6.PNG)
