@@ -53,6 +53,14 @@ This will allow M4 to poll your local SNMP deamon to get some fresh data.
 
 migrations , revisions, cache table, fixtures, collectstatic
 
+## Load the fixtures
+
+python3.5 manage.py loaddata fixtures/auth.json
+python3.5 manage.py loaddata fixtures/user.json
+python3.5 manage.py loaddata fixtures/djcelery.json
+python3.5 manage.py loaddata fixtures/scheduler.json
+python3.5 manage.py loaddata fixtures/webview.json
+
 ## Run M4
 
 ```
