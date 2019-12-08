@@ -334,6 +334,7 @@ class Thresholds(models.Model):
             doit = False
 
         if doit is True:
+            laststatus = getMetadata(host.name + ':' + check.name + ':thold-' + self.name + '::laststatus')
             setMetadata(host.name + ':' + check.name + ':thold-' + self.name + '::laststatus', 'crit')
             setMetadata(host.name + ':' + check.name + ':thold-' + self.name + '::lastcrit', int(now))
             setMetadata(host.name + ':' + check.name + '::checkstatus', 'failed')
@@ -394,11 +395,10 @@ class Thresholds(models.Model):
                                                'm4@m4system.com', [mail]))
                     send_mass_mail(tuple(emails), fail_silently=True)
             # Log a fail event for all SLA that have this check assigned
-            # print("doCrit LATE")
-
-            for sla in Sla.objects.filter(hostchecks=check):
-                EventLog(sla=sla, hostcheck=check, host=host, threshold=self, event='bad', value=value,
-                         data=error).save()
+            if laststatus != "bad":
+                for sla in Sla.objects.filter(hostchecks=check):
+                    EventLog(sla=sla, hostcheck=check, host=host, threshold=self, event='bad', value=value,
+                             data=error).save()
         return True
 
     def doOK(self, value, error, check, host):
