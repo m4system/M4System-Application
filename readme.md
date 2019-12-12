@@ -24,6 +24,7 @@ cd to your folder
 ```
 pip install -r requirements.txt
 ```
+Install getttext: https://mlocati.github.io/articles/gettext-iconv-windows.html
 
 ## Install RabbitMQ
 
