@@ -1,0 +1,245 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-12-12 14:02-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: .\System\admin.py:45 .\System\models\base_models.py:11
+#: .\System\models\models.py:159 .\System\models\models.py:176
+msgid "Name"
+msgstr ""
+
+#: .\System\admin.py:47
+msgid "Plugin"
+msgstr ""
+
+#: .\System\admin.py:91
+msgid "Trigger"
+msgstr ""
+
+#: .\System\apps.py:7
+msgid "Configuration"
+msgstr ""
+
+#: .\System\models\base_models.py:11 .\System\models\base_models.py:37
+#: .\System\models\base_models.py:63 .\System\models\base_models.py:89
+msgid "Internal name, leave empty to autopopulate."
+msgstr ""
+
+#: .\System\models\base_models.py:12 .\System\models\models.py:177
+msgid "Title"
+msgstr ""
+
+#: .\System\models\base_models.py:12 .\System\models\base_models.py:38
+#: .\System\models\base_models.py:64 .\System\models\base_models.py:90
+#: .\System\models\models.py:86 .\System\models\models.py:114
+#: .\System\models\models.py:139
+msgid "Verbose name for display purposes"
+msgstr ""
+
+#: .\System\models\models.py:53 .\System\models\models.py:87
+msgid "Data type"
+msgstr ""
+
+#: .\System\models\models.py:53
+msgid "The data datatype this trigger supports."
+msgstr ""
+
+#: .\System\models\models.py:76
+msgid "Custom Field"
+msgstr ""
+
+#: .\System\models\models.py:77 .\System\models\models.py:92
+#: .\System\models\models.py:116 .\System\models\models.py:142
+msgid "Custom Fields"
+msgstr ""
+
+#: .\System\models\models.py:85
+msgid "Datapoint Name"
+msgstr ""
+
+#: .\System\models\models.py:85
+msgid "Internal name for the Datapoint."
+msgstr ""
+
+#: .\System\models\models.py:86
+msgid "Datapoint Title"
+msgstr ""
+
+#: .\System\models\models.py:87
+msgid "The internal type for this datapoint."
+msgstr ""
+
+#: .\System\models\models.py:88
+msgid "Source Plugin"
+msgstr ""
+
+#: .\System\models\models.py:88
+msgid ""
+"Select the plugin configuration that will be used to source the data for "
+"this datapoint. If the list is empty, it means you need to create a plugin "
+"configuration first."
+msgstr ""
+
+#: .\System\models\models.py:89
+msgid "Trigger Plugin"
+msgstr ""
+
+#: .\System\models\models.py:89
+msgid ""
+"Select the plugin configuration that will be used to decide if the datapoint "
+"is failing. If the list is empty, it means you need to create a plugin "
+"configuration first."
+msgstr ""
+
+#: .\System\models\models.py:90
+msgid "Hook Plugin"
+msgstr ""
+
+#: .\System\models\models.py:90
+msgid ""
+"Select the plugin configuration that will be executed when the status of the "
+"datapoint changes. If the list is empty, it means you need to create a "
+"plugin configuration first."
+msgstr ""
+
+#: .\System\models\models.py:91
+msgid "Display Plugin"
+msgstr ""
+
+#: .\System\models\models.py:91
+msgid ""
+"Select the plugin configuration that will be used to display this datapoint "
+"on the frontends. If the list is empty, it means you need to create a plugin "
+"configuration first."
+msgstr ""
+
+#: .\System\models\models.py:92 .\System\models\models.py:116
+#: .\System\models\models.py:142
+msgid "You can set custom fields for complex scenarios."
+msgstr ""
+
+#: .\System\models\models.py:103
+msgid "Data Point"
+msgstr ""
+
+#: .\System\models\models.py:104
+msgid "Data Points"
+msgstr ""
+
+#: .\System\models\models.py:113
+msgid "Asset Name"
+msgstr ""
+
+#: .\System\models\models.py:113
+msgid "Internal name for the Asset."
+msgstr ""
+
+#: .\System\models\models.py:114
+msgid "Asset Title"
+msgstr ""
+
+#: .\System\models\models.py:115
+msgid "Datapoints which link to this assets."
+msgstr ""
+
+#: .\System\models\models.py:115
+msgid ""
+"Assign datapoints to assets here.  You can then assign an SLA and start "
+"monitoring availibility."
+msgstr ""
+
+#: .\System\models\models.py:127
+msgid "Asset"
+msgstr ""
+
+#: .\System\models\models.py:128
+msgid "Assets"
+msgstr ""
+
+#: .\System\models\models.py:138
+msgid "SLA Name"
+msgstr ""
+
+#: .\System\models\models.py:138
+msgid "Internal name for the SLA."
+msgstr ""
+
+#: .\System\models\models.py:139
+msgid "SLA Title"
+msgstr ""
+
+#: .\System\models\models.py:140 .\System\models\models.py:141
+msgid "Assigned Assets"
+msgstr ""
+
+#: .\System\models\models.py:140
+msgid "Assets assigned to this SLA."
+msgstr ""
+
+#: .\System\models\models.py:141
+msgid "Datapoints assigned to this SLA."
+msgstr ""
+
+#: .\System\models\models.py:153
+msgid "SLA"
+msgstr ""
+
+#: .\System\models\models.py:154
+msgid "SLAs"
+msgstr ""
+
+#: .\System\models\models.py:159
+msgid "Setting name"
+msgstr ""
+
+#: .\System\models\models.py:160
+msgid "Value"
+msgstr ""
+
+#: .\System\models\models.py:160
+msgid "Setting value"
+msgstr ""
+
+#: .\System\models\models.py:166
+msgid "Setting"
+msgstr ""
+
+#: .\System\models\models.py:167
+msgid "Settings"
+msgstr ""
+
+#: .\System\models\models.py:176
+msgid "Internal name for the frontend."
+msgstr ""
+
+#: .\System\models\models.py:177
+msgid "Verbose name for display purposes."
+msgstr ""
+
+#: .\System\models\models.py:192
+msgid "Front-End"
+msgstr ""
+
+#: .\System\models\models.py:193
+msgid "Front-Ends"
+msgstr ""
+
+#: .\System\views.py:13
+msgid ""
+"No default frontend have been configured.  Set the frontend_default to the "
+"plugin name to redirect automatically."
+msgstr ""

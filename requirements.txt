@@ -1,0 +1,7 @@
+django < 1.12
+django-debug-toolbar
+
+#for prettier admin panel
+#django-jet
+#google-api-python-client
+#FeedParser
