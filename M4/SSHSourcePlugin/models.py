@@ -5,11 +5,12 @@ from M4.System.models.base_models import BaseSourcePlugin
 
 
 class SSHSourcePlugin(BaseSourcePlugin):
-    shell = models.CharField(verbose_name=_('Remote Shell'), help_text=_('This is usually /bin/bash on linux.'),
+    shell = models.CharField(verbose_name=_('Remote Shell'), default='/bin/bash',
+                             help_text=_('This is usually /bin/bash on linux.'),
                              max_length=256)
     content = models.CharField(verbose_name=_('The Script'), help_text=_(
         'Put the script content here.  It will be executed by the shell you select.'), max_length=4096,
-                               default='#!/bin/bash\n')
+                               default='echo 1')
 
     def poll(self):
         return self

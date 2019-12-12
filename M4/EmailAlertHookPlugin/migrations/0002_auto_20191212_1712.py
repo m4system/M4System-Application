@@ -22,7 +22,7 @@ def forwards_func(apps, schema_editor):
                                                         template_recovered=detailedTemplate,
                                                         template_error=detailedTemplate)
     HookPlugin.objects.using(db_alias).create(id=1, name='(EmailAlertHookPlugin) Email Alerting', object_id=1,
-                                              content_type=ContentType.objects.get(pk=22))
+                                              content_type=ContentType.objects.get(model='emailalerthookplugin'))
 
 
 def reverse_func(apps, schema_editor):

@@ -17,7 +17,8 @@ def forwards_func(apps, schema_editor):
                                                                 number_high='10')
     TriggerPlugin.objects.using(db_alias).create(id=1, name='(NumberThresholdPlugin) Fail Above 10', datatype='number',
                                                  object_id=1,
-                                                 content_type=ContentType.objects.get(pk=26))
+                                                 content_type=ContentType.objects.get(
+                                                     model='numberthresholdtriggerplugin'))
 
 
 def reverse_func(apps, schema_editor):

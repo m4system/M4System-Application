@@ -20,7 +20,7 @@ def forwards_func(apps, schema_editor):
                                                           slogan='M4 is for Modern Monitoring and Management',
                                                           template='default/default')
     DisplayPlugin.objects.using(db_alias).create(id=1, name='(DashboardDisplayPlugin) Default Widgets', object_id=1,
-                                                 content_type=ContentType.objects.get(pk=23))
+                                                 content_type=ContentType.objects.get(model='dashboarddisplayplugin'))
     FrontEnd.objects.using(db_alias).create(pk=1, name='dashboard', title='Default Dashboard',
                                             plugin=Plugin.objects.get(name='dashboard'))
 

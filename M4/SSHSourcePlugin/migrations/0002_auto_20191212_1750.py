@@ -14,9 +14,9 @@ def forwards_func(apps, schema_editor):
 
     db_alias = schema_editor.connection.alias
     SSHSourcePlugin.objects.using(db_alias).create(pk=1, name='ssh-exec', title="Execute through SSH",
-                                                   shell='/bin/bash', content='echo test')
+                                                   shell='/bin/bash', content='echo 12')
     SourcePlugin.objects.using(db_alias).create(id=1, name='(SSHSourcePlugin) SSH Remote Shell', object_id=1,
-                                                content_type=ContentType.objects.get(pk=27))
+                                                content_type=ContentType.objects.get(model='sshsourceplugin'))
 
 
 def reverse_func(apps, schema_editor):
