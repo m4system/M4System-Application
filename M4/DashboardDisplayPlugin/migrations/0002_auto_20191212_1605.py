@@ -11,18 +11,18 @@ def forwards_func(apps, schema_editor):
     DashboardDisplayPlugin = apps.get_model("DashboardDisplayPlugin", "DashboardDisplayPlugin")
     DisplayPlugin = apps.get_model('System', 'DisplayPlugin')
     ContentType = apps.get_model('contenttypes', 'ContentType')
-    FrontEnd = apps.get_model('System', 'FrontEnd')
-    Plugin = apps.get_model('djangoplugins', 'Plugin')
-
     db_alias = schema_editor.connection.alias
+
     DashboardDisplayPlugin.objects.using(db_alias).create(pk=1, name='default-widgets', title="Default Widgets",
                                                           logo='img/m4.png',
                                                           slogan='M4 is for Modern Monitoring and Management',
                                                           template='default/default')
+
+    ContentType.objects.using(db_alias).create(app_label='M4.DashboardDisplayPlugin', model='dashboarddisplayplugin')
+
     DisplayPlugin.objects.using(db_alias).create(id=1, name='(DashboardDisplayPlugin) Default Widgets', object_id=1,
-                                                 content_type=ContentType.objects.get(model='dashboarddisplayplugin'))
-    FrontEnd.objects.using(db_alias).create(pk=1, name='dashboard', title='Default Dashboard',
-                                            plugin=Plugin.objects.get(name='dashboard'))
+                                                 content_type=ContentType.objects.using(db_alias).get(
+                                                     model='dashboarddisplayplugin'))
 
 
 def reverse_func(apps, schema_editor):
@@ -30,16 +30,16 @@ def reverse_func(apps, schema_editor):
     # so reverse_func() should delete them.
     DashboardDisplayPlugin = apps.get_model("DashboardDisplayPlugin", "DashboardDisplayPlugin")
     DisplayPlugin = apps.get_model('System', 'DisplayPlugin')
-    FrontEnd = apps.get_model('System', 'FrontEnd')
     db_alias = schema_editor.connection.alias
+
     DashboardDisplayPlugin.objects.using(db_alias).get(pk=1).delete()
     DisplayPlugin.objects.using(db_alias).get(id=1).delete()
-    FrontEnd.objects.using(db_alias).get(pk=1).delete()
 
 
 class Migration(migrations.Migration):
     dependencies = [
         ('DashboardDisplayPlugin', '0001_initial'),
+        ('System', '0001_initial'),
     ]
 
     operations = [

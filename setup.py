@@ -2,6 +2,12 @@ import os
 
 from setuptools import setup, find_packages
 
+with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as readme:
+    README = readme.read()
+
+# allow setup.py to be run from any path
+os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
+
 
 def strip_comments(l):
     return l.split('#', 1)[0].strip()
@@ -29,11 +35,8 @@ def reqs(*f):
 setup(
     name='M4',
     version='1.1',
-    # packages=['M4', 'System', 'System.models', 'System.migrations', 'SNMPSourcePlugin', 'SNMPSourcePlugin.migrations',
-    #           'ModbusSourcePlugin', 'ModbusSourcePlugin.migrations', 'EmailAlertHookPlugin',
-    #           'EmailAlertHookPlugin.migrations', 'DashboardDisplayPlugin', 'DashboardDisplayPlugin.migrations',
-    #           'ThresholdTriggerPlugin', 'ThresholdTriggerPlugin.migrations'],
     packages=find_packages(),
+    include_package_data=True,
     url='https://m4system.com',
     license='AGPL3',
     author='Daniel Gagnon',
@@ -58,6 +61,6 @@ setup(
         'Topic :: System :: Networking'
     ],
     install_requires=reqs('requirements.txt'),
-    # scripts=[os.path.join('M4', 'manage.py')],
-    # entry_points={'console_scripts': ['manage=M4.manage:main']},
+    scripts=[os.path.join('M4', 'manage.py')],
+    entry_points={'console_scripts': ['manage=M4.manage:main']},
 )

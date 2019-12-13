@@ -1,6 +1,9 @@
 django < 1.12
 django-debug-toolbar
 
+# djangoplugin dependancies
+django-dirtyfields
+
 #for prettier admin panel
 #django-jet
 #google-api-python-client

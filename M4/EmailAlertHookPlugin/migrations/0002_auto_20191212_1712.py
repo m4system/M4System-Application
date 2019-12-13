@@ -16,6 +16,7 @@ def forwards_func(apps, schema_editor):
     db_alias = schema_editor.connection.alias
     EmailTemplate.objects.using(db_alias).create(pk=1, name='full-details', title='Full Details')
     detailedTemplate = EmailTemplate.objects.get(pk=1)
+    ContentType.objects.using(db_alias).create(app_label='M4.EmailAlertHookPlugin', model='emailalerthookplugin')
     EmailAlertHookPlugin.objects.using(db_alias).create(pk=1, name='send-alert-to-sysops', title="Send alert to sysops",
                                                         recipients='sysops@example.com',
                                                         template_failing=detailedTemplate,

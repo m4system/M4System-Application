@@ -110,7 +110,7 @@ class BaseTriggerPlugin(models.Model):
             self.name = slugify(self.title)
         super(BaseTriggerPlugin, self).save(*args, **kwargs)
         self.trigger_instance.update_or_create(object_id=self.pk, defaults={
-            'name': '(' + self.trigger_instance.content_type.model + '-' + self.datatype + ') ' + self.name,
+            'name': '(' + self.trigger_instance.content_type.model + ') ' + self.name,
             'datatype': self.datatype})
 
     def delete(self, *args, **kwargs):

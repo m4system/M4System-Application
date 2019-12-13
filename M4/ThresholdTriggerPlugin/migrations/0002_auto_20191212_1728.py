@@ -15,9 +15,11 @@ def forwards_func(apps, schema_editor):
     db_alias = schema_editor.connection.alias
     NumberThresholdTriggerPlugin.objects.using(db_alias).create(pk=1, name='above-10', title='Above 10',
                                                                 number_high='10')
-    TriggerPlugin.objects.using(db_alias).create(id=1, name='(NumberThresholdPlugin) Fail Above 10', datatype='number',
+    ContentType.objects.using(db_alias).create(app_label='ThresholdTriggerPlugin', model='numberthresholdtriggerplugin')
+    TriggerPlugin.objects.using(db_alias).create(id=1, name='(NumberThresholdTriggerPlugin) Fail Above 10',
+                                                 datatype='number',
                                                  object_id=1,
-                                                 content_type=ContentType.objects.get(
+                                                 content_type=ContentType.objects.using(db_alias).get(
                                                      model='numberthresholdtriggerplugin'))
 
 
