@@ -16,15 +16,9 @@ Install vcc++ 2015 and build tools
 - https://www.visualstudio.com/downloads/#build-tools-for-visual-studio-2019
 
 More information on building python modules on windows here: https://wiki.python.org/moin/WindowsCompilers
+Install getttext: https://mlocati.github.io/articles/gettext-iconv-windows.html
 
 reboot
-
-cd to your folder
-
-```
-pip install -r requirements.txt
-```
-Install getttext: https://mlocati.github.io/articles/gettext-iconv-windows.html
 
 ## Install RabbitMQ
 
@@ -49,8 +43,16 @@ Allow localhost with community "public"
 
 This will allow M4 to poll your local SNMP deamon to get some fresh data.
 
+## Setup M4
 
-## Setup Django
+```
+pip3.5 install virtualenvwrapper-win
+git clone https://github.com/dgagnon/m4system.git mym4dev
+mkvirtualenv mym4dev
+pip3.5 install -e .
+manage migrate
+manage collectstatic
+```
 
 migrations , revisions, cache table, fixtures, collectstatic
 
