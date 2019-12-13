@@ -50,6 +50,7 @@ pip3.5 install virtualenvwrapper-win
 git clone https://github.com/dgagnon/m4system.git mym4dev
 mkvirtualenv mym4dev
 pip3.5 install -e .
+manage migrate djangoplugins
 manage migrate
 manage collectstatic
 ```
