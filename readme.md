@@ -8,6 +8,7 @@ description:
 
 [![Actions Status](https://github.com/dgagnon/m4system/workflows/M4%20Unit%20Test/badge.svg)](https://github.com/dgagnon/m4system/actions)
 
+<a href="https://www.patreon.com/bePatron?u=28272143" data-patreon-widget-type="become-patron-button">Become a Patron!</a><script async src="https://c6.patreon.com/becomePatronButton.bundle.js"></script>
 
 ## Install Python
 
