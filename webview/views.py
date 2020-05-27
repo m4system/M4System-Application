@@ -8,7 +8,6 @@ from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404
-from django.shortcuts import render_to_response
 from django.utils import timezone
 from django.views.decorators.cache import cache_control
 from django.views.decorators.cache import never_cache, cache_page
