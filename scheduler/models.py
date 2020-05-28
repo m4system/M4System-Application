@@ -793,7 +793,11 @@ class EventLog(models.Model):
                                   help_text='Check this data relates to.')
     host = models.ForeignKey('Hosts', on_delete=models.PROTECT, null=True, blank=True,
                              help_text='Host this data relates to.')
-    threshold = models.ForeignKey('Thresholds', blank=True, null=True, help_text='Threshold the data relates to.')
+    threshold = models.ForeignKey('Thresholds',
+                                  blank=True,
+                                  null=True,
+                                  help_text='Threshold the data relates to.',
+                                  on_delete=models.CASCADE)
     event = models.CharField('Event', max_length=4, choices=EVENT_CHOICES, default='bad',
                              help_text='What type of event are we logging.')
     value = models.CharField('Value', max_length=4096, help_text='Value of the event.')

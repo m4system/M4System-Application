@@ -112,7 +112,6 @@ MIDDLEWARE = [
     'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.admindocs.middleware.XViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -157,7 +156,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'db.sqlite3',
-        'timeout': 30
+        'timeout': 30,
         # 'USER': 'm4',
         # 'PASSWORD': 'traC4Uwe',
         # 'HOST': DB_HOST,
@@ -356,3 +355,5 @@ else:
 import djcelery
 
 djcelery.setup_loader()
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'  # see: https://docs.djangoproject.com/en/3.0/ref/clickjacking/
