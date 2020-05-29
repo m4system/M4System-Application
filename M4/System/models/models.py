@@ -90,16 +90,16 @@ class Datapoint(models.Model):
     datatype = models.CharField(max_length=8, choices=DATAPOINT_TYPES, default='string', verbose_name=_('Data type'),
                                 help_text=_('The internal type for this datapoint.'))
     source = models.ForeignKey(SourcePlugin, related_name='source', verbose_name=_('Source Plugin'), help_text=_(
-        'Select the plugin configuration that will be used to source the data for this datapoint. If the list is empty, it means you need to create a plugin configuration first.'))
+        'Select the plugin configuration that will be used to source the data for this datapoint. If the list is empty, it means you need to create a plugin configuration first.'), on_delete=models.CASCADE)
     trigger = models.ForeignKey(TriggerPlugin, blank=True, null=True, related_name='trigger',
                                 verbose_name=_('Trigger Plugin'), help_text=_(
-            'Select the plugin configuration that will be used to decide if the datapoint is failing. If the list is empty, it means you need to create a plugin configuration first.'))
+            'Select the plugin configuration that will be used to decide if the datapoint is failing. If the list is empty, it means you need to create a plugin configuration first.'), on_delete=models.CASCADE)
     hook = models.ForeignKey(HookPlugin, blank=True, null=True, related_name='hook', verbose_name=_('Hook Plugin'),
                              help_text=_(
-                                 'Select the plugin configuration that will be executed when the status of the datapoint changes. If the list is empty, it means you need to create a plugin configuration first.'))
+                                 'Select the plugin configuration that will be executed when the status of the datapoint changes. If the list is empty, it means you need to create a plugin configuration first.'), on_delete=models.CASCADE)
     display = models.ForeignKey(DisplayPlugin, blank=True, null=True, related_name='display',
                                 verbose_name=_('Display Plugin'), help_text=_(
-            'Select the plugin configuration that will be used to display this datapoint on the frontends. If the list is empty, it means you need to create a plugin configuration first.'))
+            'Select the plugin configuration that will be used to display this datapoint on the frontends. If the list is empty, it means you need to create a plugin configuration first.'), on_delete=models.CASCADE)
     custom_fields = GenericRelation(CustomField, related_query_name='datapoint', verbose_name=_('Custom Fields'),
                                     help_text=_('You can set custom fields for complex scenarios.'))
 
