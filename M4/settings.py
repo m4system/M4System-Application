@@ -32,8 +32,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    # 'jet.dashboard',
-    # 'jet',
+    'jet.dashboard',
+    'jet',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'djangoplugins',
+    'celery',
+    'djcelery',
     'M4.System',
     'M4.SNMPSourcePlugin',
     'M4.ModbusSourcePlugin',
