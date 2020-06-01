@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'djangoplugins',
     'celery',
     'djcelery',
+    'M4.scheduler',
     'M4.System',
     'M4.SNMPSourcePlugin',
     'M4.ModbusSourcePlugin',
@@ -52,6 +53,7 @@ INSTALLED_APPS = [
     'M4.ThresholdTriggerPlugin',
     'flexselect',
     'debug_toolbar',
+    'compressor'
 ]
 
 MIDDLEWARE = [
@@ -65,6 +67,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'  # see: https://docs.djangoproject.com/en/3.0/ref/clickjacking/
 
 ROOT_URLCONF = 'M4.urls'
 

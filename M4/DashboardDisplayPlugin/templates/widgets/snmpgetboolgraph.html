@@ -1,0 +1,25 @@
+<script type="text/javascript"> 
+$(function() { 
+ $.ajax({
+    url: '/graph/{{ host.name }}/{{ hostcheck.name }}/60/',
+    success: function(data) {
+        if (data.length != 0) {
+            setTimeout(function() { sparkline("#{{ host.name }}-{{ hostcheck.name }}-graph", "area", 30, 100, "basis", 750, 10000, "rgba(255,255,255,0.5)", data, '{{ host.name }}', '{{ hostcheck.name }}', '{{ unit }}', '{{ hostcheck.verbosename }}', 'bool'); }, 500);
+            } else {
+                $('#{{ host.name }}-{{ hostcheck.name }}-graph').html("<h2><center>No Data Available</center></h2>")
+            }
+ },
+    dataType: 'json'
+  });
+});
+</script>
+<!-- {{ host.name }}-{{ hostcheck.name }}-graph -->
+    <div class="panel bg-teal-400" style="margin: 0px">
+        <div class="panel-body">
+            <h3 class="no-margin">{{ host.name|upper }} - {{ hostcheck.verbosename }}</h3>
+            This is a boolean check.
+            <div class="text-muted text-size-small"># of True: <span id='m4-{{ host.name }}-{{ hostcheck.name }}-nbtru'>{{ hostcheckmd.nbtrue }}</span></div><div class="text-muted text-size-small"># of False: <span id='m4-{{ host.name }}-{{ hostcheck.name }}-nbfalse'>{{ hostcheckmd.nbfalse }}</span></div><div class="text-muted text-size-small">Last True: <span id='m4-{{ host.name }}-{{ hostcheck.name }}-lasttrue'>{{ hostcheckmd.lasttrue }}</span></div><div class="text-muted text-size-small">Last False: <span id='m4-{{ host.name }}-{{ hostcheck.name }}-lastfalse'>{{ hostcheckmd.lastfalse }}</span></div>
+        </div>
+        <div id="{{ host.name }}-{{ hostcheck.name }}-graph"></div>
+    </div>
+<!-- {{ host.name }}-{{ hostcheck.name }}-graph -->

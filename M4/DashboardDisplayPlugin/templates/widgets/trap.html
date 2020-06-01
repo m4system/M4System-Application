@@ -1,0 +1,9 @@
+{% for msg in trap %}
+<tr>
+<td>{{ msg.timestamp }}</td>
+<td>{{ msg.host.name }}</td>
+<td>{{ msg.oid }}</td>
+<td>{{ msg.value }}</td>
+</tr>
+{% endfor %}
+

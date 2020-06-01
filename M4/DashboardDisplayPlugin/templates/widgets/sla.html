@@ -1,0 +1,12 @@
+{% load comparison %}
+{% for sla in slas %}
+<tr>
+<td class='{% if sla.status != 'OK' %}alpha-pink{% endif %}'>{{ sla.name }}</td>
+<td class='{% if sla.status != 'OK' %}alpha-pink{% endif %}'>{{ sla.status|capfirst }}</td>
+<td class='{% if sla.currentvalue != None %}{% if_less_or_equal sla.currentvalue sla.warning %}alpha-orange{% else %}{% if_less_or_equal sla.currentvalue sla.critical %}alpha-danger{% endif_less_or_equal %}{% endif_less_or_equal %}{% endif %}'>{{ sla.currentvalue|floatformat:4 }}</td>
+<td>{{ sla.critical }}</td>
+<td>{% for group in sla.alertgroups.all %}{{ group }},{% endfor %}</td>
+<td>{% for group in sla.warngroups.all %}{{ group }},{% endfor %}</td>
+<td>{{ sla.allchecks }}</td>
+</tr>
+{% endfor %}

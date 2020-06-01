@@ -1,0 +1,24 @@
+Hi,
+
+The {{ thold.name }} threshold has triggered a warning with the following value:  {{ value }} {{ check.unit }}
+
+Host: {{ host.name }}
+Check: {{ check.verbosename }}
+Threshold: {{ thold.name }}
+What triggered the threshold:
+{% spaceless %}
+{% if error.lowwarn %}  * Low Warning{% endif %}
+{% if error.lowcrit %}  * Low Critical{% endif %}
+{% if error.highwarn %} * High Warning{% endif %}
+{% if error.highcrit %} * high Critical{% endif %}
+{% if error.boolbad %}  * Boolean Bad{% endif %}
+{% if error.boolgood %} * Boolean Good{% endif %}
+{% if error.strgood %} * String Good{% endif %}
+{% if error.strbad %} * String Bad{% endif %}
+{% if error.strwarn %} * String Warn{% endif %}
+{% if check.sla.count > 0 %}SLA that will be affected if this check becomes critical and their current values:
+{% for thissla in check.sla.all %}  * {{ thissla.name }} is at {{ thissla.currentvalue }}% and will become under {{ thissla.critical }}%{% endfor %}{% endif %}
+{% endspaceless %}
+
+Regards,
+M4 @ https://bms.m4system.com

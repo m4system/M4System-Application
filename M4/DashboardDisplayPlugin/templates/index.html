@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+{% load comparison %}
+{% block content %}
+<div class="row row-sortable ui-sortable">
+	{% for host in data %}
+	<div class="panel panel-flat" id="m4-{{ host.name }}" name="m4-{{ host.name }}">
+		<div class="panel-heading">
+			<h5 class="panel-title"><b>{{ host.name|upper }}</b>{% if host.note %}<small> - <i>{{ host.note }}</i></small>{% endif %}</h5>
+			<div class="heading-elements">
+				<ul class="icons-list">
+		    		<li><a data-action="collapse"></a></li>
+		    		<li><a data-action="close"></a></li>
+		    		<li><a data-action="move" class="ui-sortable-handle"></a></li>
+		    	</ul>
+	    	</div>
+		</div>
+		<div class="panel-body">
+			{% for value in host.widgets %}
+			{% autoescape off %}{{ value.data }}{% endautoescape %}
+		    {% endfor %}
+		</div>    
+	</div>    
+	{% endfor %}
+
+	{% if perms.webview.view_sla %}
+		<script type="text/javascript"> 
+		$(function() { 
+			$.periodic({period: 10000, decay: 1.2, max_period: 120000}, function() {
+				updateSla();
+			});
+		});
+		</script>
+		<!-- Table -->
+		<div class="panel panel-flat">
+			<div class="panel-heading">
+				<h5 class="panel-title"><b>SLA List</b></h5>
+				<div class="heading-elements">
+					<ul class="icons-list">
+		        		<li><a data-action="collapse"></a></li>
+		        		<li><a data-action="close"></a></li>
+		        		<li><a data-action="move" class="ui-sortable-handle"></a></li>
+		        	</ul>
+		    	</div>
+			</div>
+			<div id='sla' class="table-responsive">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Current Status</th>
+							<th>Current Value (30 days)</th>
+							<th>Critical Value</th>
+							<th>Alerts to</th>
+							<th>Warning to</th>
+							<th>Require all checks to fail</th>
+						</tr>
+					</thead>
+					<tbody id='sla-body'>
+						{% for sla in slas %}
+						<tr>
+						<td class='{% if sla.status != 'OK' %}alpha-pink{% endif %}'>{{ sla.name }}</td>
+						<td class='{% if sla.status != 'OK' %}alpha-pink{% endif %}'>{{ sla.status|capfirst }}</td>
+						<td class='{% if sla.currentvalue != None %}{% if_less_or_equal sla.currentvalue sla.warning %}alpha-orange{% else %}{% if_less_or_equal sla.currentvalue sla.critical %}alpha-danger{% endif_less_or_equal %}{% endif_less_or_equal %}{% endif %}'>{{ sla.currentvalue|floatformat:4 }}</td>
+						<td>{{ sla.critical }}</td>
+						<td>{% for group in sla.alertgroups.all %}{{ group }},{% endfor %}</td>
+						<td>{% for group in sla.warngroups.all %}{{ group }},{% endfor %}</td>
+						<td>{{ sla.allchecks }}</td>
+						</tr>
+					    {% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<!-- /table -->
+	{% endif %}
+	{% if perms.webview.view_traps %}
+		<script type="text/javascript"> 
+		$(function() { 
+			$.periodic({period: 10000, decay: 1.2, max_period: 120000}, function() {
+				updateTraps();
+			});
+		});
+		</script>
+		<!-- Table -->
+		<div class="panel panel-flat">
+			<div class="panel-heading">
+				<h5 class="panel-title"><b>Traps Log</b></h5>
+				<div class="heading-elements">
+					<ul class="icons-list">
+		        		<li><a data-action="collapse"></a></li>
+		        		<li><a data-action="close"></a></li>
+		        		<li><a data-action="move" class="ui-sortable-handle"></a></li>
+		        	</ul>
+		    	</div>
+			</div>
+			<div id='trap' class="table-responsive">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>timestamp</th>
+							<th>Host</th>
+							<th>OID</th>
+							<th>Message</th>
+						</tr>
+					</thead>
+					<tbody id='trap-body'>
+						{% for msg in trap %}
+						<tr>
+						<td>{{ msg.timestamp }}</td>
+						<td>{{ msg.host.name }}</td>
+						<td>{{ msg.oid }}</td>
+						<td>{{ msg.value }}</td>
+						</tr>
+					    {% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<!-- /table -->
+	{% endif %}
+	{% if perms.webview.view_slalog %}
+		<script type="text/javascript"> 
+		$(function() { 
+			$.periodic({period: 10000, decay: 1.2, max_period: 120000}, function() {
+				updateSlaLog('10');
+			});
+		});
+		</script>
+		<!-- Table -->
+		<div class="panel panel-flat">
+			<div class="panel-heading">
+				<h5 class="panel-title"><b>SLA Event Log</b></h5>
+				<div class="heading-elements">
+					<ul class="icons-list">
+		        		<li><a data-action="collapse"></a></li>
+		        		<li><a data-action="close"></a></li>
+		        		<li><a data-action="move" class="ui-sortable-handle"></a></li>
+		        	</ul>
+		    	</div>
+			</div>
+			<div id='slalog' class="table-responsive">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>timestamp</th>
+							<th>SLA Name</th>
+							<th>Event</th>
+						</tr>
+					</thead>
+					<tbody id='slalog-body'>
+						{% for log in slalog %}
+						<tr>
+						<td>{{ log.timestamp }}</td>
+						<td>{{ log.sla.name }}</td>
+						<td>{{ log.event }}</td>
+						</tr>
+					    {% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	<!-- /table -->
+	{% endif %}
+	{% if perms.webview.view_thresholdlog %}
+	 	<script type="text/javascript"> 
+		$(function() { 
+			$.periodic({period: 10000, decay: 1.2, max_period: 120000}, function() {
+				updateEvents('10');
+			});
+		});
+		</script>
+		<!-- Table -->
+		<div class="panel panel-flat">
+			<div class="panel-heading">
+				<h5 class="panel-title"><b>Threshold Event Log</b></h5>
+				<div class="heading-elements">
+					<ul class="icons-list">
+		        		<li><a data-action="collapse"></a></li>
+		        		<li><a data-action="close"></a></li>
+		        		<li><a data-action="move" class="ui-sortable-handle"></a></li>
+		        	</ul>
+		    	</div>
+			</div>
+			<div id='eventlog' class="table-responsive">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Event ID</th>
+							<th>timestamp</th>
+							<th>SLA Name</th>
+							<th>Check Name</th>
+							<th>Host Name</th>
+							<th>Threshold Name</th>
+							<th>Event</th>
+							<th>Value</th>
+						</tr>
+					</thead>
+					<tbody id='eventlog-body'>
+						{% for log in eventlog %}
+						<tr>
+						<td>{{ log.pk }}</td>
+						<td>{{ log.timestamp }}</td>
+						<td>{{ log.sla.name }}</td>
+						<td>{{ log.hostcheck.name }}</td>
+						<td>{{ log.host.name }}</td>
+						<td>{{ log.threshold.name }}</td>
+						<td>{{ log.event }}</td>
+						<td>{{ log.value }}</td>
+						</tr>
+					    {% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<!-- /table -->
+	{% endif %}
+</div>
+
+<!-- /main content -->
+{% endblock %}
+
+{% block aftercontent %}
+<!-- Modal with remote source -->
+<div id="modal_remote" class="modal fade">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+		</div>
+	</div>
+</div>
+<!-- /modal with remote source -->
+{% endblock %}
+

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block breadcrumbs %}<a href="/">{% trans 'Home' %}</a>{% endblock %}
+{% block nav %}
+	<!-- Main navbar -->
+	<div class="navbar navbar-inverse">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="/"><img src="/public/img/m4-logo.png" alt="m4system"></a>
+
+			<ul class="nav navbar-nav pull-right visible-xs-block">
+				<li><a data-toggle="collapse" data-target="#navbar-mobile"><i class="icon-tree5"></i></a></li>
+			</ul>
+		</div>
+
+		<div class="navbar-collapse collapse" id="navbar-mobile">
+			<ul class="nav navbar-nav navbar-right">
+				<li>
+					<a href="/admin/">
+						<i class="icon-display4"></i> <span class="visible-xs-inline-block position-right"> Go to admin</span>
+					</a>
+				</li>
+
+				<li>
+					<a href="mailto:sysops@m4system.com">
+						<i class="icon-user-tie"></i> <span class="visible-xs-inline-block position-right"> Contact admin</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<!-- /main navbar -->
+{% endblock %}
+{% block content %}
+	<!-- Page container -->
+	<div class="page-container login-container">
+
+		<!-- Page content -->
+		<div class="page-content">
+
+			<!-- Main content -->
+			<div class="content-wrapper">
+
+				<!-- Password recovery -->
+				<form action="/password_reset/" method="post">
+					{% csrf_token %}
+					<div class="panel panel-body login-form">
+						<div class="text-center">
+							<div class="icon-object border-warning text-warning"><i class="icon-spinner11"></i></div>
+							<h5 class="content-group">Password recovery <small class="display-block">We'll send you instructions in email</small></h5>
+						</div>
+						{{ form.email.errors }}
+						<div class="form-group has-feedback">
+							<input type="email" class="form-control" placeholder="Your email" id="id_email" maxlength="254" name="email" class="form-control" />
+							<div class="form-control-feedback">
+								<i class="icon-mail5 text-muted"></i>
+							</div>
+
+						</div>
+						<button type="submit" class="btn bg-blue btn-block" value="Reset my password">Reset password <i class="icon-arrow-right14 position-right"></i></button>
+					</div>
+				</form>
+				<!-- /password recovery -->
+
+			</div>
+			<!-- /main content -->
+
+		</div>
+		<!-- /page content -->
+{% endblock %}
+</body>
+</html>
