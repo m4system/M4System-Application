@@ -3,7 +3,7 @@ import datetime
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
-from scheduler.models import ErrorLog
+from M4.scheduler.models import ErrorLog
 
 
 class Command(BaseCommand):

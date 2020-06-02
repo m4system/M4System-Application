@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from scheduler.models import HostChecks
+from M4.scheduler.models import HostChecks
 
 
 # from tools import dbg, setmd, getmd, loadmd, savemd, getMetadata, setMetadata

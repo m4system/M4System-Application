@@ -12,8 +12,9 @@ from django.views.decorators.cache import cache_control
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.vary import vary_on_cookie
 
-from M4.DashboardDisplayPlugin.webview_models import UserView, UIMsg
-from M4.System.tools import getMetadata, msg
+from M4.DashboardDisplayPlugin.forms import SettingsForm
+from M4.DashboardDisplayPlugin.webview_models import UserView, UIMsg, UserProfile, Widgets
+from M4.System.tools import getMetadata, msg, dbg, setMetadata
 from M4.scheduler.models import Hosts, HostChecks, Historical, EventLog, Sla, SlaLog, Trap
 
 
@@ -154,7 +155,7 @@ def settings(request):
 
 
 @never_cache
-def test(request):
+def test(request, **kwargs):
     """
     Display an individual :model:`webview.UserProfile`.
 
@@ -276,7 +277,7 @@ def getEvents(request, qty):
             enabled=True, okgroups__name__in=request.user.groups.all().values_list('name', flat=True))).distinct()
     slalist = sla.values_list('name', flat=True)
     eventlog = EventLog.objects.filter(sla__name__in=slalist).order_by('-timestamp')[:int(qty)]
-    return render_to_response('widgets/eventlog.html', {'eventlog': eventlog})
+    return render(request, 'widgets/eventlog.html', {'eventlog': eventlog})
 
 
 @cache_control(private=True)
@@ -292,7 +293,7 @@ def getSla(request):
                                                                                                                'name',
                                                                                                                flat=True)) | Q(
             enabled=True, okgroups__name__in=request.user.groups.all().values_list('name', flat=True))).distinct()
-    return render_to_response('widgets/sla.html', {'slas': sla})
+    return render(request, 'widgets/sla.html', {'slas': sla})
 
 
 @cache_control(private=True)
@@ -312,7 +313,7 @@ def getSlaLog(request, qty):
             enabled=True, okgroups__name__in=request.user.groups.all().values_list('name', flat=True))).distinct()
     slalist = sla.values_list('name', flat=True)
     slalog = SlaLog.objects.filter(sla__name__in=slalist).order_by('-timestamp')[:int(qty)]
-    return render_to_response('widgets/slalog.html', {'slalog': slalog})
+    return render(request, 'widgets/slalog.html', {'slalog': slalog})
 
 
 @cache_control(private=True)
@@ -325,7 +326,7 @@ def getTraps(request):
     now = timezone.now()
     onehour = now - datetime.timedelta(hours=24)
     trap = Trap.objects.filter(timestamp__gt=onehour)
-    return render_to_response('widgets/trap.html', {'trap': trap})
+    return render(request, 'widgets/trap.html', {'trap': trap})
 
 
 @cache_control(private=True)

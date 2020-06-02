@@ -6,9 +6,9 @@ from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 from django.utils import timezone
 
-from scheduler.models import Sla, SlaLog
-from tools import getMetadata
-from webview.models import UserProfile
+from M4.scheduler.models import Sla, SlaLog
+from M4.System.tools import getMetadata
+from M4.DashboardDisplayPlugin.webview_models import UserProfile
 
 
 def convertEvent(event):

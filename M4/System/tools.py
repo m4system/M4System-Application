@@ -62,7 +62,7 @@ def getMetadata(key, default=None):
 # set a value on the cached key-value store
 def setMetadata(key, data):
     # local import to avoid import loop
-    from scheduler.models import Metadata
+    from M4.scheduler.models import Metadata
     # Prime the cache with the new value right away to avoid stale data
     cache.set(key, data)
     # Try to get the current key, create it instead on any error.
@@ -125,7 +125,7 @@ def msg(request, level, msg):
 # It will be displayed to the groups provided.
 # To add a sticky message, do it from the admin UI
 def add_msg(level, msg, groups):
-    from webview.models import UIMsg
+    from M4.DashboardDisplayPlugin.webview_models import UIMsg
     mymsg = UIMsg(level=level, msg=str(msg))
     mymsg.save()
     for group in groups:

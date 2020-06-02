@@ -299,7 +299,6 @@ class Thresholds(models.Model):
                 subj = '[M4 - WARNING] ' + check.name + ' on ' + host.name + ' is at ' + str(value) + check.unit
             elif self.type == 'str':
                 subj = '[M4 - WARNING] ' + check.name + ' on ' + host.name + ' is ' + str(value)
-            from webview.models import UserProfile
             emails = []
             
             # It is also an issue for users who dont log on often and have lots of threshold events.
@@ -308,6 +307,7 @@ class Thresholds(models.Model):
                 users = User.objects.filter(groups=group)
                 for user in users:
                     # This is where the user decides where to receive his notifications.
+                    from M4.DashboardDisplayPlugin.webview_models import UserProfile
                     mail = UserProfile.objects.get(user=user).notifemail
                     if mail is not None and mail != '':
                         emails.append(
@@ -343,7 +343,6 @@ class Thresholds(models.Model):
                 if self.type == 'bool':
                     subj = '[M4 - CRITICAL] ' + check.name + ' on ' + host.name + ' = ' + booltostr(
                         strtobool(str(value)))
-                    from webview.models import UserProfile
                     emails = []
 
 
@@ -353,6 +352,7 @@ class Thresholds(models.Model):
                         users = User.objects.filter(groups=group)
                         for user in users:
                             # This is where the user decides where to receive his notifications.
+                            from M4.DashboardDisplayPlugin.webview_models import UserProfile
                             mail = UserProfile.objects.get(user=user).notifemail
                             # dbg( user.username + ' is ' + mail)
                             if mail is not None and mail != '':
@@ -361,7 +361,6 @@ class Thresholds(models.Model):
                     send_mass_mail(tuple(emails), fail_silently=False)
                 elif self.type == 'str':
                     subj = '[M4 - CRITICAL] ' + check.name + ' on ' + host.name + ' is ' + str(value)
-                    from webview.models import UserProfile
                     emails = []
                     
                     # It is also an issue for users who dont log on often and have lots of threshold events.
@@ -370,6 +369,7 @@ class Thresholds(models.Model):
                         users = User.objects.filter(groups=group)
                         for user in users:
                             # This is where the user decides where to receive his notifications.
+                            from M4.DashboardDisplayPlugin.webview_models import UserProfile
                             mail = UserProfile.objects.get(user=user).notifemail
                             # dbg( user.username + ' is ' + mail)
                             if mail is not None and mail != '':
@@ -379,7 +379,6 @@ class Thresholds(models.Model):
                 elif self.type == 'int':
                     subj = '[M4 - CRITICAL] ' + check.name + ' on ' + host.name + ' is at ' + str(
                         value) + " " + check.unit
-                    from webview.models import UserProfile
                     emails = []
 
                     # It is also an issue for users who dont log on often and have lots of threshold events.
@@ -388,6 +387,7 @@ class Thresholds(models.Model):
                         users = User.objects.filter(groups=group)
                         for user in users:
                             # This is where the user decides where to receive his notifications.
+                            from M4.DashboardDisplayPlugin.webview_models import UserProfile
                             mail = UserProfile.objects.get(user=user).notifemail
                             # dbg( user.username + ' is ' + mail)
                             if mail is not None and mail != '':
@@ -417,7 +417,6 @@ class Thresholds(models.Model):
                 subj = '[M4 - OK] ' + check.name + ' on ' + host.name + ' is at ' + str(value) + check.unit
             elif self.type == 'str':
                 subj = '[M4 - OK] ' + check.name + ' on ' + host.name + ' is ' + str(value)
-            from webview.models import UserProfile
             emails = []
             
             # It is also an issue for users who dont log on often and have lots of threshold events.
@@ -426,6 +425,7 @@ class Thresholds(models.Model):
                 users = User.objects.filter(groups=group)
                 for user in users:
                     # This is where the user decides where to receive his notifications.
+                    from M4.DashboardDisplayPlugin.webview_models import UserProfile
                     mail = UserProfile.objects.get(user=user).notifemail
                     if mail is not None and mail != '':
                         emails.append(
@@ -558,7 +558,7 @@ class Sla(models.Model):
 
     def doWarn(self):
         # send notifications if the SLA is affected
-        from webview.models import UserProfile
+        from M4.DashboardDisplayPlugin.webview_models import UserProfile
         emails = []
         for group in self.warngroups.all():
             users = User.objects.filter(groups=group)
@@ -572,7 +572,7 @@ class Sla(models.Model):
 
     def doCrit(self):
         # Declare the SLA critical and send notification
-        from webview.models import UserProfile
+        from M4.DashboardDisplayPlugin.webview_models import UserProfile
         emails = []
         for group in self.critgroups.all():
             users = User.objects.filter(groups=group)
@@ -586,7 +586,7 @@ class Sla(models.Model):
 
     def doOk(self):
         # Declare the SLA OK again and send notification
-        from webview.models import UserProfile
+        from M4.DashboardDisplayPlugin.webview_models import UserProfile
         emails = []
         for group in self.okgroups.all():
             users = User.objects.filter(groups=group)
@@ -1032,7 +1032,7 @@ def create_them_models(sender, instance, action, reverse, *args, **kwargs):
                 gettask.save()
             print(host.name + '-' + instance.name)
             try:
-                from webview.models import Widgets
+                from M4.DashboardDisplayPlugin.webview_models import Widgets
                 getwidget = Widgets.objects.get(name=host.name + '-' + instance.name)
             except Exception as e:
                 dbg(e)
@@ -1112,7 +1112,7 @@ def edit_hostchecks(sender, instance, **kwargs):
             gettask.save()
 
         try:
-            from webview.models import Widgets
+            from M4.DashboardDisplayPlugin.webview_models import Widgets
             getwidget = Widgets.objects.get(name=host.name + '-' + instance.name)
         except Exception as e:
             dbg(e)
@@ -1173,7 +1173,7 @@ def edit_hostchecks(sender, instance, **kwargs):
 @receiver(post_save, sender=ErrorLog, dispatch_uid="report_error")
 def error_to_ui(sender, instance, **kwargs):
     # When an error gets logged, we want to display a notification for it in the UI
-    from webview.models import UserView
+    from M4.DashboardDisplayPlugin.webview_models import UserProfile, UserView
     host = None
     hostcheck = None
     if isinstance(instance.host, Hosts):

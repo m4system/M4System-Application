@@ -11,7 +11,7 @@ from pysnmp.carrier.asyncore.dispatch import AsyncoreDispatcher
 from pysnmp.proto import api
 
 # import sh
-from tools import setMetadata, getMetadata
+from M4.System.tools import setMetadata, getMetadata
 from .models import Hosts, HostChecks, ErrorLog
 from .utils import computeint, computebool, computestr
 

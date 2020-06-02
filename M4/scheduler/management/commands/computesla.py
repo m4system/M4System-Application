@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from scheduler.models import Sla
+from M4.scheduler.models import Sla
 
 
 class Command(BaseCommand):

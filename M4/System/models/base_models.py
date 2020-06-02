@@ -21,7 +21,7 @@ class BaseDisplayPlugin(models.Model):
             self.name = slugify(self.title)
         super(BaseDisplayPlugin, self).save(*args, **kwargs)
         self.display_instance.update_or_create(object_id=self.pk, defaults={
-            'name': '(' + self.display_instance.content_type.model + ') ' + self.name})
+            'name': '({}) {}'.format(self.display_instance.content_type.model, self.name)})
 
     def delete(self, *args, **kwargs):
         self.display_instance.all().delete()
@@ -49,7 +49,7 @@ class BaseHookPlugin(models.Model):
             self.name = slugify(self.title)
         super(BaseHookPlugin, self).save(*args, **kwargs)
         self.hook_instance.update_or_create(object_id=self.pk, defaults={
-            'name': '(' + self.hook_instance.content_type.model + ') ' + self.name})
+            'name': '({}) {}'.format(self.hook_instance.content_type.model, self.name)})
 
     def delete(self, *args, **kwargs):
         self.hook_instance.all().delete()
@@ -77,7 +77,7 @@ class BaseSourcePlugin(models.Model):
             self.name = slugify(self.title)
         super(BaseSourcePlugin, self).save(*args, **kwargs)
         self.source_instance.update_or_create(object_id=self.pk, defaults={
-            'name': '(' + self.source_instance.content_type.model + ') ' + self.name})
+            'name': '({}) {}'.format(self.source_instance.content_type.model, self.name)})
 
     def delete(self, *args, **kwargs):
         self.source_instance.all().delete()
@@ -110,7 +110,7 @@ class BaseTriggerPlugin(models.Model):
             self.name = slugify(self.title)
         super(BaseTriggerPlugin, self).save(*args, **kwargs)
         self.trigger_instance.update_or_create(object_id=self.pk, defaults={
-            'name': '(' + self.trigger_instance.content_type.model + ') ' + self.name,
+            'name': '({}) {}'.format(self.trigger_instance.content_type.model, self.name),
             'datatype': self.datatype})
 
     def delete(self, *args, **kwargs):

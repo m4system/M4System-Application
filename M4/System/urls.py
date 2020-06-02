@@ -14,15 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf.urls import url
-from django.urls import include
+from django.urls import include, path
 
 from M4.System.plugins import FrontEndPlugin
 from M4.System.views import index
 from djangoplugins.utils import include_plugins
+from django.views.generic import RedirectView
 
 urlpatterns = [
-    url(r'^jet/', include('jet.urls', 'jet')),
-    url(r'^jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),  # Django JET dashboard URLS
-    url(r'^$', index),
     url(r'', include_plugins(FrontEndPlugin)),
 ]
