@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUpload="Always" serverName="dgagnon@15.223.94.133:6250 key">
+    <serverData>
+      <paths name="dgagnon@15.223.94.133:6250 key">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/M4System-Application-V2" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="dgagnon@15.223.94.133:6250 key (1)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/M4System-Application-V2" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
+  </component>
+</project>

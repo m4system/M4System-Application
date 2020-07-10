@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 import os
+from dotenv import load_dotenv, find_dotenv
 
 os.environ.setdefault('PYCHARM_DJANGO_MANAGE_MODULE', 'M4.manage')
 
@@ -25,9 +26,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '#+a^plsx=(07$ck_&fo366twua0=z7#!igqmg0ow^zq&0y1+v1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG")
 
-ALLOWED_HOSTS = []
+load_dotenv(find_dotenv(), verbose=DEBUG)
+
+ALLOWED_HOSTS = [os.getenv("ALLOWED_HOST")]
 
 # Application definition
 
@@ -142,7 +145,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/public/'
-STATIC_ROOT = './public/'
+STATIC_ROOT = 'M4/public/'
 
 INTERNAL_IPS = [
     # ...
