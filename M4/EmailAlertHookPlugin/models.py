@@ -31,6 +31,9 @@ class EmailTemplate(models.Model):
 
 
 class EmailAlertHookPlugin(BaseHookPlugin):
+    def execute(self):
+        pass
+
     template_failing = models.ForeignKey(EmailTemplate, related_name='template_failing',
                                          verbose_name=_('Email Template when a fail is trigger.'), help_text=_(
             'Choose or create an email template.  You can use django templating.'), on_delete=models.CASCADE)
@@ -42,9 +45,6 @@ class EmailAlertHookPlugin(BaseHookPlugin):
             'Choose or create an email template.  You can use django templating.'), on_delete=models.CASCADE)
     recipients = models.CharField(verbose_name=_('Recipients List'), max_length=256, blank=True,
                                   help_text=_('Email addresses that will receive the alerts.  Separate with a comma.'))
-
-    def trigger(self):
-        return self
 
     class Meta:
         verbose_name = _('Email Alert')
