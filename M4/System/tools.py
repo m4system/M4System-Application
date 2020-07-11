@@ -1,7 +1,7 @@
 import inspect
 import logging
 
-logger = logging.getLogger('m4')
+logger = logging.getLogger('M4')
 del logging  # To prevent accidentally using it
 import json
 from django.contrib import messages

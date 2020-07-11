@@ -189,7 +189,7 @@ from debug_toolbar.panels.logging import collector # needed for handler construc
 # Configure normal logging
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
+    'disable_existing_loggers': True,
     'formatters': {
         'verbose': {
             'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
@@ -207,11 +207,6 @@ LOGGING = {
         },
     },
     'handlers': {
-        'djdt_log': {
-            'level': 'DEBUG',
-            'class': 'debug_toolbar.panels.logging.ThreadTrackingHandler',
-            'collector': collector,
-        },
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
@@ -242,7 +237,7 @@ LOGGING = {
             'propagate': True,
             'level': 'ERROR',
         },
-        'envmon': {
+        'M4': {
             'handlers': ['file', 'console'],
             'propagate': True,
             'level': 'DEBUG',
@@ -250,6 +245,6 @@ LOGGING = {
     },
     'root': {
         'level': 'DEBUG',
-        'handlers': ['djdt_log'],
+        'handlers': ['file', 'console'],
     },
 }

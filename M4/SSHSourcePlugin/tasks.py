@@ -13,5 +13,5 @@ def ssh_source(self, shell, content, datatype, datasource, datapoint):
     print("here ssh")
     run = sh.Command(BASE_DIR + "/runthis.sh")
     retval = str(run(content))
-    post_fetch.send_robust(sender='sourceplugin', retval=retval, datatype=datatype, datapoint=datapoint)
+    post_fetch.send(sender='sourceplugin', retval=retval, datatype=datatype, datapoint=datapoint)
     return retval
