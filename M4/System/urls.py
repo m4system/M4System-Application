@@ -22,5 +22,6 @@ from djangoplugins.utils import include_plugins
 from django.views.generic import RedirectView
 
 urlpatterns = [
+    url(r'^$', index),
     url(r'', include_plugins(FrontEndPlugin)),
 ]

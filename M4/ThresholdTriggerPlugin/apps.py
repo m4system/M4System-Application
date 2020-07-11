@@ -3,5 +3,6 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class ThresholdtriggerpluginConfig(AppConfig):
-    name = 'ThresholdTriggerPlugin'
+    name = 'M4.ThresholdTriggerPlugin'
+    label = 'ThresholdTriggerPlugin'
     verbose_name = _('Trigger Plugin - Thresholds')

@@ -81,7 +81,7 @@ class BaseSourcePlugin(models.Model):
             self.name = slugify(self.title)
         super(BaseSourcePlugin, self).save(*args, **kwargs)
         self.source_instance.update_or_create(object_id=self.pk, defaults={
-            'name': '({}) {}'.format(self.source_instance.content_type.model, self.name)})
+            'name': '({}) {}'.format(self.source_instance.content_type.name, self.name)})
 
     def delete(self, *args, **kwargs):
         self.source_instance.all().delete()

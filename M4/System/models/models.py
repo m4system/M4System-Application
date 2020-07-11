@@ -89,6 +89,8 @@ class Datapoint(models.Model):
                              help_text=_('Verbose name for display purposes'))
     datatype = models.CharField(max_length=8, choices=DATAPOINT_TYPES, default='string', verbose_name=_('Data type'),
                                 help_text=_('The internal type for this datapoint.'))
+    datasource = models.ForeignKey('Asset', related_name='asset', verbose_name=_('Data Source'), blank=True, null=True, help_text=_(
+        'The asset selected here will be used to for polling this datapoint.'), on_delete=models.CASCADE)
     source = models.ForeignKey(SourcePlugin, related_name='source', verbose_name=_('Source Plugin'), help_text=_(
         'Select the plugin configuration that will be used to source the data for this datapoint. If the list is empty, it means you need to create a plugin configuration first.'), on_delete=models.CASCADE)
     trigger = models.ForeignKey(TriggerPlugin, blank=True, null=True, related_name='trigger',
@@ -158,7 +160,7 @@ class Sla(models.Model):
                              help_text=_('Verbose name for display purposes'))
     assets = models.ManyToManyField(Asset, verbose_name=_('Assigned Assets'),
                                     help_text=_('Assets assigned to this SLA.'))
-    datapoints = models.ManyToManyField(Datapoint, verbose_name=_('Assigned Assets'),
+    datapoints = models.ManyToManyField(Datapoint, verbose_name=_('Assigned Datapoints'),
                                         help_text=_('Datapoints assigned to this SLA.'))
     custom_fields = GenericRelation(CustomField, related_query_name='sla', verbose_name=_('Custom Fields'),
                                     help_text=_('You can set custom fields for complex scenarios.'))
