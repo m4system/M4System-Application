@@ -40,3 +40,6 @@ python-dotenv
 # replace djcelery
 django-celery-results
 django-celery-beat
+
+sh
+easysnmp

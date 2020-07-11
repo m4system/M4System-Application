@@ -26,24 +26,29 @@ class SNMPSourcePlugin(BaseSourcePlugin):
     fetch.short_description = _('Fetch this SNMP source.')
 
     class Meta:
-        verbose_name = _('SNMP Source')
-        verbose_name_plural = _('SNMP Sources')
+        verbose_name = _('Source: SNMP')
+        verbose_name_plural = _('Sources: SNMP')
 
 
-@receiver(post_save, sender=Datapoint, dispatch_uid="setup_datapoint_task")
+from pprint import pprint
+@receiver(post_save, sender=Datapoint, dispatch_uid="setup_datapoint_task_snmp")
 def setup_task(sender, instance, **kwargs):
-    source = SNMPSourcePlugin.objects.get(pk=instance.source.object_id)
-    schedule = IntervalSchedule.objects.get(pk=1)
-    # try:
-    ptask = PeriodicTask.objects.update_or_create(
-        name=instance.name,
-        interval=schedule,
-        task='snmp_source',
-        kwargs=json.dumps({'oid': source.oid, 'version': source.version})
-    )
-    # except Exception as e:
-    #     print(e)
-    # else:
-    #     print("identical task exists")
-    return ptask
+    if instance.source.content_type.model == 'snmpsourceplugin':
+        schedule = IntervalSchedule.objects.get(pk=1)
+        # try:
+        pprint(instance.datasource.custom_fields.filter(name="ip")[0])
+        ptask = PeriodicTask.objects.update_or_create(
+            name=instance.name,
+            interval=schedule,
+            task='snmp_source',
+            kwargs=json.dumps({'oid': instance.source.content_object.oid, 'version': instance.source.content_object.version, 'datatype': instance.datatype, 'datasource': instance.datasource.custom_fields.filter(name="ip")[0].content})
+        )
+
+        # except Exception as e:
+        #     print(e)
+        # else:
+        #     print("identical task exists")
+        return ptask
+    else:
+        return True
 

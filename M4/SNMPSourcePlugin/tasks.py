@@ -1,12 +1,11 @@
 from celery import shared_task
-# from M4.System.models.base_models import BaseTask
+from easysnmp import snmp_get
+from pprint import pprint
 
 
 @shared_task(bind=True, name='snmp_source')
-def snmp_source(self, params):
+def snmp_source(self, oid, version, datatype, datasource):
     # do snmp get here
-    for i in [params]:
-        print(repr(i))
-    print("here")
-
-    return self.name
+    # pprint(vars(self))
+    res = str(snmp_get(oid, hostname=datasource, community='public', version=int(version)).value)
+    return res
