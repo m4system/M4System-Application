@@ -15,6 +15,6 @@ def snmp_source(self, oid, version, datatype, datasource, datapoint):
     # pprint(vars(self))
     res = str(snmp_get(oid, hostname=datasource, community='public', version=int(version)).value)
 
-    post_fetch.send(sender='sourceplugin', retval=res, datatype=datatype, datapoint=datapoint)
+    post_fetch.send(sender='M4.SNMPSourcePlugin', retval=res, datatype=datatype, datapoint=datapoint)
 
     return res

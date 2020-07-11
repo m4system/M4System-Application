@@ -4,8 +4,8 @@ from M4.System.tools import error, dbg, die
 
 
 @receiver(post_fetch)
-def check_trigger(sender, **kwargs):
+def check_trigger(sender, retval, datatype, datapoint, **kwargs):
 
     dbg('retval Message: ')
-    dbg(**kwargs)
+    error(retval)
     print("Fetch finished,we need to check the value against the threshold!")
