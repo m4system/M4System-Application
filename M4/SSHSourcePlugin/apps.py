@@ -6,3 +6,7 @@ class SshsourcepluginConfig(AppConfig):
     name = 'M4.SSHSourcePlugin'
     label = 'SSHSourcePlugin'
     verbose_name = _('Source Plugin - SSH')
+
+    def ready(self):
+        import M4.SSHSourcePlugin.signal     #noqa
+

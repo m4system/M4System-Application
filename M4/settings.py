@@ -179,7 +179,77 @@ if DEBUG:
 else:
     CELERY_SEND_TASK_ERROR_EMAILS = False
 # Since settings is loaded before anything else, we are bootstraping djcelery here
-import djcelery
+#import djcelery
 
-djcelery.setup_loader()
+#djcelery.setup_loader()
 # Dev: celery -A M4 worker --beat --loglevel=debug
+
+# Needed for django debug toolbar logging
+from debug_toolbar.panels.logging import collector # needed for handler constructor below
+# Configure normal logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+    },
+    'handlers': {
+        'djdt_log': {
+            'level': 'DEBUG',
+            'class': 'debug_toolbar.panels.logging.ThreadTrackingHandler',
+            'collector': collector,
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+            'filters': ['require_debug_true'],
+            'formatter': 'verbose'
+        },
+        'console': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'filters': ['require_debug_false'],
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file', 'console'],
+            'propagate': True,
+            'level': 'ERROR',
+        },
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'propagate': True,
+            'level': 'ERROR',
+        },
+        'envmon': {
+            'handlers': ['file', 'console'],
+            'propagate': True,
+            'level': 'DEBUG',
+        },
+    },
+    'root': {
+        'level': 'DEBUG',
+        'handlers': ['djdt_log'],
+    },
+}

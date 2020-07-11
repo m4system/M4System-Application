@@ -65,3 +65,5 @@ class BooleanThresholdTriggerPlugin(BaseTriggerPlugin):
     class Meta:
         verbose_name = 'Boolean Threshold'
         verbose_name_plural = 'Boolean Thresholds'
+
+

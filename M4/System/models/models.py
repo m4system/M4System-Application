@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from M4.settings import DATAPOINT_TYPES
 from djangoplugins.fields import PluginField
-
+from M4.System.signals  import post_fetch
 
 class SourcePlugin(models.Model):
     name = models.SlugField('Name')

@@ -6,3 +6,7 @@ class ThresholdtriggerpluginConfig(AppConfig):
     name = 'M4.ThresholdTriggerPlugin'
     label = 'ThresholdTriggerPlugin'
     verbose_name = _('Trigger Plugin - Thresholds')
+
+    def ready(self):
+        import M4.ThresholdTriggerPlugin.signals     #noqa
+

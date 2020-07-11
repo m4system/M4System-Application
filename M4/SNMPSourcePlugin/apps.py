@@ -6,3 +6,6 @@ class SnmpsourcepluginConfig(AppConfig):
     name = 'M4.SNMPSourcePlugin'
     label = 'SNMPSourcePlugin'
     verbose_name = _('Source Plugin - SNMP')
+
+    def ready(self):
+        import M4.SNMPSourcePlugin.signal  #noqa
