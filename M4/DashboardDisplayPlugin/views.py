@@ -35,79 +35,81 @@ def index(request, view, plugin):
 
     :template:`webview/index.html`
     """
-    global slalist
-    data = []
-    view = view[5:]
-    # Get the list of hosts so that we can loop through them and create the rows
-    if view == '':
-        # load hosts from the default view
-        from django.contrib.auth.models import User
-        user = User()
-        hosts = sorted(set(
-            UserView.objects.filter(group__name__in=request.user.groups.all().values_list('name', flat=True),
-                                    default=True)[0].widgets.filter(active=True, host__enabled=True).values_list(
-                'host__name', flat=True).order_by('-name')), reverse=True)
-    else:
-        # load hosts from the view specified in the url
-        hosts = sorted(set(
-            UserView.objects.get(name=view).widgets.filter(active=True, host__enabled=True).values_list('host__name',
-                                                                                                        flat=True).order_by(
-                '-name')), reverse=True)
-    for host in hosts:
-        # For each host, we will get generate the widgets in it's row
-        thishost = {}
-        wdgts = []
-        if view == '':
-            # load this host's widgets from the default userview
-            uv = UserView.objects.filter(group__name__in=request.user.groups.all().values_list('name', flat=True),
-                                         default=True)[0].widgets.filter(host__name=host, active=True)
-        else:
-            # load this host's widgets from the view specified in the url
-            uv = UserView.objects.get(name=view).widgets.filter(host__name=host, active=True)
-        for widget in uv:
-            thisdata = {'name': widget.name, 'note': widget.note, 'data': widget.renderWidget(user=request.user)}
-            wdgts.append(thisdata)
-        thishost['widgets'] = wdgts
-        thishost['name'] = host
-        thishost['note'] = Hosts.objects.get(name=host).note
-        data.append(thishost)
-        # Preloads the sla widget with any SLAs relating to the user's group.
-    sla = None
-    slalist = None
-    if request.user.has_perm('webview.view_sla'):
-        sla = Sla.objects.filter(
-            Q(enabled=True, warngroups__name__in=request.user.groups.all().values_list('name', flat=True)) | Q(
-                enabled=True, okgroups__name__in=request.user.groups.all().values_list('name', flat=True)) | Q(
-                enabled=True, critgroups__name__in=request.user.groups.all().values_list('name', flat=True))).distinct()
-    if request.user.has_perm('webview.view_thresholdlog') or request.user.has_perm('webview.view_slalog'):
-        slalist = sla.values_list('name', flat=True)
-    eventlog = None
-    if request.user.has_perm('webview.view_thresholdlog'):
-        # Need to figure out if this is useful or not.  Currently, we log all threshold success, making this worthless
-        eventlog = EventLog.objects.filter(sla__name__in=slalist).order_by('-timestamp')[:10]
-    slalog = None
-    if request.user.has_perm('webview.view_slalog'):
-        # Preloads the slalog widget with any SLAs relating to the user's group.
-        slalog = SlaLog.objects.filter(sla__name__in=slalist).order_by('-timestamp')[:10]
-    trap = None
-    if request.user.has_perm('webview.view_traps'):
-        now = timezone.now()
-        onehour = now - datetime.timedelta(hours=24)
-        trap = Trap.objects.filter(timestamp__gt=onehour)
-    # Load the list of available userviews for the logged in user
-    uvlist = UserView.objects.filter(group__name__in=request.user.groups.all().values_list('name', flat=True))
-    context = {'data': data, 'eventlog': eventlog, 'slas': sla, 'slalog': slalog, 'uvlist': uvlist,
-               'taskdelay': getMetadata('taskdelay-1'), 'trap': trap}
-    # Load pending message for that user from the database and push them to the UI using the message framework.
-    if request.user.has_perm('webview.view_notifs'):
-        msgs = UIMsg.objects.filter(group__name__in=request.user.groups.all().values_list('name', flat=True)).exclude(
-            user__username=request.user.username)[:100]
-        for mymsg in msgs:
-            msg(request, mymsg.level, mymsg.msg)
-            if not mymsg.sticky:
-                # by adding the user to the m2m field, this msg will get skipped at next collection. see above query
-                mymsg.user.add(request.user)
-                mymsg.save()
+    # global slalist
+    # data = []
+    # view = view[5:]
+    # # Get the list of hosts so that we can loop through them and create the rows
+    # if view == '':
+    #     # load hosts from the default view
+    #     from django.contrib.auth.models import User
+    #     user = User()
+    #     hosts = sorted(set(
+    #         UserView.objects.filter(group__name__in=request.user.groups.all().values_list('name', flat=True),
+    #                                 default=True)[0].widgets.filter(active=True, host__enabled=True).values_list(
+    #             'host__name', flat=True).order_by('-name')), reverse=True)
+    # else:
+    #     # load hosts from the view specified in the url
+    #     hosts = sorted(set(
+    #         UserView.objects.get(name=view).widgets.filter(active=True, host__enabled=True).values_list('host__name',
+    #                                                                                                     flat=True).order_by(
+    #             '-name')), reverse=True)
+    # for host in hosts:
+    #     # For each host, we will get generate the widgets in it's row
+    #     thishost = {}
+    #     wdgts = []
+    #     if view == '':
+    #         # load this host's widgets from the default userview
+    #         uv = UserView.objects.filter(group__name__in=request.user.groups.all().values_list('name', flat=True),
+    #                                      default=True)[0].widgets.filter(host__name=host, active=True)
+    #     else:
+    #         # load this host's widgets from the view specified in the url
+    #         uv = UserView.objects.get(name=view).widgets.filter(host__name=host, active=True)
+    #     for widget in uv:
+    #         thisdata = {'name': widget.name, 'note': widget.note, 'data': widget.renderWidget(user=request.user)}
+    #         wdgts.append(thisdata)
+    #     thishost['widgets'] = wdgts
+    #     thishost['name'] = host
+    #     thishost['note'] = Hosts.objects.get(name=host).note
+    #     data.append(thishost)
+    #     # Preloads the sla widget with any SLAs relating to the user's group.
+    # sla = None
+    # slalist = None
+    # if request.user.has_perm('webview.view_sla'):
+    #     sla = Sla.objects.filter(
+    #         Q(enabled=True, warngroups__name__in=request.user.groups.all().values_list('name', flat=True)) | Q(
+    #             enabled=True, okgroups__name__in=request.user.groups.all().values_list('name', flat=True)) | Q(
+    #             enabled=True, critgroups__name__in=request.user.groups.all().values_list('name', flat=True))).distinct()
+    # if request.user.has_perm('webview.view_thresholdlog') or request.user.has_perm('webview.view_slalog'):
+    #     slalist = sla.values_list('name', flat=True)
+    # eventlog = None
+    # if request.user.has_perm('webview.view_thresholdlog'):
+    #     # Need to figure out if this is useful or not.  Currently, we log all threshold success, making this worthless
+    #     eventlog = EventLog.objects.filter(sla__name__in=slalist).order_by('-timestamp')[:10]
+    # slalog = None
+    # if request.user.has_perm('webview.view_slalog'):
+    #     # Preloads the slalog widget with any SLAs relating to the user's group.
+    #     slalog = SlaLog.objects.filter(sla__name__in=slalist).order_by('-timestamp')[:10]
+    # trap = None
+    # if request.user.has_perm('webview.view_traps'):
+    #     now = timezone.now()
+    #     onehour = now - datetime.timedelta(hours=24)
+    #     trap = Trap.objects.filter(timestamp__gt=onehour)
+    # # Load the list of available userviews for the logged in user
+    # uvlist = UserView.objects.filter(group__name__in=request.user.groups.all().values_list('name', flat=True))
+    # context = {'data': data, 'eventlog': eventlog, 'slas': sla, 'slalog': slalog, 'uvlist': uvlist,
+    #            'taskdelay': getMetadata('taskdelay-1'), 'trap': trap}
+    context = {'data': None, 'eventlog': None, 'slas': None, 'slalog': None, 'uvlist': None,
+               'taskdelay': 0, 'trap': None}
+    # # Load pending message for that user from the database and push them to the UI using the message framework.
+    # if request.user.has_perm('webview.view_notifs'):
+    #     msgs = UIMsg.objects.filter(group__name__in=request.user.groups.all().values_list('name', flat=True)).exclude(
+    #         user__username=request.user.username)[:100]
+    #     for mymsg in msgs:
+    #         msg(request, mymsg.level, mymsg.msg)
+    #         if not mymsg.sticky:
+    #             # by adding the user to the m2m field, this msg will get skipped at next collection. see above query
+    #             mymsg.user.add(request.user)
+    #             mymsg.save()
     return render(request, 'index.html', context)
 
 

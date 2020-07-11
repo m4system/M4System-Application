@@ -35,8 +35,10 @@ ALLOWED_HOSTS = [os.getenv("ALLOWED_HOST")]
 # Application definition
 
 INSTALLED_APPS = [
+    # 'celery',
     'jet.dashboard',
     'jet',
+    'django_extensions',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,8 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'djangoplugins',
-    'celery',
-    'djcelery',
+    # 'djcelery',
     'M4.scheduler',
     'M4.System',
     'M4.SNMPSourcePlugin',
@@ -56,7 +57,10 @@ INSTALLED_APPS = [
     'M4.ThresholdTriggerPlugin',
     'flexselect',
     'debug_toolbar',
-    'compressor'
+    'compressor',
+    'reversion',
+    'django_celery_results',
+    'django_celery_beat'
 ]
 
 MIDDLEWARE = [
@@ -160,3 +164,22 @@ DATAPOINT_TYPES = (('number', _('Number')), ('string', _('Character String')), (
 FLEXSELECT = {
     'include_jquery': True,
 }
+
+BROKER_URL = 'redis://dev-v1-connect-cache.4fqscj.ng.0001.cac1.cache.amazonaws.com:6379'
+CELERY_ACCEPT_CONTENT = ['pickle', 'json']
+CELERY_TASK_SERIALIZER = 'pickle'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERYBEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_SEND_EVENTS = True
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_RESULT_PERSISTENT = True
+CELERY_TASK_RESULT_EXPIRES = 3600
+if DEBUG:
+    CELERY_SEND_TASK_ERROR_EMAILS = False
+else:
+    CELERY_SEND_TASK_ERROR_EMAILS = False
+# Since settings is loaded before anything else, we are bootstraping djcelery here
+import djcelery
+
+djcelery.setup_loader()
+# Dev: celery -A M4 worker --beat --loglevel=debug

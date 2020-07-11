@@ -88,3 +88,5 @@ local_settings.py
 public/
 .env
 db.sqlite3
+M4/public/
+public/

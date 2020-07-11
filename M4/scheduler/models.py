@@ -7,7 +7,7 @@ from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
 from django.template import engines
 from django.utils import timezone
-from djcelery.models import IntervalSchedule, PeriodicTask
+from django_celery_beat.models import IntervalSchedule, PeriodicTask
 
 # from delorean import Delorean
 from M4.scheduler.utils import strtobool, booltostr

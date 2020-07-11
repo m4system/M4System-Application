@@ -2,9 +2,10 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
-
 from M4.System.models.models import DisplayPlugin, HookPlugin, SourcePlugin, TriggerPlugin
 from M4.settings import DATAPOINT_TYPES
+from django_celery_beat.models import IntervalSchedule, PeriodicTask
+import json
 
 
 class BaseDisplayPlugin(models.Model):
@@ -69,7 +70,10 @@ class BaseSourcePlugin(models.Model):
     title = models.CharField('Title', max_length=256, help_text=_('Verbose name for display purposes'))
     source_instance = GenericRelation(SourcePlugin, related_query_name='sourceplugin')
 
-    def poll(self):
+    def fetch(self):
+        raise NotImplementedError
+
+    def task(self):
         raise NotImplementedError
 
     def save(self, *args, **kwargs):
@@ -123,3 +127,59 @@ class BaseTriggerPlugin(models.Model):
     class Meta:
         abstract = True
         ordering = ['-name']
+
+
+# class BaseTask(object):
+#     """
+#     Not a base_model, but we don't have other base clases, so it seems to fit better here.
+#
+#     Plugin celery task should inherit from this base object in order to interact properly with the system.
+#     """
+#
+#     def __init__(self, task=None, params={}):
+#         self.task = task
+#         self.params = params
+#
+#     def schedule(self, **kwargs):
+#         """
+#         add this task to the celery tasks
+#
+#         :return: success or failure
+#         """
+#         # find the task, create it if it doesnt exist.
+#         schedule = IntervalSchedule.objects.get(pk=1)
+#         ptask = PeriodicTask.objects.update_or_create(
+#             name=self.params['datapoint'].objects.all()[0].name,
+#             interval=schedule,
+#             task=self.name,
+#             args=json.dumps([self.task.version, self.task.oid])
+#         )
+#         return ptask
+#
+#     def unschedule(self):
+#         """
+#         remove this task to the celery tasks
+#
+#         :return: success or failure
+#         """
+#         pass
+#
+#     def run(self, name, param=None):
+#         """
+#         Execute the task with the set parameters.
+#
+#         :return: the output from the task.
+#         """
+#         raise NotImplementedError
+#
+#     def get_task_name(self):
+#         return self.name
+#
+#     def get_task_info(self):
+#         return self.name
+#
+#     def get_task_params(self):
+#         return self.name
+#
+#     class Meta:
+#         abstract = True

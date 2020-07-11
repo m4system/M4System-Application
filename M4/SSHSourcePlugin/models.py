@@ -12,10 +12,10 @@ class SSHSourcePlugin(BaseSourcePlugin):
         'Put the script content here.  It will be executed by the shell you select.'), max_length=4096,
                                default='echo 1')
 
-    def poll(self):
+    def fetch(self):
         return self
 
-    poll.short_description = _('Poll this SSH Source.')
+    fetch.short_description = _('fetch this SSH Source.')
 
     class Meta:
         verbose_name = _('SSH Source')

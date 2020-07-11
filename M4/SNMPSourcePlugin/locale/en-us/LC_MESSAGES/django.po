@@ -19,7 +19,7 @@ msgstr ""
 
 #: .\SNMPSourcePlugin\apps.py:7
 msgid "Source Plugin - SNMP"
-msgstr ""
+msgstr "Source Plugin - SNMP"
 
 #: .\SNMPSourcePlugin\models.py:9
 msgid "The OID"

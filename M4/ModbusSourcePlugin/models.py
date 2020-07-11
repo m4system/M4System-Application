@@ -21,10 +21,10 @@ class ModbusSourcePlugin(BaseSourcePlugin):
         'When there are more than 1 count (i.e. data types bigger than 16bit), this decides the order they are processed.'),
                                    max_length=8, choices=ENDIAN_TYPES, default='little')
 
-    def poll(self):
+    def fetch(self):
         return self
 
-    poll.short_description = _('Poll this modbus source.')
+    fetch.short_description = _('fetch this modbus source.')
 
     class Meta:
         verbose_name = _('Modbus Source')

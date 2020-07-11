@@ -3,5 +3,6 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class SnmpsourcepluginConfig(AppConfig):
-    name = 'SNMPSourcePlugin'
+    name = 'M4.SNMPSourcePlugin'
+    label = 'SNMPSourcePlugin'
     verbose_name = _('Source Plugin - SNMP')
