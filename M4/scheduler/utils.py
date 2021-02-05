@@ -3,7 +3,7 @@ import json
 from django.utils import timezone
 
 # from django.db.models import Avg
-from M4.System.tools import setMetadata, getMetadata
+from M4.scheduler.tools import setMetadata, getMetadata
 
 
 def computeint(check, host, value):

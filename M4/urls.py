@@ -20,7 +20,6 @@ from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, 
     PasswordResetCompleteView, LoginView, LogoutView
 from django.views.generic import RedirectView
 
-from M4.DashboardDisplayPlugin.views import settings
 
 urlpatterns = [
     url(r'^favicon\.ico$', RedirectView.as_view(url='/public/img/favicon.ico')),  # serve the favicon and avoid 404s
@@ -38,9 +37,7 @@ urlpatterns = [
         name='password_reset_confirm'),  # override the template with ours
     url(r'^password_reset_complete/', PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     # override the template with ours
-    url(r'^settings/', settings, name='settings'),
-
-    url(r'', include('M4.System.urls'))
+    url(r'', include('M4.webview.urls'))
 ]
 
 from django.conf import settings

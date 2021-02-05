@@ -11,7 +11,7 @@ from django_celery_beat.models import IntervalSchedule, PeriodicTask
 
 # from delorean import Delorean
 from M4.scheduler.utils import strtobool, booltostr
-from M4.System.tools import dbg, add_msg, getMetadata, setMetadata
+from M4.scheduler.tools import dbg, add_msg, getMetadata, setMetadata
 
 
 # noinspection PyProtectedMember

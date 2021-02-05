@@ -1,1 +1,0 @@
-default_app_config = 'M4.ThresholdTriggerPlugin.apps.ThresholdtriggerpluginConfig'
