@@ -63,13 +63,16 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'M4.webview.middleware.SetRemoteAddrFromForwardedFor',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'django.middleware.security.SecurityMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.http.ConditionalGetMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.admindocs.middleware.XViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -108,8 +111,6 @@ if os.getenv("ENV") is "dev":
     }
 else:
     ALLOWED_HOSTS = ['127.0.0.1', os.getenv("ALLOWED_HOST")]
-    SECURE_BROWSER_XSS_FILTER = True
-    SECURE_CONTENT_TYPE_NOSNIFF = True
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
@@ -118,6 +119,28 @@ else:
             },
         }
     }
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_HSTS_SECONDS = 3600
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+    USE_X_FORWARDED_HOST = True
+    USE_X_FORWARDED_PORT = True
+    SESSION_COOKIE_SECURE = True
+    CACHES = {
+        'default': {
+            'BACKEND': 'redis_cache.RedisCache',
+            'LOCATION': str(os.getenv("REDIS_HOST")),
+            'OPTIONS': {
+                'PASSWORD': str(os.getenv("REDIS_AUTH")),
+            },
+        }
+    }
+    CACHE_MIDDLEWARE_KEY_PREFIX = 'fpcache'
+    CACHE_MIDDLEWARE_SECONDS = 5
+    CACHE_MIDDLEWARE_ALIAS = 'default'
+    SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators

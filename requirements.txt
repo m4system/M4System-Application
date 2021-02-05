@@ -40,3 +40,4 @@ Werkzeug
 
 mysqlclient
 uwsgi
+django-redis-cache
