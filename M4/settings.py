@@ -30,25 +30,18 @@ DEBUG = os.getenv("DEBUG")
 
 load_dotenv(find_dotenv(), verbose=DEBUG)
 
-ALLOWED_HOSTS = [os.getenv("ALLOWED_HOST")]
-
-from django.contrib.messages import constants as message_constants
-MESSAGE_LEVEL = message_constants.DEBUG
-IGNORABLE_404_URLS = ['/robots.txt', '/favicon.ico']
-
-SECURE_BROWSER_XSS_FILTER = True
-
-SECURE_CONTENT_TYPE_NOSNIFF = True
-
 # This needs nodejs and lessc: http://lesscss.org/
 COMPRESS_PRECOMPILERS = (('text/less', 'lessc {infile} {outfile}'),)
 
 STATICFILES_FINDERS = ["django.contrib.staticfiles.finders.FileSystemFinder",
                        "django.contrib.staticfiles.finders.AppDirectoriesFinder", "compressor.finders.CompressorFinder"]
 
+from django.contrib.messages import constants as message_constants
+MESSAGE_LEVEL = message_constants.DEBUG
+IGNORABLE_404_URLS = ['/robots.txt', '/favicon.ico']
+
 
 # Application definition
-
 INSTALLED_APPS = [
     # 'celery',
     'jet.dashboard',
@@ -104,15 +97,29 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'M4.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if os.getenv("ENV") is not "prod":
+    ALLOWED_HOSTS = ('127.0.0.1',)
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
+else:
+    ALLOWED_HOSTS = [os.getenv("ALLOWED_HOST")]
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'OPTIONS': {
+                'read_default_file': '/root/.my.cnf',
+            },
+        }
+    }
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -169,7 +176,7 @@ INTERNAL_IPS = [
 DATAPOINT_TYPES = (('number', _('Number')), ('string', _('Character String')), ('boolean', _('Booleans')))
 
 
-BROKER_URL = 'redis://dev-v1-connect-cache.4fqscj.ng.0001.cac1.cache.amazonaws.com:6379'
+BROKER_URL = "redis://" + str(os.getenv("REDIS_AUTH")) + "@" + str(os.getenv("REDIS_HOST"))
 CELERY_ACCEPT_CONTENT = ['pickle', 'json']
 CELERY_TASK_SERIALIZER = 'pickle'
 CELERY_RESULT_SERIALIZER = 'json'
