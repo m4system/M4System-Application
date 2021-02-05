@@ -45,13 +45,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_celery_results',
+    'django_celery_beat',
     'M4.scheduler',
     'M4.webview',
     'debug_toolbar',
     'compressor',
-    'reversion',
-    'django_celery_results',
-    'django_celery_beat'
+    'reversion'
 ]
 
 MIDDLEWARE = [
@@ -141,6 +141,8 @@ USE_TZ = True
 
 STATIC_URL = '/public/'
 STATIC_ROOT = 'M4/public/'
+LOGIN_URL = '/login/'
+LOGOUT_URL = '/logout/'
 
 INTERNAL_IPS = [
     # ...
@@ -151,10 +153,6 @@ INTERNAL_IPS = [
 # We support the following internal types
 DATAPOINT_TYPES = (('number', _('Number')), ('string', _('Character String')), ('boolean', _('Booleans')))
 
-# Flexselect settings.
-FLEXSELECT = {
-    'include_jquery': True,
-}
 
 BROKER_URL = 'redis://dev-v1-connect-cache.4fqscj.ng.0001.cac1.cache.amazonaws.com:6379'
 CELERY_ACCEPT_CONTENT = ['pickle', 'json']

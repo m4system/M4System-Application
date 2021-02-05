@@ -1032,7 +1032,7 @@ def create_them_models(sender, instance, action, reverse, *args, **kwargs):
                 gettask.save()
             print(host.name + '-' + instance.name)
             try:
-                from M4.DashboardDisplayPlugin.webview_models import Widgets
+                from M4.webview.models import Widgets
                 getwidget = Widgets.objects.get(name=host.name + '-' + instance.name)
             except Exception as e:
                 dbg(e)
