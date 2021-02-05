@@ -1,0 +1,323 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-09-03 19:35+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgid "Quick links"
+msgstr "Liens rapides"
+
+msgid "Return to site"
+msgstr "Retourner au site"
+
+msgid "Change password"
+msgstr ""
+
+msgid "Log out"
+msgstr ""
+
+msgid "Applications"
+msgstr ""
+
+msgid "Administration"
+msgstr ""
+
+msgid "Recent Actions"
+msgstr "Actions récentes"
+
+msgid "Latest Django News"
+msgstr "Dernières nouvelles de Django"
+
+msgid "Support"
+msgstr "Support"
+
+msgid "Django documentation"
+msgstr "Documentation de Django"
+
+msgid "Django \"django-users\" mailing list"
+msgstr "Mailing liste de Django \"django-users\""
+
+msgid "Django irc channel"
+msgstr "Canal IRC de Django"
+
+msgid "Application models"
+msgstr "Modèles d'application"
+
+msgid "Revoke access"
+msgstr "Révoquer l'accès"
+
+msgid "Grant access"
+msgstr "Autoriser l'accès"
+
+msgid "Access"
+msgstr "Accès"
+
+msgid "Counter"
+msgstr "Compteur"
+
+msgid "Statistics period"
+msgstr "Période de statistiques"
+
+msgid "Today"
+msgstr "Aujourd'hui"
+
+msgid "Last week"
+msgstr "Dernière semaine"
+
+msgid "Last month"
+msgstr "Dernier mois"
+
+msgid "Last quarter"
+msgstr "Dernier trimestre"
+
+msgid "Last year"
+msgstr "L'an dernier"
+
+msgid "none"
+msgstr "aucun"
+
+msgid "grant access first"
+msgstr "autoriser l'accès préalablement"
+
+msgid "counters loading failed"
+msgstr "échec de chargement des compteurs"
+
+msgid "Show"
+msgstr "Voir"
+
+msgid "users"
+msgstr "utilisateureuses"
+
+msgid "sessions"
+msgstr ""
+
+msgid "views"
+msgstr "vues"
+
+msgid "Group"
+msgstr "Groupe"
+
+msgid "By day"
+msgstr "Par jour"
+
+msgid "By week"
+msgstr "Par semaine"
+
+msgid "By month"
+msgstr "Par mois"
+
+#, python-format
+msgid "Please <a href=\"%s\">attach Google account and choose Google Analytics counter</a> to start using widget"
+msgstr "Merci d'<a href=\"%s\">attacher un compte Google et choisir un compteur Google Analytics</a> pour commencer à utiliser le greffon"
+
+#, python-format
+msgid "Please <a href=\"%s\">select Google Analytics counter</a> to start using widget"
+msgstr "Merci de <a href=\"%s\">séléctionner un compteur Google Analytics</a> to pour commencer à utiliser le greffon "
+
+msgid "API request failed."
+msgstr "Échec de requête API."
+
+#, python-format
+msgid " Try to <a href=\"%s\">revoke and grant access</a> again"
+msgstr " Essayez de <a href=\"%s\">révoquer et autoriser l'accès</a> à nouveau"
+
+msgid "Google Analytics visitors totals"
+msgstr "Total de visiteureuses Google Analytics"
+
+msgid "Bad server response"
+msgstr "Réponse serveur invalide"
+
+msgid "Google Analytics visitors chart"
+msgstr "Graphique visiteureuses Google Analytics"
+
+msgid "Google Analytics period visitors"
+msgstr "Visiteureuses par période Google Analytics"
+
+msgid "Module not found"
+msgstr "Module non trouvé"
+
+msgid "Bad arguments"
+msgstr "Arguments invalides"
+
+msgid "visitors"
+msgstr "visiteureuses"
+
+msgid "visits"
+msgstr "visites"
+
+#, python-format
+msgid "Please <a href=\"%s\">attach Yandex account and choose Yandex Metrika counter</a> to start using widget"
+msgstr ""
+
+#, python-format
+msgid "Please <a href=\"%s\">select Yandex Metrika counter</a> to start using widget"
+msgstr ""
+
+msgid "Yandex Metrika visitors totals"
+msgstr ""
+
+msgid "Yandex Metrika visitors chart"
+msgstr ""
+
+msgid "Yandex Metrika period visitors"
+msgstr ""
+
+msgid "Title"
+msgstr "Titre"
+
+msgid "module"
+msgstr ""
+
+#, fuzzy
+#| msgid "Application models"
+msgid "application name"
+msgstr "Modèles d'application"
+
+#, fuzzy
+#| msgid "users"
+msgid "user"
+msgstr "utilisateureuses"
+
+msgid "column"
+msgstr ""
+
+msgid "order"
+msgstr ""
+
+msgid "settings"
+msgstr ""
+
+msgid "children"
+msgstr ""
+
+msgid "collapsed"
+msgstr ""
+
+msgid "user dashboard module"
+msgstr ""
+
+msgid "user dashboard modules"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
+msgid "External link"
+msgstr "Lien externe"
+
+msgid "Layout"
+msgstr ""
+
+msgid "Stacked"
+msgstr ""
+
+msgid "Inline"
+msgstr ""
+
+msgid "Links"
+msgstr "Liens"
+
+msgid "Link"
+msgstr "Lien"
+
+msgid "Models"
+msgstr "Modèles"
+
+msgid "Items limit"
+msgstr "Limite de résultats"
+
+msgid "Feed URL"
+msgstr "URL du flux"
+
+msgid "RSS Feed"
+msgstr "Flux RSS"
+
+msgid "You must install the FeedParser python module"
+msgstr "Installation du module python FeedParser requis"
+
+msgid "You must provide a valid feed URL"
+msgstr "Merci de fournir une URL de feed valide"
+
+msgid "Delete widget"
+msgstr "Éffacer le greffon"
+
+msgid "Are you sure want to delete this widget?"
+msgstr "Voulez-vous vraiment éffacer ce greffon?"
+
+msgid "widgets"
+msgstr "greffons"
+
+msgid "available"
+msgstr "disponnible"
+
+msgid "initials"
+msgstr "initiaux"
+
+msgid "Add"
+msgstr ""
+
+msgid "Reset widgets"
+msgstr "Réinitialiser les greffons"
+
+msgid "Are you sure want to reset widgets?"
+msgstr "Voulez-vous vraiment réinitialiser les gréffons?"
+
+msgid "Change"
+msgstr ""
+
+#, fuzzy
+#| msgid "Delete widget"
+msgid "Delete"
+msgstr "Éffacer le greffon"
+
+#, python-format
+msgid "Models in the %(name)s application"
+msgstr ""
+
+msgid "Nothing to show"
+msgstr "Rien à montrer"
+
+msgid "Date"
+msgstr ""
+
+#, fuzzy
+#| msgid "available"
+msgid "None available"
+msgstr "disponnible"
+
+msgid "Unknown content"
+msgstr ""
+
+msgid "Home"
+msgstr ""
+
+msgid "Please correct the errors below."
+msgstr ""
+
+#, python-format
+msgid "Add another %(verbose_name)s"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Widget was successfully updated"
+msgstr "Greffon mit à jour avec succès"
+
+msgid "Items"
+msgstr "Résultats"
+
+msgid "Widget has been successfully added"
+msgstr "Greffon ajouté avec succès"

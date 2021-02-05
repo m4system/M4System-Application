@@ -1,0 +1,127 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-09-03 19:35+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "From date"
+msgstr ""
+
+msgid "To date"
+msgstr ""
+
+msgid "URL"
+msgstr "URL"
+
+msgid "title"
+msgstr "título"
+
+msgid "user"
+msgstr "usuario"
+
+msgid "date created"
+msgstr "fecha de creación"
+
+msgid "bookmark"
+msgstr "marcador"
+
+msgid "bookmarks"
+msgstr "marcadores"
+
+msgid "application name"
+msgstr "Nombre de la aplicación"
+
+msgid "pinned application"
+msgstr "aplicación anclada"
+
+msgid "pinned applications"
+msgstr "aplicaciones ancladas"
+
+msgid "Welcome,"
+msgstr "Bienvenido, "
+
+msgid "View site"
+msgstr "Ver sitio"
+
+msgid "Documentation"
+msgstr "Documentación"
+
+msgid "Change password"
+msgstr "Cambiar contraseña"
+
+msgid "Log out"
+msgstr "Cerrar sessión"
+
+msgid "Home"
+msgstr "Inicio"
+
+msgid "back"
+msgstr "volver"
+
+msgid "Applications"
+msgstr "Aplicaciones"
+
+msgid "Hide applications"
+msgstr "Ocultar aplicaciones"
+
+msgid "Show hidden"
+msgstr "Mostrar ocultas"
+
+msgid "Add bookmark"
+msgstr "Añadir marcadores"
+
+msgid "Title"
+msgstr "Título"
+
+msgid "Delete bookmark"
+msgstr "Eliminar marcadores"
+
+msgid "Are you sure want to delete this bookmark?"
+msgstr "Está seguro de que quiere eliminar este marcador?"
+
+msgid "Remove"
+msgstr "Remover"
+
+msgid "Search"
+msgstr ""
+
+msgid "Application page"
+msgstr "Página de aplicación"
+
+msgid "current theme"
+msgstr "tema actual"
+
+#, python-format
+msgid "Add another %(verbose_name)s"
+msgstr ""
+
+msgid "Change"
+msgstr ""
+
+#, fuzzy
+#| msgid "View site"
+msgid "View on site"
+msgstr "Ver sitio"
+
+msgid "Popup closing..."
+msgstr "Cerrando ventana emergente..."
+
+#, python-format
+msgid " By %(filter_title)s "
+msgstr ""
+
+msgid "Reset"
+msgstr ""

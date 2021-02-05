@@ -1,0 +1,164 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-07-30 17:20+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: jet/filters.py:70
+msgid "From date"
+msgstr ""
+
+#: jet/filters.py:76
+msgid "To date"
+msgstr ""
+
+#: jet/models.py:8 jet/templates/admin/base.html:291
+msgid "URL"
+msgstr ""
+
+#: jet/models.py:9
+msgid "title"
+msgstr ""
+
+#: jet/models.py:10 jet/models.py:24
+msgid "user"
+msgstr ""
+
+#: jet/models.py:11 jet/models.py:25
+msgid "date created"
+msgstr ""
+
+#: jet/models.py:14
+msgid "bookmark"
+msgstr ""
+
+#: jet/models.py:15 jet/templates/admin/base.html:307
+msgid "bookmarks"
+msgstr ""
+
+#: jet/models.py:23
+msgid "application name"
+msgstr ""
+
+#: jet/models.py:28
+msgid "pinned application"
+msgstr ""
+
+#: jet/models.py:29
+msgid "pinned applications"
+msgstr ""
+
+#: jet/templates/admin/base.html:60
+msgid "Welcome,"
+msgstr ""
+
+#: jet/templates/admin/base.html:65 jet/templates/admin/base.html:182
+msgid "View site"
+msgstr ""
+
+#: jet/templates/admin/base.html:70 jet/templates/admin/base.html:191
+msgid "Documentation"
+msgstr ""
+
+#: jet/templates/admin/base.html:74
+msgid "Change password"
+msgstr ""
+
+#: jet/templates/admin/base.html:76
+msgid "Log out"
+msgstr ""
+
+#: jet/templates/admin/base.html:86 jet/templates/admin/base.html:174
+msgid "Home"
+msgstr ""
+
+#: jet/templates/admin/base.html:154
+msgid "back"
+msgstr ""
+
+#: jet/templates/admin/base.html:235
+msgid "Applications"
+msgstr ""
+
+#: jet/templates/admin/base.html:259
+msgid "Hide applications"
+msgstr ""
+
+#: jet/templates/admin/base.html:260
+msgid "Show hidden"
+msgstr ""
+
+#: jet/templates/admin/base.html:286 jet/templates/admin/base.html:305
+msgid "Add bookmark"
+msgstr ""
+
+#: jet/templates/admin/base.html:289
+msgid "Title"
+msgstr ""
+
+#: jet/templates/admin/base.html:299
+msgid "Delete bookmark"
+msgstr ""
+
+#: jet/templates/admin/base.html:300
+msgid "Are you sure want to delete this bookmark?"
+msgstr ""
+
+#: jet/templates/admin/base.html:315 jet/templates/admin/base.html:322
+#: jet/templates/admin/edit_inline/compact.html:3
+msgid "Remove"
+msgstr ""
+
+#: jet/templates/admin/base.html:344
+#: jet/templates/rangefilter/date_filter.html:33
+msgid "Search"
+msgstr ""
+
+#: jet/templates/admin/base.html:349
+msgid "Application page"
+msgstr ""
+
+#: jet/templates/admin/base.html:375
+msgid "current theme"
+msgstr ""
+
+#: jet/templates/admin/edit_inline/compact.html:12
+#, python-format
+msgid "Add another %(verbose_name)s"
+msgstr ""
+
+#: jet/templates/admin/edit_inline/compact.html:37
+msgid "Change"
+msgstr ""
+
+#: jet/templates/admin/edit_inline/compact.html:43
+msgid "View on site"
+msgstr ""
+
+#: jet/templates/admin/popup_response.html:4
+msgid "Popup closing..."
+msgstr ""
+
+#: jet/templates/jet/related_field_ajax_list_filter.html:2
+#: jet/templates/rangefilter/date_filter.html:2
+#: jet/templates/rangefilter/date_filter.html:16
+#, python-format
+msgid " By %(filter_title)s "
+msgstr ""
+
+#: jet/templates/rangefilter/date_filter.html:34
+msgid "Reset"
+msgstr ""
