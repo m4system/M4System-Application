@@ -1,0 +1,8 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}{{ header }}<img src="{% static "img/m4-logo.png" %}" class="top" style="max-width: 210px" alt="M4SYSTEM">{{ site_header|default:'' }}{% endblock %}
+
+{% block nav-global %}{% endblock %}

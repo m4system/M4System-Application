@@ -1,0 +1,26 @@
+.panel .panel-body .panel .heading-elements {
+	background-color: transparent;
+	margin-top: 0px !important;
+	right: 5px !important;
+}
+
+/*.panel .panel-body .panel .heading-elements:hover {
+	background-color: inherit;
+}
+*/
+.panel-flat > .panel-body > .heading-elements-toggle {
+	display: none !important;
+}
+
+.heading-elements.visible {
+	background-color: inherit !important;
+}
+
+.navbar-brand>img {
+	height: 44px !important;
+	margin: 0px !important;
+}
+
+.navbar-brand {
+	padding: 0px 20px !important;
+}

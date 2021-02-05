@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block breadcrumbs %}<a href="/">{% trans 'Home' %}</a>{% endblock %}
+{% block nav %}
+	<!-- Main navbar -->
+	<div class="navbar navbar-inverse">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="/"><img src="/public/img/nhs.png" alt="M4SYSTEM"></a>
+
+			<ul class="nav navbar-nav pull-right visible-xs-block">
+				<li><a data-toggle="collapse" data-target="#navbar-mobile"><i class="icon-tree5"></i></a></li>
+			</ul>
+		</div>
+
+		<div class="navbar-collapse collapse" id="navbar-mobile">
+			<ul class="nav navbar-nav navbar-right">
+				<li>
+					<a href="/admin/">
+						<i class="icon-display4"></i> <span class="visible-xs-inline-block position-right"> Go to admin</span>
+					</a>
+				</li>
+
+				<li>
+					<a href="mailto:sysops@m4system.com">
+						<i class="icon-user-tie"></i> <span class="visible-xs-inline-block position-right"> Contact admin</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<!-- /main navbar -->
+{% endblock %}
+{% block content %}
+	<!-- Page container -->
+	<div class="page-container login-container">
+
+		<!-- Page content -->
+		<div class="page-content">
+
+			<!-- Main content -->
+			<div class="content-wrapper">
+
+{% if validlink %}
+
+
+
+
+
+				<!-- Password recovery -->
+				<form method="post">
+					{% csrf_token %}
+					<div class="panel panel-body login-form">
+						<div class="text-center">
+							<div class="icon-object border-warning text-warning"><i class="icon-spinner11"></i></div>
+							<h5 class="content-group">Password recovery <small class="display-block">Please enter your new password twice so we can verify you typed it in correctly.</small></h5>
+						</div>
+						{{ form.new_password1.errors }}
+						<div class="form-group has-feedback">
+							<input type="password" class="form-control" placeholder="New password" id="new_password1" maxlength="254" name="new_password1" class="form-control" />
+							<div class="form-control-feedback">
+								<i class="icon-mail5 text-muted"></i>
+							</div>
+						</div>
+						{{ form.new_password2.errors }}
+						<div class="form-group has-feedback">
+							<input type="password" class="form-control" placeholder="New password" id="new_password2" maxlength="254" name="new_password2" class="form-control" />
+							<div class="form-control-feedback">
+								<i class="icon-mail5 text-muted"></i>
+							</div>
+						</div>
+						<button type="submit" class="btn bg-blue btn-block" value="Change my password">Reset password <i class="icon-arrow-right14 position-right"></i></button>
+					</div>
+				</form>
+				<!-- /password recovery -->
+{% else %}
+<div class="panel panel-body login-form">
+						<div class="text-center">
+							<div class="icon-object border-warning text-warning"><i class="icon-spinner11"></i></div>
+							<h5 class="content-group">The password reset link was invalid <small class="display-block">, possibly because it has already been used.  Please request a new password reset.</small></h5>
+						</div>
+						</div>
+{% endif %}
+
+			</div>
+			<!-- /main content -->
+
+		</div>
+		<!-- /page content -->
+{% endblock %}
+</body>
+</html>

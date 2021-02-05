@@ -1,0 +1,8 @@
+{% for log in slalog %}
+<tr>
+<td>{{ log.timestamp }}</td>
+<td>{{ log.sla.name }}</td>
+<td>{{ log.event }}</td>
+</tr>
+{% endfor %}
+

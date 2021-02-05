@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block breadcrumbs %}<a href="{% url '/' %}">{% trans 'Home' %}</a>{% endblock %}
+{% block nav %}
+	<!-- Main navbar -->
+	<div class="navbar navbar-inverse">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="/"><img src="/public/img/nhs.png" alt="M4SYSTEM"></a>
+
+			<ul class="nav navbar-nav pull-right visible-xs-block">
+				<li><a data-toggle="collapse" data-target="#navbar-mobile"><i class="icon-tree5"></i></a></li>
+			</ul>
+		</div>
+
+		<div class="navbar-collapse collapse" id="navbar-mobile">
+			<ul class="nav navbar-nav navbar-right">
+				<li>
+					<a href="/admin/">
+						<i class="icon-display4"></i> <span class="visible-xs-inline-block position-right"> Go to admin</span>
+					</a>
+				</li>
+
+				<li>
+					<a href="mailto:sysops@m4system.com">
+						<i class="icon-user-tie"></i> <span class="visible-xs-inline-block position-right"> Contact admin</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<!-- /main navbar -->
+{% endblock %}
+{% block content %}
+	<!-- Page container -->
+	<div class="page-container login-container">
+
+		<!-- Page content -->
+		<div class="page-content">
+
+
+
+			<!-- Main content -->
+			<div class="content-wrapper">
+
+				<!-- Content area -->
+				<div class="content">
+
+					<!-- Error wrapper -->
+					<div class="container-fluid text-center">
+						<h1 class="error-title">500</h1>
+						<h6 class="text-semibold content-group">Oops, an error has occurred. Internal server error!</h6>
+					</div>
+					<!-- /error wrapper -->
+
+				</div>
+				<!-- /content area -->
+
+
+			</div>
+			<!-- /main content -->
+
+		</div>
+		<!-- /page content -->
+
+
+		<!-- Footer -->
+		<div class="footer text-muted">
+			&copy; 2019. <a href="/">M4</a> by <a href="https://m4system.com" target="_blank">M4SYSTEM</a>
+		</div>
+		<!-- /footer -->
+
+	</div>
+	<!-- /page container -->
+{% endblock %}
+</body>
+</html>
