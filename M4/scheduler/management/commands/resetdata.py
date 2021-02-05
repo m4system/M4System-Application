@@ -2,7 +2,7 @@ from django.core.cache import cache
 from django.core.management.base import BaseCommand
 
 from M4.scheduler.models import HostChecks, Historical, Sla, EventLog, SlaLog, ErrorLog, Metadata
-from M4.DashboardDisplayPlugin.webview_models import UIMsg
+from M4.webview.models import UIMsg
 
 
 # totally reset all data

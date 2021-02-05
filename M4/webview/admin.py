@@ -79,5 +79,5 @@ class MyGroupAdmin(VersionAdmin, GroupAdmin):
 
 
 # Ovverride the default text in the admin
-admin.site.site_header = ''
-admin.site.site_title = 'M4'
+admin.site.site_header = 'globo.tech'
+admin.site.site_title = 'Monitoring'

@@ -307,7 +307,7 @@ class Thresholds(models.Model):
                 users = User.objects.filter(groups=group)
                 for user in users:
                     # This is where the user decides where to receive his notifications.
-                    from M4.DashboardDisplayPlugin.webview_models import UserProfile
+                    from M4.webview.models import UserProfile
                     mail = UserProfile.objects.get(user=user).notifemail
                     if mail is not None and mail != '':
                         emails.append(
@@ -352,7 +352,7 @@ class Thresholds(models.Model):
                         users = User.objects.filter(groups=group)
                         for user in users:
                             # This is where the user decides where to receive his notifications.
-                            from M4.DashboardDisplayPlugin.webview_models import UserProfile
+                            from M4.webview.models import UserProfile
                             mail = UserProfile.objects.get(user=user).notifemail
                             # dbg( user.username + ' is ' + mail)
                             if mail is not None and mail != '':
@@ -369,7 +369,7 @@ class Thresholds(models.Model):
                         users = User.objects.filter(groups=group)
                         for user in users:
                             # This is where the user decides where to receive his notifications.
-                            from M4.DashboardDisplayPlugin.webview_models import UserProfile
+                            from M4.webview.models import UserProfile
                             mail = UserProfile.objects.get(user=user).notifemail
                             # dbg( user.username + ' is ' + mail)
                             if mail is not None and mail != '':
@@ -387,7 +387,7 @@ class Thresholds(models.Model):
                         users = User.objects.filter(groups=group)
                         for user in users:
                             # This is where the user decides where to receive his notifications.
-                            from M4.DashboardDisplayPlugin.webview_models import UserProfile
+                            from M4.webview.models import UserProfile
                             mail = UserProfile.objects.get(user=user).notifemail
                             # dbg( user.username + ' is ' + mail)
                             if mail is not None and mail != '':
@@ -425,7 +425,7 @@ class Thresholds(models.Model):
                 users = User.objects.filter(groups=group)
                 for user in users:
                     # This is where the user decides where to receive his notifications.
-                    from M4.DashboardDisplayPlugin.webview_models import UserProfile
+                    from M4.webview.models import UserProfile
                     mail = UserProfile.objects.get(user=user).notifemail
                     if mail is not None and mail != '':
                         emails.append(
@@ -558,7 +558,7 @@ class Sla(models.Model):
 
     def doWarn(self):
         # send notifications if the SLA is affected
-        from M4.DashboardDisplayPlugin.webview_models import UserProfile
+        from M4.webview.models import UserProfile
         emails = []
         for group in self.warngroups.all():
             users = User.objects.filter(groups=group)
@@ -572,7 +572,7 @@ class Sla(models.Model):
 
     def doCrit(self):
         # Declare the SLA critical and send notification
-        from M4.DashboardDisplayPlugin.webview_models import UserProfile
+        from M4.webview.models import UserProfile
         emails = []
         for group in self.critgroups.all():
             users = User.objects.filter(groups=group)
@@ -586,7 +586,7 @@ class Sla(models.Model):
 
     def doOk(self):
         # Declare the SLA OK again and send notification
-        from M4.DashboardDisplayPlugin.webview_models import UserProfile
+        from M4.webview.models import UserProfile
         emails = []
         for group in self.okgroups.all():
             users = User.objects.filter(groups=group)
@@ -1112,7 +1112,7 @@ def edit_hostchecks(sender, instance, **kwargs):
             gettask.save()
 
         try:
-            from M4.DashboardDisplayPlugin.webview_models import Widgets
+            from M4.webview.models import Widgets
             getwidget = Widgets.objects.get(name=host.name + '-' + instance.name)
         except Exception as e:
             dbg(e)
@@ -1173,7 +1173,7 @@ def edit_hostchecks(sender, instance, **kwargs):
 @receiver(post_save, sender=ErrorLog, dispatch_uid="report_error")
 def error_to_ui(sender, instance, **kwargs):
     # When an error gets logged, we want to display a notification for it in the UI
-    from M4.DashboardDisplayPlugin.webview_models import UserProfile, UserView
+    from M4.webview.models import UserProfile, UserView
     host = None
     hostcheck = None
     if isinstance(instance.host, Hosts):

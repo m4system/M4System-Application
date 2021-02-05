@@ -16,10 +16,13 @@ if [[ "$ENVIRONEMENT" = 'prod' ]];then
 	nohup /usr/local/bin/uwsgi --chdir=/var/www/html/m4/ --module=wsgi:application --env DJANGO_SETTINGS_MODULE=M4.settings --master --pidfile=/var/www/html/m4/master.pid --socket=127.0.0.1:49152 --processes=8 --uid=1000 --gid=1000 --enable-threads --harakiri=18000 >> /var/www/html/m4/logs/uwsi-boot.log &
 	# nohup /var/www/html/m4/bin/manage runserver_plus 8080 >> /var/www/html/m4/logs/runserver.log &
 	# We do 8 concurrent workers in prod
-	nohup /var/www/html/m4/bin/manage celery -A scheduler worker --heartbeat-interval 10 -E -c12 >> /var/www/html/m4/logs/worker.log &
-	nohup /var/www/html/m4/bin/manage celery -A scheduler beat >> /var/www/html/m4/logs/beat.log &
-	/var/www/html/m4/bin/manage celerycam --frequency=10.0 --detach -f /var/www/html/m4/logs/monitor.log
+#	nohup /var/www/html/m4/bin/manage celery -A scheduler worker --heartbeat-interval 10 -E -c12 >> /var/www/html/m4/logs/worker.log &
+#	nohup /var/www/html/m4/bin/manage celery -A scheduler beat >> /var/www/html/m4/logs/beat.log &
+#	/var/www/html/m4/bin/manage celerycam --frequency=10.0 --detach -f /var/www/html/m4/logs/monitor.log
 	#nohup manage celery -A scheduler worker --heartbeat-interval 10 -E --loglevel=debug >> /var/www/html/m4/logs/worker.log &
 	#nohup manage celery -A scheduler beat --loglevel=debug >> /var/www/html/m4/logs/beat.log &
 	#manage celerycam --frequency=10.0 --detach --loglevel=debug -f /var/www/html/m4/logs/monitor.log
+	cd /var/www/html/m4/
+	C_FORCE_ROOT=1 celery -A M4 worker --beat --scheduler django --loglevel=info -E
+
 fi

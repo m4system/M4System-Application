@@ -43,7 +43,7 @@ IGNORABLE_404_URLS = ['/robots.txt', '/favicon.ico']
 
 # Application definition
 INSTALLED_APPS = [
-    # 'celery',
+    'celery',
     'jet.dashboard',
     'jet',
     'django_extensions',
@@ -197,7 +197,7 @@ INTERNAL_IPS = [
 DATAPOINT_TYPES = (('number', _('Number')), ('string', _('Character String')), ('boolean', _('Booleans')))
 
 
-BROKER_URL = "redis://" + str(os.getenv("REDIS_AUTH")) + "@" + str(os.getenv("REDIS_HOST"))
+BROKER_URL = "redis://:" + str(os.getenv("REDIS_AUTH")) + "@" + str(os.getenv("REDIS_HOST"))
 CELERY_ACCEPT_CONTENT = ['pickle', 'json']
 CELERY_TASK_SERIALIZER = 'pickle'
 CELERY_RESULT_SERIALIZER = 'json'
@@ -215,6 +215,9 @@ else:
 
 #djcelery.setup_loader()
 # Dev: celery -A M4 worker --beat --loglevel=debug
+
+INFLUXDB_HOST = os.getenv("INFLUX_HOST")
+
 
 # Needed for django debug toolbar logging
 from debug_toolbar.panels.logging import collector # needed for handler constructor below

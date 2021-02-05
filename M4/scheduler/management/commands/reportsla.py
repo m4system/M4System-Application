@@ -8,7 +8,7 @@ from django.utils import timezone
 
 from M4.scheduler.models import Sla, SlaLog
 from M4.System.tools import getMetadata
-from M4.DashboardDisplayPlugin.webview_models import UserProfile
+from M4.webview.models import UserProfile
 
 
 def convertEvent(event):

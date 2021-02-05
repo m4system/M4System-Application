@@ -5,19 +5,13 @@ from time import time
 
 from celery import shared_task
 from django.utils import timezone
-from pyasn1.codec.ber import encoder, decoder
-from pysnmp.carrier.asyncore.dgram import udp
-from pysnmp.carrier.asyncore.dispatch import AsyncoreDispatcher
-from pysnmp.proto import api
 
 # import sh
-from M4.System.tools import setMetadata, getMetadata
+from M4.scheduler.tools import setMetadata, getMetadata
 from .models import Hosts, HostChecks, ErrorLog
 from .utils import computeint, computebool, computestr
 
-# Easysnmp is not supported on windows unfortunally
-# from easysnmp import snmp_get
-# from pysnmp.hlapi import getCmd as snmp_get
+from easysnmp import snmp_get
 
 # Defines the celery task available.  Links to the checktypes
 
@@ -40,108 +34,9 @@ def snmpgetint(self, host, check):
             address = hostname.address
             community = hostname.community
             oid = checkname.arg
-            # res = str(float(snmp_get(oid, hostname=address, community=community, version=1).value) * float(check.quotient))
-            # from pysnmp import debug
-            # debug.setLogger(debug.Debug('msgproc'))
-
-            # Protocol version to use
-            pMod = api.protoModules[api.protoVersion1]
-            # pMod = api.protoModules[api.protoVersion2c]
-
-            # Build PDU
-            reqPDU = pMod.GetRequestPDU()
-            pMod.apiPDU.setDefaults(reqPDU)
-            pMod.apiPDU.setVarBinds(reqPDU, (((oid), pMod.Null()),))
-
-            # Build message
-            reqMsg = pMod.Message()
-            pMod.apiMessage.setDefaults(reqMsg)
-            pMod.apiMessage.setCommunity(reqMsg, community)
-            pMod.apiMessage.setPDU(reqMsg, reqPDU)
-
-            startedAt = time()
-
-            def cbTimerFun(timeNow):
-                if timeNow - startedAt > 3:
-                    raise Exception("Request timed out")
-
-            # noinspection PyUnusedLocal,PyUnusedLocal
-            def cbRecvFun(transportDispatcher, transportDomain, transportAddress,
-                          wholeMsg, reqPDU=reqPDU):
-                while wholeMsg:
-                    rspMsg, wholeMsg = decoder.decode(wholeMsg, asn1Spec=pMod.Message())
-                    rspPDU = pMod.apiMessage.getPDU(rspMsg)
-                    # Match response to request
-                    if pMod.apiPDU.getRequestID(reqPDU) == pMod.apiPDU.getRequestID(rspPDU):
-                        # Check for SNMP errors reported
-                        errorStatus = pMod.apiPDU.getErrorStatus(rspPDU)
-                        if errorStatus:
-                            print(errorStatus.prettyPrint())
-                        else:
-                            for oid, val in pMod.apiPDU.getVarBinds(rspPDU):
-                                # print('%s = %s' % (oid.prettyPrint(), val.prettyPrint()))
-                                # res = str(float(val.prettyPrint() * float(check.quotient)))
-                                global checkname
-                                global hostname
-                                global res
-                                res = str(float(val * float(checkname.quotient)))
-                                computeint(checkname, hostname, res)
-                        transportDispatcher.jobFinished(1)
-                return wholeMsg
-
-            transportDispatcher = AsyncoreDispatcher()
-
-            transportDispatcher.registerRecvCbFun(cbRecvFun)
-            # transportDispatcher.registerTimerCbFun(cbTimerFun)
-
-            # UDP/IPv4
-            transportDispatcher.registerTransport(
-                udp.domainName, udp.UdpSocketTransport().openClientMode()
-            )
-
-            # Pass message to dispatcher
-            transportDispatcher.sendMessage(
-                encoder.encode(reqMsg), udp.domainName, (address, 161)
-            )
-            transportDispatcher.jobStarted(1)
-
-            ## UDP/IPv6 (second copy of the same PDU will be sent)
-            # transportDispatcher.registerTransport(
-            #    udp6.domainName, udp6.Udp6SocketTransport().openClientMode()
-            # )
-
-            # Pass message to dispatcher
-            # transportDispatcher.sendMessage(
-            #    encoder.encode(reqMsg), udp6.domainName, ('::1', 161)
-            # )
-            # transportDispatcher.jobStarted(1)
-
-            ## Local domain socket
-            # transportDispatcher.registerTransport(
-            #    unix.domainName, unix.UnixSocketTransport().openClientMode()
-            # )
-            #
-            # Pass message to dispatcher
-            # transportDispatcher.sendMessage(
-            #    encoder.encode(reqMsg), unix.domainName, '/tmp/snmp-agent'
-            # )
-            # transportDispatcher.jobStarted(1)
-
-            # Dispatcher will finish as job#1 counter reaches zero
-            transportDispatcher.runDispatcher()
-
-            transportDispatcher.closeDispatcher()
-            # print(transportDispatcher)
-            del transportDispatcher
-            del pMod
-            del reqPDU
-            del reqMsg
-            del startedAt
-            del cbTimerFun
-            del cbRecvFun
-
-            # computeint(check, host, res)
-            # print(oid + ' on ' + address + ' equals ' + res)
+            res = str(float(snmp_get(oid, hostname=address, community=community, version=1).value) * float(checkname.quotient))
+            computeint(checkname, hostname, res)
+            print(oid + ' on ' + address + ' equals ' + res)
     except Exception as e:
         print('doing ' + checkname.name + ' on ' + hostname.name + ' failed')
         print(traceback.format_exc())
@@ -165,9 +60,9 @@ def snmpgetstr(self, host, check):
             address = host.address
             community = host.community
             oid = check.arg
-            # res = str(snmp_get(oid, hostname=address, community=community, version=1).value)
+            res = str(snmp_get(oid, hostname=address, community=community, version=1).value)
             computestr(check, host, res)
-        # print(oid + ' on ' + address + ' equals ' + res)
+            print(oid + ' on ' + address + ' equals ' + res)
     except Exception as e:
         print('doing ' + check.name + ' on ' + host.name + ' failed')
         # update the error count
@@ -190,9 +85,9 @@ def snmpgetbool(self, host, check):
             address = host.address
             community = host.community
             oid = check.arg
-            # res = str(snmp_get(oid, hostname=address, community=community, version=1).value)
+            res = str(snmp_get(oid, hostname=address, community=community, version=1).value)
             computebool(check, host, res)
-        # print(oid + ' on ' + address + ' equals ' + res)
+            print(oid + ' on ' + address + ' equals ' + res)
     except Exception as e:
         print('doing ' + check.name + ' on ' + host.name + ' failed')
         # update the error count
@@ -217,10 +112,10 @@ def execint(self, host, check):
         host = Hosts.objects.get(name=host)
         check = HostChecks.objects.get(name=check)
         if host.enabled is True and check.enabled is True:
-            # run = sh.Command("./bin/runthis.sh")
-            # res = str(float(run(check.arg)) * float(check.quotient))
+            run = sh.Command("./bin/runthis.sh")
+            res = str(float(run(check.arg)) * float(check.quotient))
             computeint(check, host, res)
-            # print(oid + ' on ' + address + ' equals ' + res)
+            print(oid + ' on ' + address + ' equals ' + res)
     except Exception as e:
         print('doing ' + check.name + ' on ' + host.name + ' failed')
         # update the error count
@@ -240,10 +135,10 @@ def execbool(self, host, check):
         host = Hosts.objects.get(name=host)
         check = HostChecks.objects.get(name=check)
         if host.enabled is True and check.enabled is True:
-            # run = sh.Command("./bin/runthis.sh")
-            # res = str(run(check.arg))
+            run = sh.Command("./bin/runthis.sh")
+            res = str(run(check.arg))
             computebool(check, host, res)
-            # print(oid + ' on ' + address + ' equals ' + res)
+            print(oid + ' on ' + address + ' equals ' + res)
     except Exception as e:
         print('doing ' + check.name + ' on ' + host.name + ' failed')
         # update the error count
@@ -263,10 +158,10 @@ def execstr(self, host, check):
         host = Hosts.objects.get(name=host)
         check = HostChecks.objects.get(name=check)
         if host.enabled is True and check.enabled is True:
-            # run = sh.Command("./bin/runthis.sh")
-            # res = str(run(check.arg))
+            run = sh.Command("./bin/runthis.sh")
+            res = str(run(check.arg))
             computestr(check, host, res)
-            # print(oid + ' on ' + address + ' equals ' + res)
+            print(oid + ' on ' + address + ' equals ' + res)
     except Exception as e:
         print('doing ' + check.name + ' on ' + host.name + ' failed')
         # update the error count
@@ -280,25 +175,24 @@ def execstr(self, host, check):
 
 # noinspection PyBroadException
 @shared_task(bind=True, name='exportInfluxDB')
-def exportInfluxDB(count=100):
+def exportInfluxDB(self, count):
     print("Starting with exportInfluxDB")
     from django.db import transaction
     from influxdb import InfluxDBClient
     from django.conf import settings
     from .models import Historical
 
-    user = ''
-    password = ''
+    user = 'username'
+    password = '48Sh4bSh!94b'
     dbname = 'm4'
     port = '8086'
     host = settings.INFLUXDB_HOST
     client = InfluxDBClient(host, port, user, password, dbname)
-    # producer = KafkaProducer(bootstrap_servers='172.31.238.221:9092',acks=0)
 
     # do batches of 1000 rows to start
     try:
         with transaction.atomic():
-            logs = Historical.objects.select_for_update().filter(exported=False).order_by('pk')[:count]
+            logs = Historical.objects.select_for_update().filter(exported=False).order_by('pk')[:int(count)]
             for log in logs:
                 # keep entries than are less than 1h old
                 if log.hostcheck.checktype == 'snmpgetint' or log.hostcheck.checktype == 'execint':
@@ -341,7 +235,8 @@ def exportInfluxDB(count=100):
                     log.exported = True
                     log.save()
 
-    except:
+    except Exception as e:
+        print(traceback.format_exc())
         print('Was an error in the transaction in doing influxdb')
     print("Done with exportInfluxDB")
     # producer.close()
@@ -349,7 +244,7 @@ def exportInfluxDB(count=100):
 
 
 @shared_task(bind=True, name='exportInfluxDBnew')
-def exportInfluxDBnew(count=1000):
+def exportInfluxDBnew(self, count=1000):
     print("Starting with exportInfluxDBnew")
     from django.db import transaction
     from influxdb import InfluxDBClient
@@ -419,7 +314,7 @@ def exportInfluxDBnew(count=1000):
 
 
 @shared_task(bind=True, name='pruneFromDB')
-def pruneFromDB():
+def pruneFromDB(self):
     print("Starting with pruneFromDB")
     from django.db import transaction
     from .models import Historical
@@ -438,10 +333,10 @@ def pruneFromDB():
 
 # This should get the email from  from settings.py
 @shared_task(bind=True, name='Heartbeat')
-def Heartbeat():
+def Heartbeat(self):
     from django.core.mail import send_mass_mail
     print("Starting with Heartbeat")
-    emails = [('[YUL62-BMS] Heartbeat', 'This email confirms YUL62 BMS is online and operational.',
+    emails = [('[M4] Heartbeat', 'This email confirms YUL62 BMS is online and operational.',
                'm4@m4system.com', ['m4@m4system.com'])]
     send_mass_mail(tuple(emails), fail_silently=False)
     print("Done sending Heartbeat email")
