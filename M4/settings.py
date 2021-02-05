@@ -32,6 +32,21 @@ load_dotenv(find_dotenv(), verbose=DEBUG)
 
 ALLOWED_HOSTS = [os.getenv("ALLOWED_HOST")]
 
+from django.contrib.messages import constants as message_constants
+MESSAGE_LEVEL = message_constants.DEBUG
+IGNORABLE_404_URLS = ['/robots.txt', '/favicon.ico']
+
+SECURE_BROWSER_XSS_FILTER = True
+
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# This needs nodejs and lessc: http://lesscss.org/
+COMPRESS_PRECOMPILERS = (('text/less', 'lessc {infile} {outfile}'),)
+
+STATICFILES_FINDERS = ["django.contrib.staticfiles.finders.FileSystemFinder",
+                       "django.contrib.staticfiles.finders.AppDirectoriesFinder", "compressor.finders.CompressorFinder"]
+
+
 # Application definition
 
 INSTALLED_APPS = [

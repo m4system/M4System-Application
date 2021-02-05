@@ -33,5 +33,6 @@ urlpatterns = [
         PasswordResetConfirmView.as_view(template_name='resetconfirm.html', success_url='/'),
         name='password_reset_confirm'),  # override the template with ours
     url(r'^password_reset_complete/', PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    url(r'^settings/', settings, name='settings')
     # override the template with ours
 ]
