@@ -1,10 +1,7 @@
 #!/bin/bash
-. /home/envmon/.env
-if [[ "$ENVIRONEMENT" = 'dan' ]];then
-	killall -u envmon -w python3.4
-elif [[ "$ENVIRONEMENT" = 'jude' ]];then
-	killall -u envmon -w python3.4
-elif [[ "$ENVIRONEMENT" = 'prod' ]];then
-	killall -u envmon -w python3.4
-	/usr/local/bin/uwsgi --stop /home/envmon/master.pid
+. /var/www/html/m4/.env
+
+if [[ "$ENVIRONEMENT" = 'prod' ]];then
+	killall -w python3
+	/usr/local/bin/uwsgi --stop /var/www/html/m4/master.pid
 fi

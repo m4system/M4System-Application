@@ -141,7 +141,6 @@ else:
     CACHE_MIDDLEWARE_ALIAS = 'default'
     SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
-
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 

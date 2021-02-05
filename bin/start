@@ -1,6 +1,6 @@
 #!/bin/bash
 # Use reload instead.  makes sure everything is stopped.
-. /var/www/html/m4/M4/.env
+. /var/www/html/m4/.env
 
 if [[ "$ENVIRONEMENT" = 'prod' ]];then
 	alias pip=pip3
@@ -10,19 +10,10 @@ if [[ "$ENVIRONEMENT" = 'prod' ]];then
 	export LANG=en_US.UTF-8
 	export LANGUAGE=en_US.UTF-8
 	export DJANGO_SETTINGS_MODULE=M4.settings
-#	export PYTHONPATH=/usr/lib/python3.4/:/var/www/html/m4/
   export PATH=$PATH:/var/www/html/m4/bin
+  export ENV=prod
 	TZ='America/Toronto'; export TZ
-	nohup /usr/local/bin/uwsgi --chdir=/var/www/html/m4/ --module=wsgi:application --env DJANGO_SETTINGS_MODULE=M4.settings --master --pidfile=/var/www/html/m4/master.pid --socket=127.0.0.1:49152 --processes=8 --uid=1000 --gid=1000 --enable-threads --harakiri=18000 >> /var/www/html/m4/logs/uwsi-boot.log &
-	# nohup /var/www/html/m4/bin/manage runserver_plus 8080 >> /var/www/html/m4/logs/runserver.log &
-	# We do 8 concurrent workers in prod
-#	nohup /var/www/html/m4/bin/manage celery -A scheduler worker --heartbeat-interval 10 -E -c12 >> /var/www/html/m4/logs/worker.log &
-#	nohup /var/www/html/m4/bin/manage celery -A scheduler beat >> /var/www/html/m4/logs/beat.log &
-#	/var/www/html/m4/bin/manage celerycam --frequency=10.0 --detach -f /var/www/html/m4/logs/monitor.log
-	#nohup manage celery -A scheduler worker --heartbeat-interval 10 -E --loglevel=debug >> /var/www/html/m4/logs/worker.log &
-	#nohup manage celery -A scheduler beat --loglevel=debug >> /var/www/html/m4/logs/beat.log &
-	#manage celerycam --frequency=10.0 --detach --loglevel=debug -f /var/www/html/m4/logs/monitor.log
 	cd /var/www/html/m4/
-	C_FORCE_ROOT=1 celery -A M4 worker --beat --scheduler django --loglevel=info -E
-
+	/usr/local/bin/uwsgi --module=wsgi:application --master --pidfile=/var/www/html/m4/master.pid --socket=127.0.0.1:49152 --processes=8 --enable-threads --harakiri=18000 --daemonize=/var/www/html/m4/logs/uwsi-boot.log
+	C_FORCE_ROOT=1 celery -A M4 worker --beat --scheduler django --loglevel=info -E --detach --logfile /var/www/html/m4/logs/worker.log --pidfile /var/www/html/m4/celery.pid
 fi
