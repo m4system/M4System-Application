@@ -1,0 +1,25 @@
+#!/bin/bash
+# THIS WILL RESET THE DATABASE
+# in prod, add a ccheck to bail out if this is production environement
+stop
+sudo /etc/init.d/memcached restart
+manage clear_cache
+rm -rf /home/envmon/webview/migrations/*
+rm -rf /home/envmon/scheduler/migrations/*
+manage reset_db --noinput
+manage clean_pyc
+manage makemigrations --noinput
+manage makemigrations webview --noinput
+manage makemigrations scheduler --noinput
+manage migrate --noinput
+manage migrate webview --noinput
+manage migrate scheduler --noinput
+# manage migrate --run-syncdb --noinput
+manage collectstatic --clear --noinput
+manage createinitialrevisions
+manage loaddata superuser.json
+manage loaddata scheduler.json
+manage loaddata webview.json
+# manage loaddata tasks.json
+manage loaddata celery.json
+start

@@ -1,0 +1,21 @@
+#!/bin/bash
+# when su'ing into envmon, this bin folder is in the path
+# This files allows you to run "manage shell_plus" and others easily
+alias pip=pip3
+alias easy_install=easy_install3
+alias python=python3
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LANGUAGE=en_US.UTF-8
+# we use the home folder as the django project root, so we need to specify the settings file
+export DJANGO_SETTINGS_MODULE=M4.settings
+#export PYTHONPATH=/usr/lib/python3.4/:/home/envmon/
+export PATH=$PATH:/var/www/html/m4/bin
+TZ='America/Toronto'; export TZ
+umask 002
+. /var/www/html/m4/M4/.env
+
+cur=$(pwd)
+cd /var/www/html/m4/
+/usr/bin/python3 manage.py $@
+cd $cur

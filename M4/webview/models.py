@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from M4.scheduler.tools import getMetadata
 
 # FIXME: to remove when not longer using sqlite
-from django.db.backends.sqlite3.features import DatabaseFeatures
+# from django.db.backends.sqlite3.features import DatabaseFeatures
 
 # File "djcelery/db.py", line 52, in commit_on_success
 # if connection.features.autocommits_when_autocommit_is_off:
@@ -14,7 +14,7 @@ from django.db.backends.sqlite3.features import DatabaseFeatures
 
 # So hardcoded the attribute here (doing it elsewhere would cause a crash,
 # forcing an import of django.db.models too early causes a circular import problem)
-DatabaseFeatures.autocommits_when_autocommit_is_off = True
+# DatabaseFeatures.autocommits_when_autocommit_is_off = True
 
 
 # User profile for the webui used to store info

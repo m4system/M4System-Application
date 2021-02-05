@@ -37,3 +37,6 @@ django-celery-beat
 sh
 easysnmp
 Werkzeug
+
+mysqlclient
+uwsgi

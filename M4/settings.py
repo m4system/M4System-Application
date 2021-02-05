@@ -98,7 +98,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'M4.wsgi.application'
 
 
-if os.getenv("ENV") is not "prod":
+if os.getenv("ENV") is "dev":
     ALLOWED_HOSTS = ('127.0.0.1',)
     DATABASES = {
         'default': {
@@ -107,7 +107,7 @@ if os.getenv("ENV") is not "prod":
         }
     }
 else:
-    ALLOWED_HOSTS = [os.getenv("ALLOWED_HOST")]
+    ALLOWED_HOSTS = ['127.0.0.1', os.getenv("ALLOWED_HOST")]
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     DATABASES = {
@@ -118,8 +118,6 @@ else:
             },
         }
     }
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
