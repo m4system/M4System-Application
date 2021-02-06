@@ -184,11 +184,11 @@ class Thresholds(models.Model):
                                  help_text='For Integer checks, the high warning value.  for Internal Use.')
     highcrit = models.FloatField('INT High Critical', blank=True, null=True, default=None,
                                  help_text='For Integer checks, the high critical value.  Affects the SLA.')
-    boolgood = models.NullBooleanField('BOOL Good', default=None,
+    boolgood = models.BooleanField('BOOL Good', default=None, null=True,
                                        help_text='For Boolean checks, This is the expected value.  Anything else affects the SLA.  Leave UNKOWN to disable')
-    boolbad = models.NullBooleanField('BOOL Bad', default=None,
+    boolbad = models.BooleanField('BOOL Bad', default=None, null=True,
                                       help_text='For Boolean checks, If seen, this affects the SLA.  All other values OK.  Leave UNKOWN to disable.')
-    boolwarn = models.NullBooleanField('BOOL Warn', default=None,
+    boolwarn = models.BooleanField('BOOL Warn', default=None, null=True,
                                        help_text='For Boolean checks, If seen, this triggers a warning email.  Leave UNKOWN to disable.')
     strgood = models.CharField('STR Good', max_length=1024, blank=True, null=True, default=None,
                                help_text='For string checks. expected value.  Anything else affects the SLA.')
