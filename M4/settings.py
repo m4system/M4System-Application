@@ -26,7 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '#+a^plsx=(07$ck_&fo366twua0=z7#!igqmg0ow^zq&0y1+v1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG")
+DEBUG = True
 
 load_dotenv(find_dotenv(), verbose=DEBUG)
 
@@ -98,7 +98,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'M4.wsgi.application'
+WSGI_APPLICATION = 'wsgi.application'
 
 
 if os.getenv("ENV") is "dev":
@@ -170,7 +170,7 @@ LANGUAGES = [
     ('fr', _('French')),
 ]
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Toronto'
 
 USE_I18N = True
 
@@ -282,3 +282,17 @@ LOGGING = {
         'handlers': ['file', 'console'],
     },
 }
+
+EMAIL_HOST='127.0.0.1'
+EMAIL_PORT='25'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# we use the DB so we can use the session store
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
+USE_ETAGS = True
+DEFAULT_CHARSET = 'UTF-8'
+
+# The email that will get error reports
+ADMINS = [('Admin', os.getenv("ADMIN"))]
+MAIL_FROM = os.getenv("MAIL_FROM")

@@ -5,11 +5,13 @@ from time import time
 
 from celery import shared_task
 from django.utils import timezone
+from django.conf import settings
 
-# import sh
+import sh
 from M4.scheduler.tools import setMetadata, getMetadata
 from .models import Hosts, HostChecks, ErrorLog
 from .utils import computeint, computebool, computestr
+from os import getenv
 
 from easysnmp import snmp_get
 
@@ -182,8 +184,8 @@ def exportInfluxDB(self, count):
     from django.conf import settings
     from .models import Historical
 
-    user = 'username'
-    password = '48Sh4bSh!94b'
+    user = getenv("INFLUX_USER")
+    password = getenv("INFLUX_AUTH")
     dbname = 'm4'
     port = '8086'
     host = settings.INFLUXDB_HOST
@@ -220,13 +222,6 @@ def exportInfluxDB(self, count):
                     # we should be writing to 2 servers to ensure high availibility
                     client.write_points(json_body, batch_size=5000)
 
-                    # json_body = {'measurement': log.hostcheck.name, 'host': log.host.name, 'address': log.host.address,
-                    #              'type': log.hostcheck.checktype, 'unit': log.hostcheck.unit,
-                    #              'checknote': log.hostcheck.note, 'verbosename': log.hostcheck.verbosename,
-                    #              'time': log.timestamp.strftime("%m/%d/%Y, %H:%M:%S"), 'value': value}
-                    # producer.send('m4-measurements', json.dumps(json_body).encode())
-                    # producer.flush()
-
                 except Exception as e:
                     print('doing exportInfluxDB failed' + str(e.message))
                     # Log the error to the database.
@@ -257,10 +252,7 @@ def exportInfluxDBnew(self, count=1000):
     port = '8086'
     host = settings.INFLUXDB_HOST
     client = InfluxDBClient(host, port, user, password, dbname)
-    # producer = KafkaProducer(bootstrap_servers='172.31.238.221:9092',acks=0)
 
-    # do batches of 1000 rows to start
-    # noinspection PyBroadException
     try:
         with transaction.atomic():
             logs = Historical.objects.select_for_update().filter(exported=False).order_by('-pk')[:count]
@@ -290,13 +282,6 @@ def exportInfluxDBnew(self, count=1000):
                 try:
                     # we should be writing to 2 servers to ensure high availibility
                     client.write_points(json_body, batch_size=5000)
-
-                    # json_body = {'measurement': log.hostcheck.name, 'host': log.host.name, 'address': log.host.address,
-                    #              'type': log.hostcheck.checktype, 'unit': log.hostcheck.unit,
-                    #              'checknote': log.hostcheck.note, 'verbosename': log.hostcheck.verbosename,
-                    #              'time': log.timestamp.strftime("%m/%d/%Y, %H:%M:%S"), 'value': value}
-                    # producer.send('m4-measurements', json.dumps(json_body).encode())
-                    # producer.flush()
 
                 except Exception as e:
                     print('doing exportInfluxDB failed' + str(e.message))
@@ -336,55 +321,8 @@ def pruneFromDB(self):
 def Heartbeat(self):
     from django.core.mail import send_mass_mail
     print("Starting with Heartbeat")
-    emails = [('[M4] Heartbeat', 'This email confirms YUL62 BMS is online and operational.',
-               'm4@m4system.com', ['m4@m4system.com'])]
+    emails = [('[M4] Heartbeat', 'This email confirms M4 is online and operational.',
+               settings.MAIL_FROM, [settings.MAIL_FROM])]
     send_mass_mail(tuple(emails), fail_silently=False)
     print("Done sending Heartbeat email")
 
-# @shared_task(bind=True, name='ExportKafka')
-# def exportKafka(count = 100):
-#     print("Starting with exportKafka")
-#     from .models import Historical
-#     from kafka import KafkaProducer
-#     import json
-#
-#     producer = KafkaProducer(bootstrap_servers='127.0.0.1:9092')
-#     # do batches of 1000 rows to start
-#     # try:
-#     # with transaction.atomic():
-#     logs = Historical.objects.filter(exportedk=False).order_by('pk')[:count]
-#     for log in logs:
-#         # keep entries than are less than 1h old
-#         if log.hostcheck.checktype == 'snmpgetint' or log.hostcheck.checktype == 'execint':
-#             value = float(log.value)
-#         else:
-#             value = log.value
-#         json_body = {}
-#         json_body['measurement'] = log.hostcheck.name
-#         json_body['host'] = log.host.name
-#         json_body['address'] = log.host.address
-#         json_body['type'] = log.hostcheck.checktype
-#         json_body['unit'] = log.hostcheck.unit
-#         json_body['checknote'] = log.hostcheck.note
-#         json_body['verbosename'] = log.hostcheck.verbosename
-#         json_body['time'] = log.timestamp.strftime("%m/%d/%Y, %H:%M:%S")
-#         json_body['value'] = value
-#
-#
-#         try:
-#             # we should be writing to 2 servers to ensure high availibility
-#             producer.send('measurements', json.dumps(json_body).encode())
-#         except Exception as e:
-#             print('doing exportKafka failed' + str(e.message))
-#             # Log the error to the database.
-#         else:
-#             # I think we should write to a file before deletion
-#             log.exportedk = True
-#             log.save()
-#             producer.flush()
-#     producer.close()
-#     # except:
-#     #     print('Was an error in the transaction in doing kafka')
-#     print("Done with exportKafka")
-#
-#     return True

@@ -125,7 +125,7 @@ def msg(request, level, msg):
 # It will be displayed to the groups provided.
 # To add a sticky message, do it from the admin UI
 def add_msg(level, msg, groups):
-    from webview.models import UIMsg
+    from M4.webview.models import UIMsg
     mymsg = UIMsg(level=level, msg=str(msg))
     mymsg.save()
     for group in groups:

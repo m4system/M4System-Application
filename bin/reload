@@ -1,21 +1,21 @@
 #!/bin/bash
 # Run this every time you pull new changes.  This is safe in production.
 # Also need to run this everytime you add a new check.  See #3303
-/home/envmon/bin/stop
-sudo rabbitmqctl stop_app
-sudo rabbitmqctl reset
-sudo rabbitmqctl start_app
-sudo rabbitmqctl add_user envmon 8rateSuR
-sudo rabbitmqctl add_vhost envmon
-sudo rabbitmqctl set_user_tags envmon envmon
-sudo rabbitmqctl set_permissions -p envmon envmon ".*" ".*" ".*"
-/home/envmon/bin/manage clear_cache
-sudo /etc/init.d/memcached restart
-/home/envmon/bin/manage clean_pyc
-/home/envmon/bin/manage makemigrations --noinput
-/home/envmon/bin/manage migrate --noinput
-/home/envmon/bin/manage collectstatic --noinput
+/var/www/html/m4/bin/stop
+#sudo rabbitmqctl stop_app
+#sudo rabbitmqctl reset
+#sudo rabbitmqctl start_app
+#sudo rabbitmqctl add_user envmon 8rateSuR
+#sudo rabbitmqctl add_vhost envmon
+#sudo rabbitmqctl set_user_tags envmon envmon
+#sudo rabbitmqctl set_permissions -p envmon envmon ".*" ".*" ".*"
+/var/www/html/m4/bin/manage clear_cache
+#sudo /etc/init.d/memcached restart
+/var/www/html/m4/bin/manage clean_pyc
+/var/www/html/m4/bin/manage makemigrations --noinput
+/var/www/html/m4/bin/manage migrate --noinput
+/var/www/html/m4/bin/manage collectstatic --noinput
 # This needs to be run when we add new models.
 # manage createinitialrevisions
-/home/envmon/bin/start
+/var/www/html/m4/bin/start
 

@@ -3,7 +3,7 @@ import sys
 from django.core.management.base import BaseCommand
 
 from M4.scheduler.models import Trap, Hosts
-from M4.System.tools import dbg
+from M4.scheduler.tools import dbg
 
 
 class Command(BaseCommand):

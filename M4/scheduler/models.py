@@ -8,6 +8,7 @@ from django.dispatch import receiver
 from django.template import engines
 from django.utils import timezone
 from django_celery_beat.models import IntervalSchedule, PeriodicTask
+from django.conf import settings
 
 # from delorean import Delorean
 from M4.scheduler.utils import strtobool, booltostr
@@ -311,7 +312,7 @@ class Thresholds(models.Model):
                     mail = UserProfile.objects.get(user=user).notifemail
                     if mail is not None and mail != '':
                         emails.append(
-                            (subj, self.renderMail(value, error, check, host, 'warn'), 'm4@m4system.com', [mail]))
+                            (subj, self.renderMail(value, error, check, host, 'warn'), settings.MAIL_FROM, [mail]))
             send_mass_mail(tuple(emails), fail_silently=True)
         return True
 
@@ -357,7 +358,7 @@ class Thresholds(models.Model):
                             # dbg( user.username + ' is ' + mail)
                             if mail is not None and mail != '':
                                 emails.append((subj, self.renderMail(value, error, check, host, 'crit'),
-                                               'm4@m4system.com', [mail]))
+                                               settings.MAIL_FROM, [mail]))
                     send_mass_mail(tuple(emails), fail_silently=False)
                 elif self.type == 'str':
                     subj = '[M4 - CRITICAL] ' + check.name + ' on ' + host.name + ' is ' + str(value)
@@ -374,7 +375,7 @@ class Thresholds(models.Model):
                             # dbg( user.username + ' is ' + mail)
                             if mail is not None and mail != '':
                                 emails.append((subj, self.renderMail(value, error, check, host, 'crit'),
-                                               'm4@m4system.com', [mail]))
+                                               settings.MAIL_FROM, [mail]))
                     send_mass_mail(tuple(emails), fail_silently=False)
                 elif self.type == 'int':
                     subj = '[M4 - CRITICAL] ' + check.name + ' on ' + host.name + ' is at ' + str(
@@ -392,7 +393,7 @@ class Thresholds(models.Model):
                             # dbg( user.username + ' is ' + mail)
                             if mail is not None and mail != '':
                                 emails.append((subj, self.renderMail(value, error, check, host, 'crit'),
-                                               'm4@m4system.com', [mail]))
+                                               settings.MAIL_FROM, [mail]))
                     send_mass_mail(tuple(emails), fail_silently=True)
             # Log a fail event for all SLA that have this check assigned
             if laststatus != "bad":
@@ -429,7 +430,7 @@ class Thresholds(models.Model):
                     mail = UserProfile.objects.get(user=user).notifemail
                     if mail is not None and mail != '':
                         emails.append(
-                            (subj, self.renderMail(value, error, check, host, 'ok'), 'm4@m4system.com', [mail]))
+                            (subj, self.renderMail(value, error, check, host, 'ok'), settings.MAIL_FROM, [mail]))
             send_mass_mail(tuple(emails), fail_silently=True)
             # Log a fail event for all SLA that have this check assigned
             for sla in Sla.objects.filter(hostchecks=check):
@@ -484,8 +485,6 @@ class Historical(models.Model):
     timestamp = models.DateTimeField('Timestamp', auto_now_add=True, help_text='Timestamp for the event.')
     exported = models.BooleanField('To Delete', default=False,
                                    help_text='Set to True if it was exported to InfluxDB and can be deleted')
-
-    # exportedk = models.BooleanField('To Delete K', default=False, help_text='Set to True if it was exported to Kafka and can be deleted')
 
     def __str__(self):
         return str(self.host.name) + '[' + str(self.hostcheck.name) + '] = ' + str(self.value) + ' on ' + str(
@@ -566,7 +565,7 @@ class Sla(models.Model):
                 mail = UserProfile.objects.get(user=user).notifemail
                 if mail is not None and mail != '':
                     emails.append(
-                        ('[M4] SLA Warning for ' + self.name, self.renderMail('warn'), 'm4@m4system.com', [mail]))
+                        ('[M4] SLA Warning for ' + self.name, self.renderMail('warn'), settings.MAIL_FROM, [mail]))
         send_mass_mail(tuple(emails), fail_silently=True)
         return True
 
@@ -580,7 +579,7 @@ class Sla(models.Model):
                 mail = UserProfile.objects.get(user=user).notifemail
                 if mail is not None and mail != '':
                     emails.append(('[M4] ***CRITICAL SLA*** for ' + self.name, self.renderMail('crit'),
-                                   'm4@m4system.com', [mail]))
+                                   settings.MAIL_FROM, [mail]))
         send_mass_mail(tuple(emails), fail_silently=True)
         return True
 
@@ -594,7 +593,7 @@ class Sla(models.Model):
                 mail = UserProfile.objects.get(user=user).notifemail
                 if mail is not None and mail != '':
                     emails.append(
-                        ('[M4] SLA Restored for ' + self.name, self.renderMail('ok'), 'm4@m4system.com', [mail]))
+                        ('[M4] SLA Restored for ' + self.name, self.renderMail('ok'), settings.MAIL_FROM, [mail]))
         send_mass_mail(tuple(emails), fail_silently=True)
         return True
 

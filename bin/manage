@@ -13,7 +13,7 @@ export DJANGO_SETTINGS_MODULE=M4.settings
 export PATH=$PATH:/var/www/html/m4/bin
 TZ='America/Toronto'; export TZ
 umask 002
-. /var/www/html/m4/M4/.env
+. /var/www/html/m4/.env
 
 cur=$(pwd)
 cd /var/www/html/m4/

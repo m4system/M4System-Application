@@ -5,9 +5,10 @@ from django.core.mail import send_mass_mail
 from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 from django.utils import timezone
+from django.conf import settings
 
 from M4.scheduler.models import Sla, SlaLog
-from M4.System.tools import getMetadata
+from M4.scheduler.tools import getMetadata
 from M4.webview.models import UserProfile
 
 
@@ -101,6 +102,6 @@ class Command(BaseCommand):
             rendered = render_to_string(t, c)
             mail = UserProfile.objects.get(user=user).notifemail
             if mail is not None and mail != '':
-                emails.append(('[M4] Monthly Report', rendered, 'm4@m4system.com', [mail]))
+                emails.append(('[M4] Monthly Report', rendered, settings.MAIL_FROM, [mail]))
         send_mass_mail(tuple(emails), fail_silently=False)
         self.stdout.write(self.style.SUCCESS('Reporting done.'))
