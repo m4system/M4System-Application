@@ -1,5 +1,5 @@
 #/bin/bash
 # Run this after pulling new changes
-chown -R envmon:envmon /home/envmon
-chmod +x /home/envmon/bin/*
-chmod -R g+w /home/envmon/*
+chown -R envmon:envmon /var/www/html/m4
+chmod +x /var/www/html/m4/bin/*
+chmod -R g+w /var/www/html/m4/*

@@ -109,6 +109,7 @@ if os.getenv("ENV") is "dev":
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
+    CELERY_SEND_TASK_ERROR_EMAILS = False
 else:
     ALLOWED_HOSTS = ['127.0.0.1', os.getenv("ALLOWED_HOST")]
     DATABASES = {
@@ -140,6 +141,7 @@ else:
     CACHE_MIDDLEWARE_SECONDS = 5
     CACHE_MIDDLEWARE_ALIAS = 'default'
     SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+    CELERY_SEND_TASK_ERROR_EMAILS = True
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -205,10 +207,7 @@ CELERY_SEND_EVENTS = True
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_RESULT_PERSISTENT = True
 CELERY_TASK_RESULT_EXPIRES = 3600
-if DEBUG:
-    CELERY_SEND_TASK_ERROR_EMAILS = False
-else:
-    CELERY_SEND_TASK_ERROR_EMAILS = False
+
 # Since settings is loaded before anything else, we are bootstraping djcelery here
 #import djcelery
 
