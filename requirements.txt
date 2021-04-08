@@ -4,7 +4,7 @@ reversion
 anyjson>=0.3.3
 celery==4.4.0
 Delorean>0.6.0
-Django==3.0.6
+Django==3.0.14
 django-appconf>1.0.1
 django-cachalot>1.4.1
 django-celery @ git+git://github.com/celery/django-celery@a78b3a5e0d3b28ee550c70cc509d608744c88337 # master branch
