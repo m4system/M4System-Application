@@ -2,7 +2,7 @@ influxdb
 pyasn1
 reversion
 anyjson>=0.3.3
-celery==4.4.0
+celery==5.2.2
 Delorean>0.6.0
 Django==3.0.6
 django-appconf>1.0.1
